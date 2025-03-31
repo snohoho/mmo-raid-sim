@@ -4,5 +4,15 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 18d125c75ee4ee044a35471a183a0d73
+  - enabled: 1
+    path: Assets/Scenes/LANMenu.unity
+    guid: 6d22997405851b14aaa95ea46099597a
+  - enabled: 1
+    path: Assets/Scenes/WAN_Game.unity
+    guid: e1d09c9733521d843a2c32ec899e93f9
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

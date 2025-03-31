@@ -1,0 +1,11 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class #SCRIPTNAME#  : MonoBehaviour
+{
+    public IEnumerator Effect(GameObject itemOwner) {
+        #NOTRIM#
+        yield return new WaitForEndOfFrame();
+    }
+}

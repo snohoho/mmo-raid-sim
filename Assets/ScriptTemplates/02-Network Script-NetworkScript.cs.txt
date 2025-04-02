@@ -1,0 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
+using NETWORK_ENGINE;
+using UnityEngine;
+
+public class #SCRIPTNAME# : NetworkComponent
+{
+    public override void HandleMessage(string flag, string value)
+    {
+        #NOTRIM#
+    }
+
+    public override void NetworkedStart()
+    {
+        #NOTRIM#
+    }
+
+    public override IEnumerator SlowUpdate()
+    {
+        #NOTRIM#
+        yield return new WaitForSeconds(MyCore.MasterTimer);
+    }
+
+    void Start()
+    {
+        #NOTRIM#
+    }
+
+    void Update()
+    {
+        #NOTRIM#
+    }
+}

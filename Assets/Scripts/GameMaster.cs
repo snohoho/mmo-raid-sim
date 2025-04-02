@@ -4,21 +4,25 @@ using UnityEngine;
 using NETWORK_ENGINE;
 using UnityEditor;
 using UnityEngine.UI;
-using Unity.VisualScripting;
 
-public class GameManager : NetworkComponent
+public class GameMaster : NetworkComponent
 {
     public bool gameStarted;
     public bool gameFinished;
 
     public override void HandleMessage(string flag, string value) 
     {
-        if(flag == "GAMESTART" && IsClient) {
-            gameStarted = true;
-            
-            NetworkPlayerManager[] npm = FindObjectsOfType<NetworkPlayerManager>();
-            foreach(NetworkPlayerManager n in npm) {
-                n.transform.GetChild(0).gameObject.SetActive(false);
+        if(flag == "GAMESTART") {
+            if(IsClient) {
+                NetworkPlayerManager[] npm = FindObjectsOfType<NetworkPlayerManager>();
+                foreach(NetworkPlayerManager n in npm) {
+                    n.transform.GetChild(0).gameObject.SetActive(false);
+                }
+            }
+        }
+        if(flag == "GAMEFINISH") {
+            if(IsClient) {
+                //disable movement
             }
         }
     }
@@ -59,24 +63,23 @@ public class GameManager : NetworkComponent
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
 
-            while(!gameFinished && gameStarted) {
+            while(!gameFinished) {
                 Debug.Log("running game");
 
-                yield return new WaitForSeconds(10f);
-
-                gameFinished = true;
+                yield return new WaitForSeconds(5f);
             }
 
+            gameFinished = true;
             Debug.Log("finishing game");
-            SendUpdate("GAMEFINISH", "1");
+            SendUpdate("GAMEFINISH", "true");
 
             yield return new WaitForSeconds(1f);
             
             Debug.Log("game finished");
-            StartCoroutine(MyCore.DisconnectServer());
+            //StartCoroutine(MyCore.DisconnectServer());
         }
 
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(MyCore.MasterTimer);
     }
 
     void Start()

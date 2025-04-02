@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class ItemStats : MonoBehaviour
+[CreateAssetMenu]
+public class ItemStats : ScriptableObject
 {
     public int itemID;
     public int itemRarity;

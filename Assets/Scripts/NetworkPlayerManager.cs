@@ -9,11 +9,17 @@ using TMPro;
 public class NetworkPlayerManager : NetworkComponent
 {
     public RectTransform lobbyUIPos;
-    public Toggle readyToggle;
+    public Toggle readyToggle; 
     public TMP_InputField nameInput;
+    public TextMeshProUGUI selectedName;
+    public TMP_Dropdown classDropdown;
+    public Image classImg;
+    public TextMeshProUGUI selectedClass;
+    public Sprite[] classSprites;
 
     public bool ready;
     public string playerName;
+    public int playerClass;    
 
     public override void HandleMessage(string flag, string value)
     {
@@ -25,25 +31,61 @@ public class NetworkPlayerManager : NetworkComponent
         }
         if(flag == "NAME") {
             playerName = value;
+            if(IsClient) {
+                selectedName.text = playerName;
+            }
             if(IsServer) {
                 SendUpdate("NAME", value);
+            }
+        }
+        if(flag == "CLASS") {
+            playerClass = int.Parse(value);
+            if(IsClient) {
+                classImg.sprite = classSprites[playerClass];
+                selectedClass.text = classDropdown.options[playerClass].text;
+            }
+            if(IsServer) {
+                SendUpdate("CLASS", value);
             }
         }
     }
 
     public override void NetworkedStart()
     {
+        if(IsLocalPlayer) {
+            selectedName.GameObject().SetActive(false);
+            selectedClass.GameObject().SetActive(false);
+        }
         if(!IsLocalPlayer) {
             nameInput.GameObject().SetActive(false);
-            readyToggle.GameObject().SetActive(false);
+            classDropdown.GameObject().SetActive(false);
         }
+        readyToggle.interactable = false;
+
         lobbyUIPos.localPosition = new Vector2((Owner-2)*480, 0);
     }
 
     public override IEnumerator SlowUpdate()
     {
-        
-        yield return new WaitForSeconds(.1f);
+        while(IsConnected) {
+            if(IsLocalPlayer && playerName == "") {
+                readyToggle.interactable = false;
+            }
+            else if(IsLocalPlayer && playerName != "") {
+                readyToggle.interactable = true;
+            }
+
+            if(IsServer) {
+                if(IsDirty) {
+                    SendUpdate("NAME", playerName);
+                    SendUpdate("CLASS", playerClass.ToString());
+
+                    IsDirty = false;
+                }
+            }
+
+            yield return new WaitForSeconds(.1f);
+        }  
     }
 
     public void NameInput(string name) {
@@ -57,6 +99,16 @@ public class NetworkPlayerManager : NetworkComponent
             SendCommand("READY", ready.ToString());
         }
     }
+
+    public void PlayerClass(int playerClass) {
+        //0 = fortitude (gunbreaker)
+        //1 = prudence (astro)
+        //2 = temperance (samurai)
+        //3 = justice (machinist)
+        if(IsLocalPlayer) {
+            SendCommand("CLASS", playerClass.ToString());
+        }
+    } 
 
     void Start()
     {

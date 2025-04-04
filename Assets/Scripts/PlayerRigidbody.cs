@@ -31,7 +31,6 @@ public class PlayerRigidbody : NetworkComponent
         }
         if(flag == "CHANGEVEL") {
             if(IsClient) {
-                Debug.Log(lastVel);
                 lastVel = NetworkCore.Vector3FromString(value);
                 if(lastVel.magnitude <= 0.1f) {
                     adjustedVel = Vector3.zero;

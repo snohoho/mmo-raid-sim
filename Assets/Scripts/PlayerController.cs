@@ -12,13 +12,18 @@ public class PlayerController : NetworkComponent
     public Rigidbody rb;
     
     public bool isMoving;
+    public bool isHurt;
+    public bool isDead;
+    public float deathTimer;
     public bool usingPrimary;
     public bool usingSecondary;
     public bool usingDefensive;
     public bool usingUlt;
     public bool usingLimit;
     public string lastSkill;
+    public float gcd;
 
+    public ItemStats[] inventory;
 
     public override void HandleMessage(string flag, string value)
     {
@@ -30,37 +35,48 @@ public class PlayerController : NetworkComponent
                 SendUpdate("MOVE", value);
             }
         }
-        if(flag == "PRIMARY") {
+        if(flag == "HURT") {
             if(IsServer) {
+                isHurt = bool.Parse(value);
+
+                SendUpdate("HURT", value);
+            }
+        }
+        if(flag == "PRIMARY") {
+            if(IsServer && gcd <= 0) {
                 usingPrimary = bool.Parse(value);
-                lastSkill = flag;
+
                 SendUpdate("PRIMARY", value);
+            }
+            if(IsClient) {
+                usingPrimary = bool.Parse(value);
             }
         }
         if(flag == "SECONDARY") {
-            if(IsServer) {
+            if(IsServer && gcd <= 0) {
                 usingSecondary = bool.Parse(value);
-                lastSkill = flag;
+
                 SendUpdate("SECONDARY", value);
             }
         }
         if(flag == "DEFENSIVE") {
-            if(IsServer) {
+            if(IsServer && gcd <= 0) {
                 usingDefensive = bool.Parse(value);
-                lastSkill = flag;
+
                 SendUpdate("DEFENSIVE", value);
             }
         }
         if(flag == "ULT") {
-            if(IsServer) {
+            if(IsServer && gcd <= 0) {
                 usingUlt = bool.Parse(value);
-                lastSkill = flag;
+
                 SendUpdate("ULT", value);
             }
         }
         if(flag == "LIMIT") {
             if(IsServer) {
                 usingLimit = bool.Parse(value);
+
                 SendUpdate("LIMIT", value);
             }
         }
@@ -77,13 +93,40 @@ public class PlayerController : NetworkComponent
         yield return new WaitForSeconds(MyCore.MasterTimer);
     }
 
+    void Start()
+    {
+        
+    }
+
+    void Update()
+    {
+        if(IsServer) {
+            rb.velocity = new Vector3(lastInput.x, 0f, lastInput.y) * 5f;
+
+            if(rb.velocity == Vector3.zero) {
+                isMoving = false;
+            }
+            else if(rb.velocity != Vector3.zero) {
+                isMoving = true;
+            }
+        }
+        if(IsClient) {
+            //perform anim
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Enemy") {
+            SendCommand("HURT","true");
+        }
+    }
+
     public void Move(InputAction.CallbackContext context) {
         if(context.started || context.performed) {
-            Debug.Log("START");
             SendCommand("MOVE", context.ReadValue<Vector2>().ToString());
         }
         if(context.canceled) {
-            Debug.Log("STOP");
             SendCommand("MOVE", Vector2.zero.ToString());
         }
     }
@@ -117,26 +160,16 @@ public class PlayerController : NetworkComponent
             SendCommand("LIMIT", "true");
         }
     }
-
-    void Start()
-    {
-        
+    
+    public void OpenInventory(InputAction.CallbackContext context) {
+        if(context.started) {
+            SendCommand("OPENINV", "true");
+        }
     }
 
-    void Update()
-    {
-        if(IsServer) {
-            rb.velocity = new Vector3(lastInput.x, 0f, lastInput.y) * 5f;
-
-            if(rb.velocity == Vector3.zero) {
-                isMoving = false;
-            }
-            else if(rb.velocity != Vector3.zero) {
-                isMoving = true;
-            }
-        }
-        if(IsClient) {
-            //perform anim
+    public void Revive(InputAction.CallbackContext context) {
+        if(context.started && isDead && deathTimer <= 0) {
+            SendCommand("REVIVE", "false");
         }
     }
 }

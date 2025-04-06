@@ -45,6 +45,7 @@ public class PlayerController : NetworkComponent
         if(flag == "PRIMARY") {
             if(IsServer && gcd <= 0) {
                 usingPrimary = bool.Parse(value);
+                lastSkill = flag;
 
                 SendUpdate("PRIMARY", value);
             }
@@ -55,6 +56,7 @@ public class PlayerController : NetworkComponent
         if(flag == "SECONDARY") {
             if(IsServer && gcd <= 0) {
                 usingSecondary = bool.Parse(value);
+                lastSkill = flag;
 
                 SendUpdate("SECONDARY", value);
             }
@@ -62,6 +64,7 @@ public class PlayerController : NetworkComponent
         if(flag == "DEFENSIVE") {
             if(IsServer && gcd <= 0) {
                 usingDefensive = bool.Parse(value);
+                lastSkill = flag;
 
                 SendUpdate("DEFENSIVE", value);
             }
@@ -69,6 +72,7 @@ public class PlayerController : NetworkComponent
         if(flag == "ULT") {
             if(IsServer && gcd <= 0) {
                 usingUlt = bool.Parse(value);
+                lastSkill = flag;
 
                 SendUpdate("ULT", value);
             }
@@ -98,7 +102,7 @@ public class PlayerController : NetworkComponent
         
     }
 
-    void Update()
+    public virtual void Update()
     {
         if(IsServer) {
             rb.velocity = new Vector3(lastInput.x, 0f, lastInput.y) * 5f;

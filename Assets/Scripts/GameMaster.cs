@@ -8,7 +8,9 @@ using UnityEngine.UI;
 public class GameMaster : NetworkComponent
 {
     public bool gameStarted;
+    public bool grindPhaseFinished;
     public bool gameFinished;
+    public int time;
 
     public override void HandleMessage(string flag, string value) 
     {
@@ -62,6 +64,12 @@ public class GameMaster : NetworkComponent
             Debug.Log("starting game");
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
+
+            while(!grindPhaseFinished) {
+                Debug.Log("grind phase start");
+
+                yield return new WaitForSeconds(300f);
+            }
 
             while(!gameFinished) {
                 Debug.Log("running game");

@@ -612,9 +612,9 @@ MonoBehaviour:
   ObjectCounter: 0
   SpawnPrefab:
   - {fileID: 4438060857700421501, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
-  - {fileID: 4438060857700421501, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
-  - {fileID: 4438060857700421501, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
-  - {fileID: 4438060857700421501, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+  - {fileID: 6239167578177002580, guid: b820407d69e31e740acce714d100ca9a, type: 3}
+  - {fileID: 6488245134476229588, guid: 2d181779582e6ab4d8048dab8c62a158, type: 3}
+  - {fileID: 5330618611410293680, guid: b326204cd1b609d4cb03c3c916fe6270, type: 3}
   - {fileID: 7681306874247493441, guid: 478c1b1e92f749c439760a2ff73ac05c, type: 3}
   - {fileID: 1483879396007937757, guid: 72038f64b3bedb245984535fa4ab34b0, type: 3}
   NetworkPlayerManager: {fileID: 6561740684305070923, guid: a9452e8ca1efa3f4fbca5c0fd46e5e74, type: 3}
@@ -1595,7 +1595,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 34bd720025919c84f8c0520764aef52d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -11,6 +11,7 @@ public class GameMaster : NetworkComponent
     public bool grindPhaseFinished;
     public bool gameFinished;
     public int time;
+    public int count = 0;
 
     public override void HandleMessage(string flag, string value) 
     {
@@ -70,6 +71,16 @@ public class GameMaster : NetworkComponent
 
                 yield return new WaitForSeconds(300f);
             }
+
+            do {
+                count++;
+                if(count > 2)
+                {
+                    MyCore.NetCreateObject(4, -1, GameObject.Find("EnemySpawn").transform.position);
+                    count = 0;
+                }
+                yield return new WaitForSeconds(5f);
+            } while(!grindPhaseFinished);
 
             while(!gameFinished) {
                 Debug.Log("running game");

@@ -101,10 +101,10 @@ public class NetworkPlayerManager : NetworkComponent
     }
 
     public void PlayerClass(int playerClass) {
-        //0 = fortitude (gunbreaker)
-        //1 = prudence (astro)
-        //2 = temperance (samurai)
-        //3 = justice (machinist)
+        //0 = queen (liz - tank)
+        //1 = fister (gigi - melee dps)
+        //2 = sounddemon (rissa - range dps)
+        //3 = emotionjewel (biboo - support)
         if(IsLocalPlayer) {
             SendCommand("CLASS", playerClass.ToString());
         }

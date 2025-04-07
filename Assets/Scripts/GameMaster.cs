@@ -58,7 +58,7 @@ public class GameMaster : NetworkComponent
             npm = FindObjectsOfType<NetworkPlayerManager>();
             foreach(NetworkPlayerManager n in npm) {
                 //create objects
-                MyCore.NetCreateObject(0, n.Owner, GameObject.Find("spawn" + n.Owner).transform.position);
+                MyCore.NetCreateObject(n.playerClass, n.Owner, GameObject.Find("spawn" + n.Owner).transform.position);
             }
 
             Debug.Log("starting game");

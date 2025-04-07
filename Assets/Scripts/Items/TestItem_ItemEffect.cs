@@ -42,16 +42,16 @@ public class TestItem_ItemEffect : NetworkComponent
             if(n.Owner == Owner) {
                 switch(n.playerClass) {
                     case 0:
-                        playerClassScripts[Owner] = gameObject.GetComponent<FortitudeClass>();
+                        playerClassScripts[Owner] = gameObject.GetComponent<QueenClass>();
                         break;
                     case 1:
-                        playerClassScripts[Owner] = gameObject.GetComponent<PrudenceClass>();
+                        playerClassScripts[Owner] = gameObject.GetComponent<FisterClass>();
                         break;
                     case 2:
-                        playerClassScripts[Owner] = gameObject.GetComponent<TemperanceClass>();
+                        playerClassScripts[Owner] = gameObject.GetComponent<SoundDemonClass>();
                         break;
                     case 3:
-                        playerClassScripts[Owner] = gameObject.GetComponent<JusticeClass>();
+                        playerClassScripts[Owner] = gameObject.GetComponent<EmotionJewelClass>();
                         break;
                 }
             }

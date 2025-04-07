@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FortitudeClass : PlayerController
+public class SoundDemonClass : PlayerController
 {
     public TextMeshProUGUI nameLabel;
     public string playerName;
@@ -14,22 +14,23 @@ public class FortitudeClass : PlayerController
     TextMeshProUGUI levelText, goldText, meleeText, rangedText, speedText; 
     public RectTransform skillsPanel; 
     TextMeshProUGUI s1, s2, s3, s4;
-    public Slider heatBar;
+    public RectTransform notesPanel;
+    GameObject n1, n2, n3;
 
     public int level = 1;
     public int gold = 0;
-    public int hp = 7;
-    public int meleeAtk = 50;
-    public int rangedAtk = 50;
+    public int hp = 5;
+    public int meleeAtk = 0;
+    public int rangedAtk = 100;
     public int speed = 5;
     public float primaryCD;
     public float secondaryCD;
     public float defCD;
     public float ultCD;
     public float gcdMod;
-    public int heat;
-    public bool overheat;
-    public bool uiOverheat;
+    public bool note1;
+    public bool note2;
+    public bool note3;
 
     public override void HandleMessage(string flag, string value)
     {
@@ -76,15 +77,24 @@ public class FortitudeClass : PlayerController
                 ultCD = cd;
             }
         }
-        if(flag == "HEAT") {
-            int newHeat = int.Parse(value);
+        if(flag == "NOTE") {
+            int note = int.Parse(value);
             if(IsClient) {
-                heat = newHeat;
-                if(overheat && heat <= 0) {
-                    overheat = false;
-                }
-                if(heat >= 100) {
-                    overheat = true;
+                switch(note) {
+                    case 0:
+                        note1 = true;
+                        break;
+                    case 1:
+                        note2 = true;
+                        break;
+                    case 2:
+                        note3 = true;
+                        break;
+                    case 3:
+                        note1 = false;
+                        note2 = false;
+                        note3 = false;
+                        break;
                 }
             }
         }
@@ -116,33 +126,12 @@ public class FortitudeClass : PlayerController
     {
         while(IsConnected) {
             if(IsLocalPlayer) {
-                heatBar.value = heat;
-
-                Image heatColor = heatBar.transform.GetChild(2).GetChild(0).gameObject.GetComponent<Image>();
-                TextMeshProUGUI heatLabel = heatBar.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-                if(heat >= 100) {
-                    heatColor.color = new Color32(62,140,238,255);
-                    if(!uiOverheat) {
-                        heatLabel.text = "OVERHEATED";
-                        StartCoroutine(FlashOverheat(heatLabel.gameObject));
-                    }
-
-                    uiOverheat = true;
-                }
-                else if(heat >= 50) {
-                    if(!uiOverheat) {
-                        heatColor.color = new Color32(213,91,217,255);
-                    }
-                }
-                else if(heat >= 0) {
-                    if(heat <= 0 && uiOverheat) {
-                        heatLabel.text = "HEAT";
-                        uiOverheat = false;
-                    }
-                    if(!uiOverheat) {
-                        heatColor.color = new Color32(241,47,71,255);
-                    }
-                }
+                n1 = notesPanel.GetChild(0).gameObject;
+                n2 = notesPanel.GetChild(1).gameObject;
+                n3 = notesPanel.GetChild(2).gameObject;
+                n1.SetActive(note1);
+                n2.SetActive(note2);
+                n3.SetActive(note3);
 
                 levelText.text = level.ToString();
                 goldText.text = gold.ToString();
@@ -161,38 +150,45 @@ public class FortitudeClass : PlayerController
                 }
 
                 if(lastSkill == "PRIMARY") {
-                    heat += 10;
+                    note1 = true;
                     lastSkill = "";
+                    SendUpdate("NOTE","0");
                 }
                 if(lastSkill == "SECONDARY") {
-                    heat += 10;
+                    note2 = true;
                     lastSkill = "";
+                    SendUpdate("NOTE","1");
                 }
                 if(lastSkill == "DEFENSIVE") {
-                    heat -= 30;
+                    note3 = true;
                     lastSkill = "";
+                    SendUpdate("NOTE","2");
                 }
                 if(lastSkill == "ULT") {
-                    heat -= 50;
-                    lastSkill = "";
-                }
-                
-                if(heat <= 0) {
-                    heat = 0;
-                    if(overheat) {
-                        overheat = false;
-                        gcdMod = 0f;
-                    }
-                }
-                else if(heat >= 100) {
-                    heat = 100;
-                    if(!overheat) {
-                        gcdMod = 1f;
-                    }
-                    overheat = true;
-                }
+                    int noteCt = 0;
+                    if(note1) { noteCt++; }
+                    if(note2) { noteCt++; }
+                    if(note3) { noteCt++; }
 
-                SendUpdate("HEAT", heat.ToString());
+                    int prevAtk = rangedAtk;
+                    if(noteCt == 1) {
+                        rangedAtk = (int)(rangedAtk*1.2);
+                    }
+                    else if(noteCt == 2) {
+                        rangedAtk = (int)(rangedAtk*1.5);
+                    }
+                    else if(noteCt == 3) {
+                        rangedAtk *= 2;
+                    }
+
+                    note1 = false;
+                    note2 = false;
+                    note3 = false;
+                    rangedAtk = prevAtk;
+
+                    lastSkill = "";
+                    SendUpdate("NOTE","3");
+                }
             }
 
             yield return new WaitForSeconds(MyCore.MasterTimer);
@@ -352,15 +348,5 @@ public class FortitudeClass : PlayerController
 
             yield return new WaitForEndOfFrame();
         }
-    }
-
-    public IEnumerator FlashOverheat(GameObject obj) {
-        bool flash = false;    
-        while(uiOverheat) {
-            obj.SetActive(flash);
-            flash = !flash;
-            yield return new WaitForSeconds(0.1f);
-        }
-        yield return new WaitForEndOfFrame();
     }
 }

@@ -10,6 +10,12 @@ public class PlayerController : NetworkComponent
 {
     public Vector3 lastInput;
     public Rigidbody rb;
+    public float distance = 10.0f;
+    public Vector2 camPos;
+    public float currentX = 0f;
+    public float currentY = 0f;
+    public float sensivity = 4.0f;
+    public Transform lookAt;
     
     public bool isMoving;
     public bool isHurt;
@@ -105,7 +111,7 @@ public class PlayerController : NetworkComponent
     public virtual void Update()
     {
         if(IsServer) {
-            rb.velocity = new Vector3(lastInput.x, 0f, lastInput.y) * 5f;
+            rb.velocity = (transform.forward * lastInput.x) + (transform.right * lastInput.y) * 5f;
 
             if(rb.velocity == Vector3.zero) {
                 isMoving = false;
@@ -113,9 +119,25 @@ public class PlayerController : NetworkComponent
             else if(rb.velocity != Vector3.zero) {
                 isMoving = true;
             }
+
+            currentX += camPos.x * sensivity * Time.deltaTime;
+            currentY += camPos.y * sensivity * Time.deltaTime;
+            rb.rotation = Quaternion.Euler(0, currentX, 0);
         }
         if(IsClient) {
             //perform anim
+        }
+        if(IsLocalPlayer) {
+            currentX += camPos.x * sensivity * Time.deltaTime;
+            currentY += camPos.y * sensivity * Time.deltaTime;
+
+            currentY = Mathf.Clamp(currentY, 0f, 50f);
+
+            Vector3 direction = new Vector3(0, 0, -distance);
+            Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+            Camera.main.transform.position = lookAt.position + rotation * direction;
+           
+            Camera.main.transform.LookAt(lookAt.position);
         }
     }
 
@@ -132,6 +154,12 @@ public class PlayerController : NetworkComponent
         }
         if(context.canceled) {
             SendCommand("MOVE", Vector2.zero.ToString());
+        }
+    }
+
+    public void Look(InputAction.CallbackContext context) {
+        if(context.started) {
+            camPos = context.ReadValue<Vector2>();
         }
     }
 

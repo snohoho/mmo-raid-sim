@@ -6,7 +6,9 @@ using UnityEngine;
 public class PlayerRigidbody : NetworkComponent
 {
     public Vector3 lastPos;
+    public Vector3 lastRot;
     public Vector3 lastVel;
+    public Vector3 lastAngVel;
 
     public float threshold = 0.1f, eThreshold = 1.0f;
     public bool useAdjusted = false;
@@ -37,6 +39,17 @@ public class PlayerRigidbody : NetworkComponent
                 }
             }
         }
+        if(flag == "CHANGEROT") {
+            if(IsClient) {
+                lastRot = NetworkCore.Vector3FromString(value);
+                rb.rotation = Quaternion.Euler(lastRot);
+            }
+        }
+        if(flag == "CHANGEANGVEL") {
+            if(IsClient) {
+                lastAngVel = NetworkCore.Vector3FromString(value);
+            }
+        }
     }
 
     public override void NetworkedStart()
@@ -52,14 +65,23 @@ public class PlayerRigidbody : NetworkComponent
                     lastPos = rb.position;
                     SendUpdate("CHANGEPOS", rb.position.ToString());
                 }
+                if ((rb.rotation.eulerAngles - lastRot).magnitude > threshold){
+                    lastRot = rb.rotation.eulerAngles;
+                    SendUpdate("CHANGEROT", rb.rotation.eulerAngles.ToString());
+                }
                 if((rb.velocity - lastVel).magnitude > threshold) {
                     lastVel = rb.velocity;
                     SendUpdate("CHANGEVEL", rb.velocity.ToString());
                 }
+                if ((rb.angularVelocity - lastAngVel).magnitude > threshold){
+                    lastAngVel = rb.angularVelocity;
+                    SendUpdate("CHANGEANGVEL", rb.angularVelocity.ToString());
+                }
                 if(IsDirty) {
                     SendUpdate("CHANGEPOS", rb.position.ToString());
+                    SendUpdate("CHANGEROT", rb.rotation.ToString());
                     SendUpdate("CHANGEVEL", rb.velocity.ToString());
-
+                    SendUpdate("CHANGEANGVEL", rb.angularVelocity.ToString());
                     IsDirty = false;   
                 }
             }

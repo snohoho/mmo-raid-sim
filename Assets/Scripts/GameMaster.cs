@@ -10,7 +10,7 @@ public class GameMaster : NetworkComponent
     public bool gameStarted;
     public bool grindPhaseFinished;
     public bool gameFinished;
-    public int time = 0;
+    public int time;
     public int count = 0;
 
     public override void HandleMessage(string flag, string value) 

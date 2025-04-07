@@ -12,6 +12,8 @@ public class NavMeshController : NetworkComponent
     public int Gold = 5;
     public int XP = 10;
     public int Atk = 5;
+    public int randx = 0;
+    public int randz = 0;
     public Vector3 Goal;
     NavMeshAgent MyAgent;
 
@@ -41,7 +43,9 @@ public class NavMeshController : NetworkComponent
         {
             if(MyAgent.remainingDistance<.1f)
             {
-                Goal = new Vector3(Goal.x * -1, Goal.y, Goal.z);
+                randx = UnityEngine.Random.Range(-47,47);
+                randz = UnityEngine.Random.Range(-47,47);
+                Goal = new Vector3(randx, Goal.y, randz);
                 MyAgent.SetDestination(Goal);
             }
             yield return new WaitForSeconds(.1f);

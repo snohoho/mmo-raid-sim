@@ -174,7 +174,9 @@ MonoBehaviour:
   Gold: 5
   XP: 10
   Atk: 5
-  Goal: {x: 3, y: 0, z: 0}
+  randx: 0
+  randz: 0
+  Goal: {x: 0, y: 0, z: 15.05}
 --- !u!114 &3362502362294991682
 MonoBehaviour:
   m_ObjectHideFlags: 0

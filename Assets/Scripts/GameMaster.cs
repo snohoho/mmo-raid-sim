@@ -9,6 +9,7 @@ public class GameMaster : NetworkComponent
 {
     public bool gameStarted;
     public bool gameFinished;
+    public int count = 0;
 
     public override void HandleMessage(string flag, string value) 
     {
@@ -65,7 +66,12 @@ public class GameMaster : NetworkComponent
 
             while(!gameFinished) {
                 Debug.Log("running game");
-
+                count++;
+                if(count > 2)
+                {
+                    MyCore.NetCreateObject(4, -1, GameObject.Find("EnemySpawn").transform.position);
+                    count = 0;
+                }
                 yield return new WaitForSeconds(5f);
             }
 

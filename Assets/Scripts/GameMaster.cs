@@ -16,6 +16,7 @@ public class GameMaster : NetworkComponent
     {
         if(flag == "GAMESTART") {
             if(IsClient) {
+                Cursor.lockState = CursorLockMode.Locked;
                 NetworkPlayerManager[] npm = FindObjectsOfType<NetworkPlayerManager>();
                 foreach(NetworkPlayerManager n in npm) {
                     n.transform.GetChild(0).gameObject.SetActive(false);

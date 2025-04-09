@@ -18,14 +18,14 @@ public class QueenClass : PlayerController
 
     public int level = 1;
     public int gold = 0;
-    public int hp = 7;
-    public int meleeAtk = 50;
-    public int rangedAtk = 50;
-    public int speed = 4;
     public float primaryCD;
     public float secondaryCD;
     public float defCD;
     public float ultCD;
+    public GameObject primaryHB;
+    public GameObject secondaryHB;
+    public GameObject defHB;
+    public GameObject ultHB;
     public float gcdMod;
     public int heat;
     public bool overheat;
@@ -35,17 +35,6 @@ public class QueenClass : PlayerController
     {
         base.HandleMessage(flag, value);
 
-        if(flag == "STATUP") {
-            int invSlot = int.Parse(value);
-            if(IsServer) {
-                hp += inventory[invSlot].hpBonus;
-                meleeAtk += inventory[invSlot].meleeBonus;
-                rangedAtk += inventory[invSlot].rangedBonus;
-                speed += inventory[invSlot].spdBonus;
-
-                SendUpdate("STATUP", value);  
-            }
-        }
         if(flag == "GBLCD") {
             float cd = float.Parse(value);
             if(IsClient) {
@@ -151,8 +140,14 @@ public class QueenClass : PlayerController
                 speedText.text = speed.ToString();
             }
             if(IsServer) {
-                while(isDead) {
+                //primary, secondary, def, ult
+                primaryHB.SetActive(false);
+                secondaryHB.SetActive(false);
+                defHB.SetActive(false);
+                ultHB.SetActive(false);
 
+                while(isDead) {
+                    
                 }
 
                 if(isHurt) {
@@ -162,18 +157,53 @@ public class QueenClass : PlayerController
 
                 if(lastSkill == "PRIMARY") {
                     heat += 10;
+
+                    skillDmg = 100;
+                    dmgBonus = 1;
+                    primaryHB.SetActive(true);
+
                     lastSkill = "";
                 }
                 if(lastSkill == "SECONDARY") {
-                    heat += 10;
+                    heat += 20;
+                    skillDmg = 150;
+                    dmgBonus = 1;
+
+                    secondaryHB.SetActive(true);
+
                     lastSkill = "";
                 }
                 if(lastSkill == "DEFENSIVE") {
-                    heat -= 30;
+                    if(heat >= 50) {
+                        buffTimer = 3f;
+                        heat -= 40;
+                    }
+                    else if(heat < 50) {
+                        buffTimer = 1f;
+                        heat -= 20;
+                    }
+
+                    defHB.SetActive(true);
+                    StartCoroutine(InvulnTimer(buffTimer));
+
                     lastSkill = "";
                 }
                 if(lastSkill == "ULT") {
-                    heat -= 50;
+                    if(overheat) {
+                        ultHB.SetActive(true);
+                        skillDmg = 300;
+                        dmgBonus = 1;
+                        heat -= 50;
+                    }
+                    else if(!overheat) {
+                        if(heat < 30) {
+                            skillDmg = 150;
+                            dmgBonus = 1.2f;
+                            ultHB.SetActive(true);
+                        }
+                        StartCoroutine(UltHitboxes());
+                    }
+                    
                     lastSkill = "";
                 }
                 
@@ -362,5 +392,22 @@ public class QueenClass : PlayerController
             yield return new WaitForSeconds(0.1f);
         }
         yield return new WaitForEndOfFrame();
+    }
+
+    public IEnumerator UltHitboxes() {
+        skillDmg = 0;
+        dmgBonus = 1f;
+        while(heat >= 30) {
+            heat -= 30;
+            skillDmg += 100;
+            dmgBonus += 0.5f;
+
+            ultHB.SetActive(true); 
+            yield return new WaitForSeconds(0.05f);
+
+            ultHB.SetActive(false);
+
+            yield return new WaitForSeconds(0.15f);
+        }
     }
 }

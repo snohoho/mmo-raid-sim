@@ -19,10 +19,6 @@ public class EmotionJewelClass : PlayerController
 
     public int level = 1;
     public int gold = 0;
-    public int hp = 5;
-    public int meleeAtk = 0;
-    public int rangedAtk = 50;
-    public int speed = 6;
     public float primaryCD;
     public float secondaryCD;
     public float defCD;
@@ -33,18 +29,7 @@ public class EmotionJewelClass : PlayerController
     public override void HandleMessage(string flag, string value)
     {
         base.HandleMessage(flag, value);
-
-        if(flag == "STATUP") {
-            int invSlot = int.Parse(value);
-            if(IsServer) {
-                hp += inventory[invSlot].hpBonus;
-                meleeAtk += inventory[invSlot].meleeBonus;
-                rangedAtk += inventory[invSlot].rangedBonus;
-                speed += inventory[invSlot].spdBonus;
-
-                SendUpdate("STATUP", value);  
-            }
-        }
+        
         if(flag == "STATCHANGE") {
             string[] args = value.Split(',');
             string stat = args[0];

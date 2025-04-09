@@ -19,10 +19,6 @@ public class SoundDemonClass : PlayerController
 
     public int level = 1;
     public int gold = 0;
-    public int hp = 5;
-    public int meleeAtk = 0;
-    public int rangedAtk = 100;
-    public int speed = 5;
     public float primaryCD;
     public float secondaryCD;
     public float defCD;
@@ -36,17 +32,6 @@ public class SoundDemonClass : PlayerController
     {
         base.HandleMessage(flag, value);
 
-        if(flag == "STATUP") {
-            int invSlot = int.Parse(value);
-            if(IsServer) {
-                hp += inventory[invSlot].hpBonus;
-                meleeAtk += inventory[invSlot].meleeBonus;
-                rangedAtk += inventory[invSlot].rangedBonus;
-                speed += inventory[invSlot].spdBonus;
-
-                SendUpdate("STATUP", value);  
-            }
-        }
         if(flag == "GBLCD") {
             float cd = float.Parse(value);
             if(IsClient) {
@@ -170,21 +155,19 @@ public class SoundDemonClass : PlayerController
                     if(note2) { noteCt++; }
                     if(note3) { noteCt++; }
 
-                    int prevAtk = rangedAtk;
                     if(noteCt == 1) {
-                        rangedAtk = (int)(rangedAtk*1.2);
+                        dmgBonus = 1.2f;
                     }
                     else if(noteCt == 2) {
-                        rangedAtk = (int)(rangedAtk*1.5);
+                        dmgBonus = 1.5f;
                     }
                     else if(noteCt == 3) {
-                        rangedAtk *= 2;
+                        dmgBonus = 2f;
                     }
 
                     note1 = false;
                     note2 = false;
                     note3 = false;
-                    rangedAtk = prevAtk;
 
                     lastSkill = "";
                     SendUpdate("NOTE","3");

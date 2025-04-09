@@ -18,10 +18,7 @@ public class FisterClass : PlayerController
 
     public int level = 1;
     public int gold = 0;
-    public int hp = 6;
-    public int meleeAtk = 100;
-    public int rangedAtk = 0;
-    public int speed = 5;
+    
     public float primaryCD;
     public float secondaryCD;
     public float defCD;
@@ -35,17 +32,6 @@ public class FisterClass : PlayerController
     {
         base.HandleMessage(flag, value);
 
-        if(flag == "STATUP") {
-            int invSlot = int.Parse(value);
-            if(IsServer) {
-                hp += inventory[invSlot].hpBonus;
-                meleeAtk += inventory[invSlot].meleeBonus;
-                rangedAtk += inventory[invSlot].rangedBonus;
-                speed += inventory[invSlot].spdBonus;
-
-                SendUpdate("STATUP", value);  
-            }
-        }
         if(flag == "STATCHANGE") {
             string[] args = value.Split(',');
             string stat = args[0];

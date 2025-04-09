@@ -17,6 +17,7 @@ public class GameMaster : NetworkComponent
     {
         if(flag == "GAMESTART") {
             if(IsClient) {
+                Cursor.lockState = CursorLockMode.Locked;
                 NetworkPlayerManager[] npm = FindObjectsOfType<NetworkPlayerManager>();
                 foreach(NetworkPlayerManager n in npm) {
                     n.transform.GetChild(0).gameObject.SetActive(false);
@@ -69,7 +70,9 @@ public class GameMaster : NetworkComponent
             while(!grindPhaseFinished) {
                 Debug.Log("grind phase start");
 
-                yield return new WaitForSeconds(300f);
+                yield return new WaitForSeconds(60f);
+
+                
             }
 
             do {

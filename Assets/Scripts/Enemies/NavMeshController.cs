@@ -8,7 +8,7 @@ using UnityEngine.AI;
 
 public class NavMeshController : NetworkComponent
 {
-    public int HP = 10;
+    public int HP = 200;
     public int Gold = 5;
     public int XP = 10;
     public int Atk = 5;
@@ -35,6 +35,10 @@ public class NavMeshController : NetworkComponent
         if(IsServer)
         {
             MyAgent.SetDestination(Goal);
+
+            if(HP<=0) {
+                MyCore.NetDestroyObject(NetId);
+            }
         }
 
         while(IsServer)

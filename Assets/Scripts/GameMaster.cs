@@ -69,13 +69,6 @@ public class GameMaster : NetworkComponent
 
             while(!grindPhaseFinished) {
                 Debug.Log("grind phase start");
-
-                yield return new WaitForSeconds(60f);
-
-                
-            }
-
-            do {
                 count++;
                 if(count > 2)
                 {
@@ -83,7 +76,8 @@ public class GameMaster : NetworkComponent
                     count = 0;
                 }
                 yield return new WaitForSeconds(5f);
-            } while(!grindPhaseFinished);
+            }
+            yield return new WaitForSeconds(60f);
 
             while(!gameFinished) {
                 Debug.Log("running game");

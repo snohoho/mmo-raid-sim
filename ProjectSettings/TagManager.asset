@@ -9,6 +9,10 @@ TagManager:
   - Ranged
   - Invuln
   - Item
+  - Atk1
+  - Atk2
+  - Atk3
+  - Atk4
   layers:
   - Default
   - TransparentFX

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NETWORK_ENGINE;
 using UnityEngine;
 
-public class EnemyScript : NetworkComponent
+public class EnemyHitboxes : NetworkComponent
 {
     public int hp = 200;
     public override void HandleMessage(string flag, string value)

@@ -771,7 +771,7 @@ PrefabInstance:
     - target: {fileID: 1371650132343922900, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: owner
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7668720485115543640}
     - target: {fileID: 1485973275142433885, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -983,6 +983,14 @@ PrefabInstance:
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[16].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: UseLimit
+      objectReference: {fileID: 0}
+    - target: {fileID: 3700197217660463116, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Value
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3700197217660463116, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_MaxValue
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4122980795822297007, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_AnchorMax.y

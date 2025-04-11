@@ -11,7 +11,7 @@ public class GameMaster : NetworkComponent
     public bool grindPhaseFinished;
     public bool gameFinished;
     public int time;
-    public int count = 0;
+    public int count;
 
     public override void HandleMessage(string flag, string value) 
     {
@@ -67,23 +67,37 @@ public class GameMaster : NetworkComponent
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
 
+            while(count < 60)
+            {
+                count++;
+                if(count % 6 == 0)
+                {
+                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn1").transform.position);
+                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn2").transform.position);
+                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn3").transform.position);
+                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn4").transform.position);
+                }
+                yield return new WaitForSeconds(1f);
+            }
+
             Debug.Log("grind phase start");
             while(!grindPhaseFinished) {
-                count++;
-                if(count > 2)
-                {
-                    MyCore.NetCreateObject(4, -1, GameObject.Find("EnemySpawn").transform.position);
-                    count = 0;
-                }
-                yield return new WaitForSeconds(5f);
+                
+                yield return new WaitForSeconds(60f);
             }
-            yield return new WaitForSeconds(60f);
+
+            if(grindPhaseFinished)
+            {
+                MyCore.NetCreateObject(29, -1, new Vector3(0, 0, 0));
+            }
 
             while(!gameFinished) {
                 Debug.Log("running game");
 
                 yield return new WaitForSeconds(5f);
             }
+
+
 
             gameFinished = true;
             Debug.Log("finishing game");

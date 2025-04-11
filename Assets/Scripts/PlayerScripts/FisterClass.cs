@@ -19,34 +19,16 @@ public class FisterClass : PlayerController
     public int level = 1;
     public int gold = 0;
     
-    public float primaryCD;
-    public float secondaryCD;
-    public float defCD;
-    public float ultCD;
-    public float gcdMod;
     public float gremlin;
     public bool gremmingOut;
     public bool uiGremmingOut;
+    public bool defBonus;
+    public bool inCr;
 
     public override void HandleMessage(string flag, string value)
     {
         base.HandleMessage(flag, value);
 
-        if(flag == "STATCHANGE") {
-            string[] args = value.Split(',');
-            string stat = args[0];
-            string bonus = args[1];
-            if(IsClient) {
-                switch(stat) {
-                    case "ATK":
-                        meleeAtk = int.Parse(bonus);
-                        break; 
-                    case "SPD":
-                        speed = int.Parse(bonus);
-                        break; 
-                }
-            }
-        }
         if(flag == "GBLCD") {
             float cd = float.Parse(value);
             if(IsClient) {
@@ -126,38 +108,61 @@ public class FisterClass : PlayerController
                 speedText.text = speed.ToString();
             }
             if(IsServer) {
+                if((primaryHB.activeSelf || secondaryHB.activeSelf || ultHB.activeSelf) && !gremmingOut && !inCr) {
+                    dmgBonus = 1f;
+                }
+                if(!inCr) {
+                    primaryHB.SetActive(false);
+                    secondaryHB.SetActive(false);
+                    defHB.SetActive(false);
+                    ultHB.SetActive(false);
+                }   
+
                 while(isDead) {
 
                 }
 
-                if(isHurt) {
-                    hp -= 1;
-                    isHurt = false;
+                if(lastSkill == "PRIMARY") {
+                    if(!gremmingOut) gremlin += 10f;
+
+                    skillDmg = 100;
+                    defBonus = false;
+                    invuln = false;
+                    primaryHB.SetActive(true);
+                    
+                    lastSkill = "";
+                }
+                if(lastSkill == "SECONDARY") {
+                    if(!gremmingOut) gremlin += 10f;
+
+                    StartCoroutine(SecondaryHitboxes());
+                    defBonus = false;
+                    invuln = false;
+
+                    lastSkill = "";
+                }
+                if(lastSkill == "DEFENSIVE") {
+                    if(!gremmingOut) gremlin += 20f;
+
+                    invuln = true;
+                    if(!defBonus) {
+                        dmgBonus += 0.5f;
+                        defBonus = true;
+                    }
+
+                    lastSkill = "";
+                }
+                if(lastSkill == "ULT") {
+                    if(!gremmingOut) gremlin += 30f;
+
+                    StartCoroutine(UltHitboxes());
+                    defBonus = false;
+                    invuln = false;
+
+                    lastSkill = "";
                 }
 
-                if(!gremmingOut) {
-                    if(lastSkill == "PRIMARY") {
-                        gremlin += 10f;
-                        lastSkill = "";
-                    }
-                    if(lastSkill == "SECONDARY") {
-                        gremlin += 10f;
-                        lastSkill = "";
-                    }
-                    if(lastSkill == "DEFENSIVE") {
-                        gremlin += 20f;
-                        lastSkill = "";
-                    }
-                    if(lastSkill == "ULT") {
-                        gremlin += 30f;
-                        lastSkill = "";
-                    }
-
-                    if(gremlin >= 100f) {
-                        gremlin = 100f;
-                    }
-                }
-                else {
+                if(gremmingOut) {
                     gremlin -= 1f;
                     if(gremlin <= 0f) {
                         gremlin = 0f;
@@ -168,17 +173,15 @@ public class FisterClass : PlayerController
                     gremlin = 0;
                     if(gremmingOut) {
                         gremmingOut = false;
-                        meleeAtk /= 2;
+                        dmgBonus = 1f;
                         gcdMod = 0f;
-                        SendUpdate("STATCHANGE","ATK,"+meleeAtk.ToString());
                     }
                 }
                 else if(gremlin >= 100) {
                     gremlin = 100;
                     if(!gremmingOut) {
-                        meleeAtk *= 2;
-                        gcdMod = -0.5f;
-                        SendUpdate("STATCHANGE","ATK,"+meleeAtk.ToString());
+                        dmgBonus = 2f;
+                        gcdMod -= 0.5f;
                     }
                     gremmingOut = true;
                 }
@@ -223,26 +226,26 @@ public class FisterClass : PlayerController
             }
             if(usingSecondary) {
                 if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
+                    s2.text = secondaryCD.ToString("N1");
                 }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
+                if(secondaryCD > 0) {
+                    secondaryCD -= Time.deltaTime;
                 }
             }
             if(usingDefensive) {
                 if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
+                    s3.text = defCD.ToString("N1");
                 }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
+                if(defCD > 0) {
+                    defCD -= Time.deltaTime;
                 }
             }
             if(usingUlt) {
                 if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
+                    s4.text = ultCD.ToString("N1");
                 }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
+                if(ultCD > 0) {
+                    ultCD -= Time.deltaTime;
                 }
             }
             
@@ -313,7 +316,7 @@ public class FisterClass : PlayerController
 
             if(usingUlt && ultCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
-                ultCD = 1f;
+                ultCD = 10f;
                 gcd = 1f + gcdMod;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());
@@ -343,5 +346,52 @@ public class FisterClass : PlayerController
 
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    public IEnumerator SecondaryHitboxes() {
+        inCr = true;
+        skillDmg = 0;
+        int hbCount = 0;
+        float totalDmgBonus = dmgBonus;
+       
+        while(hbCount < 2) {
+            skillDmg += 75;
+            dmgBonus = totalDmgBonus;
+
+            secondaryHB.SetActive(true); 
+            yield return new WaitForSeconds(0.05f);
+
+            secondaryHB.SetActive(false);
+            yield return new WaitForSeconds(0.15f);
+
+            hbCount++;
+        }
+        
+        dmgBonus = 1f;
+        inCr = false;
+    }
+
+    public IEnumerator UltHitboxes() {
+        inCr = true;
+        skillDmg = 0;
+        int hbCount = 0;
+        float totalDmgBonus = dmgBonus;
+       
+        while(hbCount < 5) {
+            skillDmg += 50;
+            totalDmgBonus += 0.2f;
+            dmgBonus = totalDmgBonus;
+
+            ultHB.SetActive(true); 
+            yield return new WaitForSeconds(0.05f);
+
+            ultHB.SetActive(false);
+            yield return new WaitForSeconds(0.15f);
+
+            hbCount++;
+        }
+
+        dmgBonus = 1f;
+        inCr = false;
     }
 }

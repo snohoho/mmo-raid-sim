@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using NETWORK_ENGINE;
 using TMPro;
 using UnityEngine;
@@ -18,18 +19,11 @@ public class QueenClass : PlayerController
 
     public int level = 1;
     public int gold = 0;
-    public float primaryCD;
-    public float secondaryCD;
-    public float defCD;
-    public float ultCD;
-    public GameObject primaryHB;
-    public GameObject secondaryHB;
-    public GameObject defHB;
-    public GameObject ultHB;
-    public float gcdMod;
+    
     public int heat;
     public bool overheat;
     public bool uiOverheat;
+    public bool inCr;
 
     public override void HandleMessage(string flag, string value)
     {
@@ -140,35 +134,32 @@ public class QueenClass : PlayerController
                 speedText.text = speed.ToString();
             }
             if(IsServer) {
-                //primary, secondary, def, ult
-                primaryHB.SetActive(false);
-                secondaryHB.SetActive(false);
-                defHB.SetActive(false);
-                ultHB.SetActive(false);
+                if((primaryHB.activeSelf || secondaryHB.activeSelf || ultHB.activeSelf) && !inCr) {
+                    dmgBonus = 1f;
+                }
+                if(!inCr) {
+                    primaryHB.SetActive(false);
+                    secondaryHB.SetActive(false);
+                    defHB.SetActive(false);
+                    ultHB.SetActive(false);
+                }   
 
                 while(isDead) {
                     
-                }
-
-                if(isHurt) {
-                    hp -= 1;
-                    isHurt = false;
                 }
 
                 if(lastSkill == "PRIMARY") {
                     heat += 10;
 
                     skillDmg = 100;
-                    dmgBonus = 1;
                     primaryHB.SetActive(true);
 
                     lastSkill = "";
                 }
                 if(lastSkill == "SECONDARY") {
                     heat += 20;
+                    
                     skillDmg = 150;
-                    dmgBonus = 1;
-
                     secondaryHB.SetActive(true);
 
                     lastSkill = "";
@@ -198,7 +189,7 @@ public class QueenClass : PlayerController
                     else if(!overheat) {
                         if(heat < 30) {
                             skillDmg = 150;
-                            dmgBonus = 1.2f;
+                            dmgBonus += 0.2f;
                             ultHB.SetActive(true);
                         }
                         StartCoroutine(UltHitboxes());
@@ -262,26 +253,26 @@ public class QueenClass : PlayerController
             }
             if(usingSecondary) {
                 if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
+                    s2.text = secondaryCD.ToString("N1");
                 }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
+                if(secondaryCD > 0) {
+                    secondaryCD -= Time.deltaTime;
                 }
             }
             if(usingDefensive) {
                 if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
+                    s3.text = defCD.ToString("N1");
                 }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
+                if(defCD > 0) {
+                    defCD -= Time.deltaTime;
                 }
             }
             if(usingUlt) {
                 if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
+                    s4.text = ultCD.ToString("N1");
                 }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
+                if(ultCD > 0) {
+                    ultCD -= Time.deltaTime;
                 }
             }
             
@@ -395,12 +386,15 @@ public class QueenClass : PlayerController
     }
 
     public IEnumerator UltHitboxes() {
+        inCr = true;
         skillDmg = 0;
-        dmgBonus = 1f;
+        float totalDmgBonus = dmgBonus;
+
         while(heat >= 30) {
             heat -= 30;
             skillDmg += 100;
-            dmgBonus += 0.5f;
+            totalDmgBonus += 0.5f;
+            dmgBonus = totalDmgBonus;
 
             ultHB.SetActive(true); 
             yield return new WaitForSeconds(0.05f);
@@ -409,5 +403,7 @@ public class QueenClass : PlayerController
 
             yield return new WaitForSeconds(0.15f);
         }
+        dmgBonus = 1;
+        inCr = false;
     }
 }

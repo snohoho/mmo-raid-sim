@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerInventory : NetworkComponent
 {
     public RectTransform invPanel;
-    public GameObject[] inventory;
+    public GameObject[] inventory = new GameObject[10];
 
     public override void HandleMessage(string flag, string value)
     {

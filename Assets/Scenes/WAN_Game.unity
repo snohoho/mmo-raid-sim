@@ -607,7 +607,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 378318156}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.69839466
+  m_Size: 0.806979
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2331,8 +2331,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1658902906}
   m_HandleRect: {fileID: 1658902905}
   m_Direction: 0
-  m_Value: 0.4962591
-  m_Size: 0.9991681
+  m_Value: 0.49625874
+  m_Size: 0.9992413
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3518,8 +3518,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1904947442}
   m_HandleRect: {fileID: 1904947441}
   m_Direction: 2
-  m_Value: 0.50000006
-  m_Size: 0.04853509
+  m_Value: 0.5
+  m_Size: 0.056068625
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3910,8 +3910,8 @@ MonoBehaviour:
   SpawnPrefab: []
   NetworkPlayerManager: {fileID: 7124888953299117985, guid: aa91568026d4b66408ee390ed8c99ee3, type: 3}
   DefaultReturnScene: 0
-  publicIPAddress: 10.200.208.184
-  privateIPAddress: 23.128.112.65
+  publicIPAddress: 23.128.112.65
+  privateIPAddress: 10.200.208.184
   portMininimum: 9001
   portMaxinimum: 10000
   isGameServer: 0

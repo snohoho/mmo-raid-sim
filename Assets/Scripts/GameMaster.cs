@@ -67,8 +67,8 @@ public class GameMaster : NetworkComponent
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
 
+            Debug.Log("grind phase start");
             while(!grindPhaseFinished) {
-                Debug.Log("grind phase start");
                 count++;
                 if(count > 2)
                 {

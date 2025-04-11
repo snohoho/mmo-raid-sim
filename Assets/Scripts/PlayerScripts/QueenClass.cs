@@ -9,16 +9,7 @@ using UnityEngine.UI;
 
 public class QueenClass : PlayerController
 {
-    public TextMeshProUGUI nameLabel;
-    public string playerName;
-    public RectTransform statsPanel;
-    TextMeshProUGUI levelText, goldText, meleeText, rangedText, speedText; 
-    public RectTransform skillsPanel; 
-    TextMeshProUGUI s1, s2, s3, s4;
     public Slider heatBar;
-
-    public int level = 1;
-    public int gold = 0;
     
     public int heat;
     public bool overheat;
@@ -29,36 +20,6 @@ public class QueenClass : PlayerController
     {
         base.HandleMessage(flag, value);
 
-        if(flag == "GBLCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                gcd = cd;
-            }
-        }
-        if(flag == "PRIMARYCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                primaryCD = cd;
-            }
-        }
-        if(flag == "SECONDARYCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                secondaryCD = cd;
-            }
-        }
-        if(flag == "DEFCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                defCD = cd;
-            }
-        }
-        if(flag == "ULTCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                ultCD = cd;
-            }
-        }
         if(flag == "HEAT") {
             int newHeat = int.Parse(value);
             if(IsClient) {
@@ -229,54 +190,6 @@ public class QueenClass : PlayerController
     {       
         base.Update();
 
-        //handles cooldown timers
-        if(IsLocalPlayer) {
-            //Debug.Log(gcd + " " + primaryCD);
-            s1 = skillsPanel.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s2 = skillsPanel.GetChild(1).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s3 = skillsPanel.GetChild(2).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s4 = skillsPanel.GetChild(3).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            if(gcd > 0) {
-                s1.text = gcd.ToString("N1");
-                s2.text = gcd.ToString("N1");
-                s3.text = gcd.ToString("N1");
-                s4.text = gcd.ToString("N1");
-                gcd -= Time.deltaTime;
-            }
-            if(usingPrimary) {
-                if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
-                }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
-                }
-            }
-            if(usingSecondary) {
-                if(gcd <= 0) {
-                    s2.text = secondaryCD.ToString("N1");
-                }
-                if(secondaryCD > 0) {
-                    secondaryCD -= Time.deltaTime;
-                }
-            }
-            if(usingDefensive) {
-                if(gcd <= 0) {
-                    s3.text = defCD.ToString("N1");
-                }
-                if(defCD > 0) {
-                    defCD -= Time.deltaTime;
-                }
-            }
-            if(usingUlt) {
-                if(gcd <= 0) {
-                    s4.text = ultCD.ToString("N1");
-                }
-                if(ultCD > 0) {
-                    ultCD -= Time.deltaTime;
-                }
-            }
-            
-        }
         if(IsServer) {
             if(usingPrimary && primaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
@@ -371,7 +284,7 @@ public class QueenClass : PlayerController
                 nameLabel.text = playerName;
             }
 
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
@@ -382,7 +295,7 @@ public class QueenClass : PlayerController
             flash = !flash;
             yield return new WaitForSeconds(0.1f);
         }
-        yield return new WaitForEndOfFrame();
+        yield return null;
     }
 
     public IEnumerator UltHitboxes() {

@@ -5,6 +5,7 @@ using NETWORK_ENGINE;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : NetworkComponent
 {
@@ -24,12 +25,15 @@ public class PlayerController : NetworkComponent
     public float ultCD;
     public float gcd;
     public float gcdMod = 0f;
+    public float gcdMax;
     public bool invuln;
     public float buffTimer;
     public GameObject primaryHB;
     public GameObject secondaryHB;
     public GameObject defHB;
     public GameObject ultHB;
+    public int level = 1;
+    public int gold = 0;
 
     public bool isMoving;
     public bool isHurt;
@@ -42,6 +46,14 @@ public class PlayerController : NetworkComponent
     public bool usingLimit;
     public bool withinInteract;
     public string lastSkill;
+
+    public TextMeshProUGUI nameLabel;
+    public string playerName;
+    public RectTransform statsPanel;
+    public TextMeshProUGUI levelText, goldText, meleeText, rangedText, speedText; 
+    public RectTransform skillsPanel; 
+    public TextMeshProUGUI s1, s2, s3, s4;
+    public Image gcd1, gcd2, gcd3, gcd4;
     
 
     public override void HandleMessage(string flag, string value)
@@ -84,6 +96,9 @@ public class PlayerController : NetworkComponent
 
                 SendUpdate("SECONDARY", value);
             }
+            if(IsClient) {
+                usingSecondary = bool.Parse(value);
+            }
         }
         if(flag == "DEFENSIVE") {
             if(IsServer && gcd <= 0 && defCD <= 0) {
@@ -91,6 +106,9 @@ public class PlayerController : NetworkComponent
                 lastSkill = flag;
 
                 SendUpdate("DEFENSIVE", value);
+            }
+            if(IsClient) {
+                usingDefensive = bool.Parse(value);
             }
         }
         if(flag == "ULT") {
@@ -100,12 +118,46 @@ public class PlayerController : NetworkComponent
 
                 SendUpdate("ULT", value);
             }
+            if(IsClient) {
+                usingUlt = bool.Parse(value);
+            }
         }
         if(flag == "LIMIT") {
             if(IsServer) {
                 usingLimit = bool.Parse(value);
 
                 SendUpdate("LIMIT", value);
+            }
+        }
+        if(flag == "GBLCD") {
+            float cd = float.Parse(value);
+            if(IsClient) {
+                gcd = cd;
+                gcdMax = cd;
+            }
+        }
+        if(flag == "PRIMARYCD") {
+            float cd = float.Parse(value);
+            if(IsClient) {
+                primaryCD = cd;
+            }
+        }
+        if(flag == "SECONDARYCD") {
+            float cd = float.Parse(value);
+            if(IsClient) {
+                secondaryCD = cd;
+            }
+        }
+        if(flag == "DEFCD") {
+            float cd = float.Parse(value);
+            if(IsClient) {
+                defCD = cd;
+            }
+        }
+        if(flag == "ULTCD") {
+            float cd = float.Parse(value);
+            if(IsClient) {
+                ultCD = cd;
             }
         }
         if(flag == "STATCHANGE") {
@@ -146,6 +198,7 @@ public class PlayerController : NetworkComponent
 
     public virtual void Update()
     {
+        //handle rigidbody
         if(IsServer) {
             rb.velocity = (transform.forward * lastInput.y + transform.right * lastInput.x) * speed;
 
@@ -154,15 +207,59 @@ public class PlayerController : NetworkComponent
             }
             else if(rb.velocity != Vector3.zero) {
                 isMoving = true;
-            }
-
-            
+            } 
         }
         if(IsClient) {
             //perform anim
         }
+
+        //handle cooldown timers
         if(IsLocalPlayer) {
-            
+            s1 = skillsPanel.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+            s2 = skillsPanel.GetChild(1).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+            s3 = skillsPanel.GetChild(2).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+            s4 = skillsPanel.GetChild(3).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+            gcd1 = skillsPanel.GetChild(0).GetChild(1).gameObject.GetComponent<Image>();
+            gcd2 = skillsPanel.GetChild(1).GetChild(1).gameObject.GetComponent<Image>();
+            gcd3 = skillsPanel.GetChild(2).GetChild(1).gameObject.GetComponent<Image>();
+            gcd4 = skillsPanel.GetChild(3).GetChild(1).gameObject.GetComponent<Image>();
+            if(gcd > 0) {
+                gcd1.fillAmount = gcd/gcdMax;
+                gcd2.fillAmount = gcd/gcdMax;
+                gcd3.fillAmount = gcd/gcdMax;
+                gcd4.fillAmount = gcd/gcdMax;
+                gcd -= Time.deltaTime;
+            }
+            if(gcd <= 0) {
+                gcd1.fillAmount = 0;
+                gcd2.fillAmount = 0;
+                gcd3.fillAmount = 0;
+                gcd4.fillAmount = 0;
+            }
+            if(usingPrimary) {
+                s1.text = primaryCD.ToString("N1");
+                if(primaryCD > 0) {
+                    primaryCD -= Time.deltaTime;
+                }
+            }
+            if(usingSecondary) {
+                s2.text = secondaryCD.ToString("N1");
+                if(secondaryCD > 0) {
+                    secondaryCD -= Time.deltaTime;
+                }
+            }
+            if(usingDefensive) {
+                s3.text = defCD.ToString("N1");
+                if(defCD > 0) {
+                    defCD -= Time.deltaTime;
+                }
+            }
+            if(usingUlt) {
+                s4.text = ultCD.ToString("N1");
+                if(ultCD > 0) {
+                    ultCD -= Time.deltaTime;
+                }
+            }
         }
     }
 

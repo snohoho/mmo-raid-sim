@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using NETWORK_ENGINE;
 using TMPro;
 using UnityEngine;
@@ -8,63 +9,17 @@ using UnityEngine.UI;
 
 public class QueenClass : PlayerController
 {
-    public TextMeshProUGUI nameLabel;
-    public string playerName;
-    public RectTransform statsPanel;
-    TextMeshProUGUI levelText, goldText, meleeText, rangedText, speedText; 
-    public RectTransform skillsPanel; 
-    TextMeshProUGUI s1, s2, s3, s4;
     public Slider heatBar;
-
-    public int level = 1;
-    public int gold = 0;
-    public float primaryCD;
-    public float secondaryCD;
-    public float defCD;
-    public float ultCD;
-    public GameObject primaryHB;
-    public GameObject secondaryHB;
-    public GameObject defHB;
-    public GameObject ultHB;
-    public float gcdMod;
+    
     public int heat;
     public bool overheat;
     public bool uiOverheat;
+    public bool inCr;
 
     public override void HandleMessage(string flag, string value)
     {
         base.HandleMessage(flag, value);
 
-        if(flag == "GBLCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                gcd = cd;
-            }
-        }
-        if(flag == "PRIMARYCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                primaryCD = cd;
-            }
-        }
-        if(flag == "SECONDARYCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                secondaryCD = cd;
-            }
-        }
-        if(flag == "DEFCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                defCD = cd;
-            }
-        }
-        if(flag == "ULTCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                ultCD = cd;
-            }
-        }
         if(flag == "HEAT") {
             int newHeat = int.Parse(value);
             if(IsClient) {
@@ -140,35 +95,32 @@ public class QueenClass : PlayerController
                 speedText.text = speed.ToString();
             }
             if(IsServer) {
-                //primary, secondary, def, ult
-                primaryHB.SetActive(false);
-                secondaryHB.SetActive(false);
-                defHB.SetActive(false);
-                ultHB.SetActive(false);
+                if((primaryHB.activeSelf || secondaryHB.activeSelf || ultHB.activeSelf) && !inCr) {
+                    dmgBonus = 1f;
+                }
+                if(!inCr) {
+                    primaryHB.SetActive(false);
+                    secondaryHB.SetActive(false);
+                    defHB.SetActive(false);
+                    ultHB.SetActive(false);
+                }   
 
                 while(isDead) {
                     
-                }
-
-                if(isHurt) {
-                    hp -= 1;
-                    isHurt = false;
                 }
 
                 if(lastSkill == "PRIMARY") {
                     heat += 10;
 
                     skillDmg = 100;
-                    dmgBonus = 1;
                     primaryHB.SetActive(true);
 
                     lastSkill = "";
                 }
                 if(lastSkill == "SECONDARY") {
                     heat += 20;
+                    
                     skillDmg = 150;
-                    dmgBonus = 1;
-
                     secondaryHB.SetActive(true);
 
                     lastSkill = "";
@@ -198,7 +150,7 @@ public class QueenClass : PlayerController
                     else if(!overheat) {
                         if(heat < 30) {
                             skillDmg = 150;
-                            dmgBonus = 1.2f;
+                            dmgBonus += 0.2f;
                             ultHB.SetActive(true);
                         }
                         StartCoroutine(UltHitboxes());
@@ -238,54 +190,6 @@ public class QueenClass : PlayerController
     {       
         base.Update();
 
-        //handles cooldown timers
-        if(IsLocalPlayer) {
-            //Debug.Log(gcd + " " + primaryCD);
-            s1 = skillsPanel.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s2 = skillsPanel.GetChild(1).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s3 = skillsPanel.GetChild(2).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s4 = skillsPanel.GetChild(3).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            if(gcd > 0) {
-                s1.text = gcd.ToString("N1");
-                s2.text = gcd.ToString("N1");
-                s3.text = gcd.ToString("N1");
-                s4.text = gcd.ToString("N1");
-                gcd -= Time.deltaTime;
-            }
-            if(usingPrimary) {
-                if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
-                }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
-                }
-            }
-            if(usingSecondary) {
-                if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
-                }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
-                }
-            }
-            if(usingDefensive) {
-                if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
-                }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
-                }
-            }
-            if(usingUlt) {
-                if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
-                }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
-                }
-            }
-            
-        }
         if(IsServer) {
             if(usingPrimary && primaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
@@ -380,7 +284,7 @@ public class QueenClass : PlayerController
                 nameLabel.text = playerName;
             }
 
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 
@@ -391,16 +295,19 @@ public class QueenClass : PlayerController
             flash = !flash;
             yield return new WaitForSeconds(0.1f);
         }
-        yield return new WaitForEndOfFrame();
+        yield return null;
     }
 
     public IEnumerator UltHitboxes() {
+        inCr = true;
         skillDmg = 0;
-        dmgBonus = 1f;
+        float totalDmgBonus = dmgBonus;
+
         while(heat >= 30) {
             heat -= 30;
             skillDmg += 100;
-            dmgBonus += 0.5f;
+            totalDmgBonus += 0.5f;
+            dmgBonus = totalDmgBonus;
 
             ultHB.SetActive(true); 
             yield return new WaitForSeconds(0.05f);
@@ -409,5 +316,7 @@ public class QueenClass : PlayerController
 
             yield return new WaitForSeconds(0.15f);
         }
+        dmgBonus = 1;
+        inCr = false;
     }
 }

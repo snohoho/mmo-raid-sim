@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using NETWORK_ENGINE;
 using UnityEngine;
 
-public class #SCRIPTNAME#  : NetworkComponent
+public class TestItem_Item : NetworkComponent
 {
     public int itemID;
     public int itemRarity;
@@ -15,8 +17,6 @@ public class #SCRIPTNAME#  : NetworkComponent
     public int rangedBonus;
     public int spdBonus;
     #NOTRIM#
-    Object[] playerClassScripts = new Object[4];
-    #NOTRIM#
     public override void HandleMessage(string flag, string value)
     {
         if(flag == "EFFECT") {
@@ -28,7 +28,7 @@ public class #SCRIPTNAME#  : NetworkComponent
     #NOTRIM#
     public override void NetworkedStart()
     {
-        StartCoroutine(PopulateClassScripts());
+        #NOTRIM#
     }
     #NOTRIM#
     public override IEnumerator SlowUpdate()
@@ -39,33 +39,9 @@ public class #SCRIPTNAME#  : NetworkComponent
         #NOTRIM#
         yield return new WaitForSeconds(MyCore.MasterTimer);
     }
-
+    #NOTRIM#
     void Update()
     {
-    #NOTRIM#
-    }
-    #NOTRIM#
-    public IEnumerator PopulateClassScripts() {
-        NetworkPlayerManager[] npms = FindObjectsOfType<NetworkPlayerManager>();
-        foreach(NetworkPlayerManager n in npms) {
-            if(n.Owner == Owner) {
-                switch(n.playerClass) {
-                    case 0:
-                        playerClassScripts[Owner] = gameObject.GetComponent<FortitudeClass>();
-                        break;
-                    case 1:
-                        playerClassScripts[Owner] = gameObject.GetComponent<PrudenceClass>();
-                        break;
-                    case 2:
-                        playerClassScripts[Owner] = gameObject.GetComponent<TemperanceClass>();
-                        break;
-                    case 3:
-                        playerClassScripts[Owner] = gameObject.GetComponent<JusticeClass>();
-                        break;
-                }
-            }
-            #NOTRIM#
-            yield return new WaitForEndOfFrame();
-        }
+        #NOTRIM#
     }
 }

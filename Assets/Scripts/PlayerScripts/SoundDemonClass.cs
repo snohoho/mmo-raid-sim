@@ -3,82 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using NETWORK_ENGINE;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SoundDemonClass : PlayerController
 {
-    public TextMeshProUGUI nameLabel;
-    public string playerName;
-    public RectTransform statsPanel;
-    TextMeshProUGUI levelText, goldText, meleeText, rangedText, speedText; 
-    public RectTransform skillsPanel; 
-    TextMeshProUGUI s1, s2, s3, s4;
     public RectTransform notesPanel;
     GameObject n1, n2, n3;
-
-    public int level = 1;
-    public int gold = 0;
-    public float primaryCD;
-    public float secondaryCD;
-    public float defCD;
-    public float ultCD;
-    public float gcdMod;
-    public bool note1;
-    public bool note2;
-    public bool note3;
+    
+    public bool defBonus;
+    public bool[] note = new bool[3] {false, false, false};
+    public bool inCr;
 
     public override void HandleMessage(string flag, string value)
     {
         base.HandleMessage(flag, value);
 
-        if(flag == "GBLCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                gcd = cd;
-            }
-        }
-        if(flag == "PRIMARYCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                primaryCD = cd;
-            }
-        }
-        if(flag == "SECONDARYCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                secondaryCD = cd;
-            }
-        }
-        if(flag == "DEFCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                defCD = cd;
-            }
-        }
-        if(flag == "ULTCD") {
-            float cd = float.Parse(value);
-            if(IsClient) {
-                ultCD = cd;
-            }
-        }
         if(flag == "NOTE") {
-            int note = int.Parse(value);
+            int index = int.Parse(value);
             if(IsClient) {
-                switch(note) {
+                switch(index) {
                     case 0:
-                        note1 = true;
+                        note[index] = true;
                         break;
                     case 1:
-                        note2 = true;
+                        note[index] = true;
                         break;
                     case 2:
-                        note3 = true;
+                        note[index] = true;
                         break;
                     case 3:
-                        note1 = false;
-                        note2 = false;
-                        note3 = false;
+                        note[0] = false;
+                        note[1] = false;
+                        note[2] = false;
                         break;
                 }
             }
@@ -114,9 +72,9 @@ public class SoundDemonClass : PlayerController
                 n1 = notesPanel.GetChild(0).gameObject;
                 n2 = notesPanel.GetChild(1).gameObject;
                 n3 = notesPanel.GetChild(2).gameObject;
-                n1.SetActive(note1);
-                n2.SetActive(note2);
-                n3.SetActive(note3);
+                n1.SetActive(note[0]);
+                n2.SetActive(note[1]);
+                n3.SetActive(note[2]);
 
                 levelText.text = level.ToString();
                 goldText.text = gold.ToString();
@@ -125,49 +83,54 @@ public class SoundDemonClass : PlayerController
                 speedText.text = speed.ToString();
             }
             if(IsServer) {
+                if((primaryHB.activeSelf || secondaryHB.activeSelf || ultHB.activeSelf) && !inCr) {
+                    dmgBonus = 1f;
+                }
+                if(!inCr) {
+                    primaryHB.SetActive(false);
+                    secondaryHB.SetActive(false);
+                    defHB.SetActive(false);
+                    ultHB.SetActive(false);
+                }   
+
                 while(isDead) {
 
                 }
 
-                if(isHurt) {
-                    hp -= 1;
-                    isHurt = false;
-                }
-
                 if(lastSkill == "PRIMARY") {
-                    note1 = true;
+                    note[0] = true;
+
+                    skillDmg = 100;
+                    primaryHB.SetActive(true);
+                    defBonus = false;
+
                     lastSkill = "";
                     SendUpdate("NOTE","0");
                 }
                 if(lastSkill == "SECONDARY") {
-                    note2 = true;
+                    note[1] = true;
+                    
+                    skillDmg = 200;
+                    secondaryHB.SetActive(true);
+                    defBonus = false;
+
                     lastSkill = "";
                     SendUpdate("NOTE","1");
                 }
                 if(lastSkill == "DEFENSIVE") {
-                    note3 = true;
+                    note[2] = true;
+
+                    if(!defBonus) {
+                        dmgBonus += 0.5f;
+                        defBonus = true;
+                    }
+                    
                     lastSkill = "";
                     SendUpdate("NOTE","2");
                 }
                 if(lastSkill == "ULT") {
-                    int noteCt = 0;
-                    if(note1) { noteCt++; }
-                    if(note2) { noteCt++; }
-                    if(note3) { noteCt++; }
-
-                    if(noteCt == 1) {
-                        dmgBonus = 1.2f;
-                    }
-                    else if(noteCt == 2) {
-                        dmgBonus = 1.5f;
-                    }
-                    else if(noteCt == 3) {
-                        dmgBonus = 2f;
-                    }
-
-                    note1 = false;
-                    note2 = false;
-                    note3 = false;
+                    StartCoroutine(UltHitboxes());
+                    defBonus = false;
 
                     lastSkill = "";
                     SendUpdate("NOTE","3");
@@ -187,54 +150,6 @@ public class SoundDemonClass : PlayerController
     {       
         base.Update();
 
-        //handles cooldown timers
-        if(IsLocalPlayer) {
-            //Debug.Log(gcd + " " + primaryCD);
-            s1 = skillsPanel.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s2 = skillsPanel.GetChild(1).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s3 = skillsPanel.GetChild(2).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s4 = skillsPanel.GetChild(3).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            if(gcd > 0) {
-                s1.text = gcd.ToString("N1");
-                s2.text = gcd.ToString("N1");
-                s3.text = gcd.ToString("N1");
-                s4.text = gcd.ToString("N1");
-                gcd -= Time.deltaTime;
-            }
-            if(usingPrimary) {
-                if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
-                }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
-                }
-            }
-            if(usingSecondary) {
-                if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
-                }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
-                }
-            }
-            if(usingDefensive) {
-                if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
-                }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
-                }
-            }
-            if(usingUlt) {
-                if(gcd <= 0) {
-                    s1.text = primaryCD.ToString("N1");
-                }
-                if(primaryCD > 0) {
-                    primaryCD -= Time.deltaTime;
-                }
-            }
-            
-        }
         if(IsServer) {
             if(usingPrimary && primaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
@@ -331,5 +246,34 @@ public class SoundDemonClass : PlayerController
 
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    public IEnumerator UltHitboxes() {
+        inCr = true;
+        skillDmg = 0;
+        float totalDmgBonus = dmgBonus;
+       
+        for(int i=0; i<note.Length; i++) {
+            if(note[i]) {
+                skillDmg += 100;
+                totalDmgBonus += 0.5f;
+                dmgBonus = totalDmgBonus;
+
+                ultHB.SetActive(true); 
+                yield return new WaitForSeconds(0.05f);
+
+                ultHB.SetActive(false);
+                yield return new WaitForSeconds(0.15f);
+            }
+            
+            yield return null;
+        }
+
+        note[0] = false;
+        note[1] = false;
+        note[2] = false;
+        SendUpdate("NOTE","3");
+        dmgBonus = 1f;
+        inCr = false;
     }
 }

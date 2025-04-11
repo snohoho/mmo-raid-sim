@@ -12,14 +12,24 @@ public class PlayerController : NetworkComponent
     public Rigidbody rb;
     
     public int hp;
+    public int maxHp;
     public int meleeAtk;
     public int rangedAtk;
     public int speed;
     public float skillDmg;
-    public float dmgBonus;
+    public float dmgBonus = 1f;
+    public float primaryCD;
+    public float secondaryCD;
+    public float defCD;
+    public float ultCD;
     public float gcd;
+    public float gcdMod = 0f;
     public bool invuln;
     public float buffTimer;
+    public GameObject primaryHB;
+    public GameObject secondaryHB;
+    public GameObject defHB;
+    public GameObject ultHB;
 
     public bool isMoving;
     public bool isHurt;
@@ -57,10 +67,10 @@ public class PlayerController : NetworkComponent
             }
         }
         if(flag == "PRIMARY") {
-            if(IsServer && gcd <= 0) {
+            if(IsServer && gcd <= 0 && primaryCD <= 0) {
                 usingPrimary = bool.Parse(value);
                 lastSkill = flag;
-
+                
                 SendUpdate("PRIMARY", value);
             }
             if(IsClient) {
@@ -68,7 +78,7 @@ public class PlayerController : NetworkComponent
             }
         }
         if(flag == "SECONDARY") {
-            if(IsServer && gcd <= 0) {
+            if(IsServer && gcd <= 0 && secondaryCD <= 0) {
                 usingSecondary = bool.Parse(value);
                 lastSkill = flag;
 
@@ -76,7 +86,7 @@ public class PlayerController : NetworkComponent
             }
         }
         if(flag == "DEFENSIVE") {
-            if(IsServer && gcd <= 0) {
+            if(IsServer && gcd <= 0 && defCD <= 0) {
                 usingDefensive = bool.Parse(value);
                 lastSkill = flag;
 
@@ -84,7 +94,7 @@ public class PlayerController : NetworkComponent
             }
         }
         if(flag == "ULT") {
-            if(IsServer && gcd <= 0) {
+            if(IsServer && gcd <= 0 && ultCD <= 0) {
                 usingUlt = bool.Parse(value);
                 lastSkill = flag;
 
@@ -96,6 +106,24 @@ public class PlayerController : NetworkComponent
                 usingLimit = bool.Parse(value);
 
                 SendUpdate("LIMIT", value);
+            }
+        }
+        if(flag == "STATCHANGE") {
+            string[] args = value.Split(',');
+            string stat = args[0];
+            string bonus = args[1];
+            if(IsClient) {
+                switch(stat) {
+                    case "MATK":
+                        meleeAtk = int.Parse(bonus);
+                        break;
+                    case "RATK":
+                        rangedAtk = int.Parse(bonus);
+                        break; 
+                    case "SPD":
+                        speed = int.Parse(bonus);
+                        break; 
+                }
             }
         }
     }
@@ -119,7 +147,7 @@ public class PlayerController : NetworkComponent
     public virtual void Update()
     {
         if(IsServer) {
-            rb.velocity = (transform.forward * lastInput.y + transform.right * lastInput.x) * 5f;
+            rb.velocity = (transform.forward * lastInput.y + transform.right * lastInput.x) * speed;
 
             if(rb.velocity == Vector3.zero) {
                 isMoving = false;
@@ -226,5 +254,58 @@ public class PlayerController : NetworkComponent
         yield return new WaitForSeconds(invulnTime);
 
         invuln = false;
+    }
+
+    public IEnumerator EmotionTime(int emotion) {
+        Debug.Log(gameObject.name + " emotion: " + emotion);
+        int melBonus = meleeAtk;
+        int rngBonus = rangedAtk;
+        int spdBonus = 2;
+        float newGcdBonus = -0.5f; 
+        switch(emotion) {
+            case 0:
+                gcdMod += newGcdBonus;
+                break;
+            case 1:
+                meleeAtk += melBonus;
+                rangedAtk += rngBonus;
+                SendUpdate("STATCHANGE","MATK,"+meleeAtk.ToString());
+                SendUpdate("STATCHANGE","RATK,"+rangedAtk.ToString());
+                break;
+            case 2:
+                invuln = true;
+                break;
+            case 3:
+                speed += spdBonus;
+                SendUpdate("STATCHANGE","SPD,"+speed.ToString());
+                break;
+        }
+
+        if(emotion == 2) {
+            yield return new WaitForSeconds(2f);
+        }
+        else {
+            yield return new WaitForSeconds(5f);
+        }
+
+        Debug.Log(gameObject.name + "emotion end: " + emotion);
+        switch(emotion) {
+            case 0:
+                gcdMod -= newGcdBonus;
+                break;
+            case 1:
+                meleeAtk -= melBonus;
+                rangedAtk -= rngBonus;
+                SendUpdate("STATCHANGE","MATK,"+meleeAtk.ToString());
+                SendUpdate("STATCHANGE","RATK,"+rangedAtk.ToString());
+                break;
+            case 2:
+                invuln = false;
+                break;
+            case 3:
+                speed -= spdBonus;
+                SendUpdate("STATCHANGE","SPD,"+speed.ToString());
+                break;
+        }
     }
 }

@@ -13,6 +13,7 @@ TagManager:
   - Atk2
   - Atk3
   - Atk4
+  - Emotion
   layers:
   - Default
   - TransparentFX

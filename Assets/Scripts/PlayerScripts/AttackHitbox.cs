@@ -48,8 +48,8 @@ public class AttackHitbox : NetworkComponent
                 Debug.Log("ENEMY HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
 
                 col.gameObject.GetComponent<NavMeshController>().HP -= (int)damage;
-            }
-            
+                controller.dmgBonus = 1;
+            }       
         }
     }
 }

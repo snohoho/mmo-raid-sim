@@ -40,10 +40,13 @@ public class SupportHitbox : NetworkComponent
                 Debug.Log("support effect on " + col.gameObject.name);
 
                 if(gameObject.tag == "Invuln") {
-                    StartCoroutine(col.gameObject.GetComponent<PlayerController>().InvulnTimer(controller.buffTimer));
+                    col.gameObject.GetComponent<PlayerController>().StartCoroutine(col.gameObject.GetComponent<PlayerController>().InvulnTimer(controller.buffTimer));
+                }
+                if(gameObject.tag == "Emotion") {
+                    int emotion = controller.GetComponent<EmotionJewelClass>().activeEmotion;
+                    col.gameObject.GetComponent<PlayerController>().StartCoroutine(col.gameObject.GetComponent<PlayerController>().EmotionTime(emotion));
                 }
             }
-            
         }
     }
 }

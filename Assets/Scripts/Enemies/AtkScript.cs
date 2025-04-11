@@ -39,62 +39,53 @@ public class AtkScript : NetworkComponent
     {
         if(col.gameObject.CompareTag("Player")) {
             if(IsServer) {
-                float damage;
                 if(hitboxes.count == 10){
                     if(gameObject.CompareTag("Atk1")) {
                         if(col.gameObject.GetComponent<PlayerController>().invuln = false)
                         {
-                            damage = 0;
-                            col.gameObject.GetComponent<PlayerController>().hp -= (int)damage;
-                            Debug.Log("PLAYER HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
+                            Debug.Log(col.gameObject.name + " INVULN");
                             hitboxes.atk1HB.SetActive(false);
                         } else {
-                            damage = hitboxes.atkDmg;
-                            col.gameObject.GetComponent<PlayerController>().hp -= (int)damage;
-                            Debug.Log("PLAYER HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
+                            col.gameObject.GetComponent<PlayerController>().hp -= 1;
+                            Debug.Log("PLAYER HIT");
+                            SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
                             hitboxes.atk1HB.SetActive(false);
                         }
                     }
                     if(gameObject.CompareTag("Atk2")) {
                         if(col.gameObject.GetComponent<PlayerController>().invuln = false)
                         {
-                            damage = 0;
-                            col.gameObject.GetComponent<PlayerController>().hp -= (int)damage;
-                            Debug.Log("PLAYER HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
-                            hitboxes.atk2HB.SetActive(false);
+                            Debug.Log(col.gameObject.name + " INVULN");
+                            hitboxes.atk1HB.SetActive(false);
                         } else {
-                            damage = hitboxes.atkDmg;
-                            col.gameObject.GetComponent<PlayerController>().hp -= (int)damage;
-                            Debug.Log("PLAYER HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
-                            hitboxes.atk2HB.SetActive(false);
+                            col.gameObject.GetComponent<PlayerController>().hp -= 1;
+                            Debug.Log("PLAYER HIT");
+                            SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
+                            hitboxes.atk1HB.SetActive(false);
                         }
                     }
                     if(gameObject.CompareTag("Atk3")) {
                         if(col.gameObject.GetComponent<PlayerController>().invuln = false)
                         {
-                            damage = 0;
-                            col.gameObject.GetComponent<PlayerController>().hp -= (int)damage;
-                            Debug.Log("PLAYER HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
-                            hitboxes.atk3HB.SetActive(false);
+                            Debug.Log(col.gameObject.name + " INVULN");
+                            hitboxes.atk1HB.SetActive(false);
                         } else {
-                            damage = hitboxes.atkDmg;
-                            col.gameObject.GetComponent<PlayerController>().hp -= (int)damage;
-                            Debug.Log("PLAYER HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
-                            hitboxes.atk3HB.SetActive(false);
+                            col.gameObject.GetComponent<PlayerController>().hp -= 1;
+                            Debug.Log("PLAYER HIT");
+                            SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
+                            hitboxes.atk1HB.SetActive(false);
                         }
                     }
                     if(gameObject.CompareTag("Atk4")) {
                         if(col.gameObject.GetComponent<PlayerController>().invuln = false)
                         {
-                            damage = 0;
-                            col.gameObject.GetComponent<PlayerController>().hp -= (int)damage;
-                            Debug.Log("PLAYER HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
-                            hitboxes.atk4HB.SetActive(false);
+                            Debug.Log(col.gameObject.name + " INVULN");
+                            hitboxes.atk1HB.SetActive(false);
                         } else {
-                            damage = hitboxes.atkDmg;
-                            col.gameObject.GetComponent<PlayerController>().hp -= (int)damage;
-                            Debug.Log("PLAYER HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
-                            hitboxes.atk4HB.SetActive(false);
+                            col.gameObject.GetComponent<PlayerController>().hp -= 1;
+                            Debug.Log("PLAYER HIT");
+                            SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
+                            hitboxes.atk1HB.SetActive(false);
                         }
                     }
                 }

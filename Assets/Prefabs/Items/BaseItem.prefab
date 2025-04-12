@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5779621770694848573}
   - component: {fileID: -378322447209352510}
+  - component: {fileID: 8310838952246377927}
+  - component: {fileID: 5879322880264311818}
   m_Layer: 0
   m_Name: BaseItem
   m_TagString: Untagged
@@ -86,3 +88,47 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8310838952246377927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7309268987623219551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34ca87a457962d459c49c36b9753ca5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 0
+  Owner: -10
+  NetId: -10
+  IsInit: 0
+  IsLocalPlayer: 0
+  UseLobby: 0
+  UpdateFrequency: 0.1
+  MyCore: {fileID: 0}
+--- !u!114 &5879322880264311818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7309268987623219551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc67f21636418a4aac1615d2dbcf6df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MyCore: {fileID: 0}
+  MyId: {fileID: 0}
+  IsDirty: 0
+  itemID: 0
+  itemRarity: 0
+  itemName: 
+  itemDescription: 
+  itemSprite: {fileID: 0}
+  hpBonus: 0
+  meleeBonus: 0
+  rangedBonus: 0
+  spdBonus: 0

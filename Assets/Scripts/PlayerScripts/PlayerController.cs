@@ -45,6 +45,7 @@ public class PlayerController : NetworkComponent
     public bool usingUlt;
     public bool usingLimit;
     public bool withinInteract;
+    public bool inShop;
     public string lastSkill;
 
     public TextMeshProUGUI nameLabel;
@@ -67,6 +68,9 @@ public class PlayerController : NetworkComponent
             }
         }
         if(flag == "INTERACT") {
+            if(IsServer) {
+                inShop = bool.Parse(value);
+            }
             if(IsClient) {
                 withinInteract = bool.Parse(value);
             }
@@ -187,7 +191,17 @@ public class PlayerController : NetworkComponent
 
     public override IEnumerator SlowUpdate()
     {
-
+        if(withinInteract) {
+            if(inShop) {
+                GameObject shop = GameObject.Find("Shop");
+                shop.transform.GetChild(0).gameObject.SetActive(true);
+            }
+            if(!inShop) {
+                GameObject shop = GameObject.Find("Shop");
+                shop.transform.GetChild(0).gameObject.SetActive(false);
+            }
+        }
+        
         yield return new WaitForSeconds(MyCore.MasterTimer);
     }
 
@@ -271,7 +285,7 @@ public class PlayerController : NetworkComponent
                 SendUpdate("HURT",hp.ToString());
            }
         }
-        if(col.gameObject.CompareTag("Item")) {
+        if(col.gameObject.CompareTag("Shop")) {
             if(IsServer) {
                 withinInteract = true;
                 SendUpdate("INTERACT","true");
@@ -281,17 +295,12 @@ public class PlayerController : NetworkComponent
 
     public void OnTriggerExit(Collider col)
     {
-        if(col.gameObject.CompareTag("Item")) {
+        if(col.gameObject.CompareTag("Shop")) {
             if(IsServer) {
                 withinInteract = false;
                 SendUpdate("INTERACT","false");
             }
         }
-    }
-
-    public void OnTriggerStay(Collider col)
-    {
-        
     }
 
     public void Move(InputAction.CallbackContext context) {

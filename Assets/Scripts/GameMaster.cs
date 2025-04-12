@@ -62,6 +62,7 @@ public class GameMaster : NetworkComponent
                 //create objects
                 MyCore.NetCreateObject(n.playerClass, n.Owner, GameObject.Find("spawn" + n.Owner).transform.position);
             }
+            MyCore.NetCreateObject(34, -1, new Vector3(6,0,5));
 
             Debug.Log("starting game");
             SendUpdate("GAMESTART", "1");
@@ -82,8 +83,8 @@ public class GameMaster : NetworkComponent
 
             Debug.Log("grind phase start");
             while(!grindPhaseFinished) {
-                
-                yield return new WaitForSeconds(60f);
+                yield return new WaitForSeconds(180f);
+                grindPhaseFinished = true;
             }
 
             if(grindPhaseFinished)

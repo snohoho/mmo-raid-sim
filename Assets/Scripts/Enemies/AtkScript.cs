@@ -56,36 +56,36 @@ public class AtkScript : NetworkComponent
                         if(col.gameObject.GetComponent<PlayerController>().invuln = false)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
-                            hitboxes.atk1HB.SetActive(false);
+                            hitboxes.atk2HB.SetActive(false);
                         } else {
                             col.gameObject.GetComponent<PlayerController>().hp -= 1;
                             Debug.Log("PLAYER HIT");
                             SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
-                            hitboxes.atk1HB.SetActive(false);
+                            hitboxes.atk2HB.SetActive(false);
                         }
                     }
                     if(gameObject.CompareTag("Atk3")) {
                         if(col.gameObject.GetComponent<PlayerController>().invuln = false)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
-                            hitboxes.atk1HB.SetActive(false);
+                            hitboxes.atk3HB.SetActive(false);
                         } else {
                             col.gameObject.GetComponent<PlayerController>().hp -= 1;
                             Debug.Log("PLAYER HIT");
                             SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
-                            hitboxes.atk1HB.SetActive(false);
+                            hitboxes.atk3HB.SetActive(false);
                         }
                     }
                     if(gameObject.CompareTag("Atk4")) {
                         if(col.gameObject.GetComponent<PlayerController>().invuln = false)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
-                            hitboxes.atk1HB.SetActive(false);
+                            hitboxes.atk4HB.SetActive(false);
                         } else {
                             col.gameObject.GetComponent<PlayerController>().hp -= 1;
                             Debug.Log("PLAYER HIT");
                             SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
-                            hitboxes.atk1HB.SetActive(false);
+                            hitboxes.atk4HB.SetActive(false);
                         }
                     }
                 }

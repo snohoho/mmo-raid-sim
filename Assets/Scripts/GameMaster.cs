@@ -62,12 +62,13 @@ public class GameMaster : NetworkComponent
                 //create objects
                 MyCore.NetCreateObject(n.playerClass, n.Owner, GameObject.Find("spawn" + n.Owner).transform.position);
             }
+            MyCore.NetCreateObject(34, -1, new Vector3(6,0,5));
 
             Debug.Log("starting game");
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
 
-            while(count < 60)
+            /*while(count < 60)
             {
                 count++;
                 if(count % 6 == 0)
@@ -78,12 +79,12 @@ public class GameMaster : NetworkComponent
                     MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn4").transform.position);
                 }
                 yield return new WaitForSeconds(1f);
-            }
+            }*/
 
             Debug.Log("grind phase start");
             while(!grindPhaseFinished) {
-                
-                yield return new WaitForSeconds(60f);
+                yield return new WaitForSeconds(180f);
+                grindPhaseFinished = true;
             }
 
             if(grindPhaseFinished)

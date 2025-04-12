@@ -14,6 +14,7 @@ TagManager:
   - Atk3
   - Atk4
   - Emotion
+  - Shop
   layers:
   - Default
   - TransparentFX

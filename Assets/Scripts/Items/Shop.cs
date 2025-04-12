@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using NETWORK_ENGINE;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Shop : NetworkComponent
 {
-    public ItemManager itemManager;
+    public ItemStats[] items;
     public PlayerController[] shoppers;
     public PlayerInventory playerInventory;
     public ItemStats[] itemsForSale = new ItemStats[5];
     public ItemStats[] displayInventory = new ItemStats[10]; 
     public RectTransform invPanel;
     public RectTransform itemsPanel;
-    public int[] sellPrice;
-    public int[] buyPrice;
+    public int[] sellPrice = new int[5];
+    public int[] buyPrice = new int[5];
+    public Button refreshButton;
+    public bool refreshing;
 
     public override void HandleMessage(string flag, string value)
     {
@@ -22,17 +25,49 @@ public class Shop : NetworkComponent
             string[] args = value.Split(',');
             int slot = int.Parse(args[0]);
             int randItem = int.Parse(args[1]);
-            int price = int.Parse(args[2]);
 
             if(IsClient) {
-                itemsForSale[slot] = itemManager.items[randItem];
-                itemsPanel.GetChild(slot).GetChild(0).GetComponent<TextMeshProUGUI>().text = price + "G";
-                buyPrice[slot] = price;
+                Debug.Log(slot + " " + randItem);
+                itemsForSale[slot] = items[randItem];
+                int rarity = itemsForSale[slot].itemRarity;
+                switch(rarity) {
+                    case 1:
+                        buyPrice[slot] = 100;
+                        break;
+                    case 2:
+                        buyPrice[slot] = 200;
+                        break;
+                    case 3:
+                        buyPrice[slot] = 300;
+                        break;
+                    case 4:
+                        buyPrice[slot] = 400;
+                        break;
+                    case 5:
+                        buyPrice[slot] = 500;
+                        break;
+                }
+                itemsPanel.GetChild(slot).GetChild(0).GetComponent<TextMeshProUGUI>().text = buyPrice[slot] + "G";
             }
         }
         if(flag == "BUY") {
+            if(IsServer) {
+                Debug.Log("BUY ITEM");
+            }
+        }
+        if(flag == "REFRESH") {
+            Debug.Log("TEST");
+            if(IsServer) {
+                Debug.Log("refresh server flag");
+                refreshing = bool.Parse(value);
+                StartCoroutine(RefreshShop());
+
+                SendUpdate("REFRESH", refreshing.ToString());
+            }
             if(IsClient) {
-                
+                Debug.Log("refresh client flag");
+                refreshing = bool.Parse(value);
+                refreshButton.interactable = !refreshing;
             }
         }
     }
@@ -40,26 +75,29 @@ public class Shop : NetworkComponent
     public override void NetworkedStart()
     {
         shoppers = FindObjectsOfType<PlayerController>();
-        RefreshShop();
+        StartCoroutine(RefreshShop());
     }
 
     public override IEnumerator SlowUpdate()
     {
-        if(IsServer) {
-
-        }
-        if(IsLocalPlayer) {
-            for(int i=0; i<10; i++) {
-                if(displayInventory[i] != null) {
-                    invPanel.GetChild(i).gameObject.SetActive(true);
-                }
-                else if(displayInventory[i] == null) {
-                    invPanel.GetChild(i).gameObject.SetActive(false);
+        while(IsConnected) {
+            if(IsClient) {
+                foreach(PlayerController shopper in shoppers) {
+                    transform.GetChild(0).gameObject.SetActive(shopper.inShop);
+                    if(shopper.inShop) {
+                        Cursor.lockState = CursorLockMode.None;
+                    }
+                    if(!shopper.inShop) {
+                        Cursor.lockState = CursorLockMode.Locked;
+                    }
                 }
             }
-        }
+            if(IsServer) {
 
-        yield return new WaitForSeconds(MyCore.MasterTimer);
+            }
+
+            yield return new WaitForSeconds(MyCore.MasterTimer);
+        }
     }
 
     void Start()
@@ -72,11 +110,19 @@ public class Shop : NetworkComponent
         
     }
 
-    public void RefreshShop() {
+    public void ButtonRefresh(bool refresh) {
+        if(IsClient) {
+            Debug.Log("START REFRESH");
+            SendCommand("REFRESH",refresh.ToString());
+        }
+    }
+
+    public IEnumerator RefreshShop() {
         if(IsServer) {
-            for(int i=0; i<5; i++) {
-                int randItem = Random.Range(0, itemManager.items.Length);
-                itemsForSale[i] = itemManager.items[randItem];
+            Debug.Log("START REFRESH SERVER");
+            for(int i=0; i<itemsForSale.Length; i++) {
+                int randItem = Random.Range(0, items.Length);
+                itemsForSale[i] = items[randItem];
                 
                 int rarity = itemsForSale[i].itemRarity;
                 switch(rarity) {
@@ -96,22 +142,19 @@ public class Shop : NetworkComponent
                         buyPrice[i] = 500;
                         break;
                 }
-                SendUpdate("SALEITEM",i+","+randItem+","+buyPrice);
+                SendUpdate("SALEITEM",i+","+randItem);
+                yield return new WaitForSeconds(MyCore.MasterTimer);
             }
-        }
-        if(IsClient) {
 
+            SendUpdate("REFRESH", "false");
         }
     }
 
     public void BuyItem(int slot) {
-        if(IsLocalPlayer) {
-            playerInventory.inventory[0] = itemsForSale[slot];
-            foreach(PlayerController shopper in shoppers) {
-                if(shopper.Owner == playerInventory.Owner) {
-                    shopper.gold -= buyPrice[slot];
-                }
-            }
+        if(IsClient) {
+            //handles VISUALS
+            Debug.Log("BUY ITEM");
+            SendCommand("BUY", slot.ToString());
         }
     }
 
@@ -134,6 +177,10 @@ public class Shop : NetworkComponent
                 sellPrice[slot] = 250;
                 break;
         }
+    }
+
+    public void ReplaceItem(int slot) {
+
     }
 
     public void HoverItem(int slot) {

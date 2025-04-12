@@ -70,6 +70,11 @@ public class PlayerController : NetworkComponent
         if(flag == "INTERACT") {
             if(IsServer) {
                 inShop = bool.Parse(value);
+
+                SendUpdate("INTERACT","true");
+            }
+            if(IsClient && withinInteract) {
+                inShop = bool.Parse(value);
             }
             if(IsClient) {
                 withinInteract = bool.Parse(value);
@@ -191,14 +196,21 @@ public class PlayerController : NetworkComponent
 
     public override IEnumerator SlowUpdate()
     {
-        if(withinInteract) {
-            if(inShop) {
-                GameObject shop = GameObject.Find("Shop");
-                shop.transform.GetChild(0).gameObject.SetActive(true);
-            }
-            if(!inShop) {
-                GameObject shop = GameObject.Find("Shop");
-                shop.transform.GetChild(0).gameObject.SetActive(false);
+        if(IsLocalPlayer) {
+            Debug.Log("test1");
+            if(withinInteract) {
+                Debug.Log("test2");
+                if(inShop) {
+                    Debug.Log("open shop ui");
+                    GameObject shop = FindAnyObjectByType<Shop>().gameObject;
+                    Debug.Log(shop.name);
+                    shop.transform.GetChild(0).gameObject.SetActive(true);
+                }
+                if(!inShop) {
+                    Debug.Log("test3");
+                    GameObject shop = FindAnyObjectByType<Shop>().gameObject;
+                    shop.transform.GetChild(0).gameObject.SetActive(false);
+                }
             }
         }
         
@@ -344,7 +356,7 @@ public class PlayerController : NetworkComponent
 
     public void Interact(InputAction.CallbackContext context) {
         if(context.started && withinInteract) {
-            SendCommand("INTERACT","true");
+            SendCommand("INTERACT",(!inShop).ToString());
         }
     }
 

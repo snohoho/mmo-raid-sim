@@ -1250,6 +1250,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6524560042421249209}
+    - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Move
       objectReference: {fileID: 0}
@@ -1272,6 +1276,10 @@ PrefabInstance:
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: UseUlt
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Interact
       objectReference: {fileID: 0}
     - target: {fileID: 3700197217660463116, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_Value
@@ -1654,12 +1662,15 @@ MonoBehaviour:
   ultCD: 0
   gcd: 0
   gcdMod: 0
+  gcdMax: 0
   invuln: 0
   buffTimer: 0
   primaryHB: {fileID: 7797845019172466987}
   secondaryHB: {fileID: 1672710043246839077}
   defHB: {fileID: 6979654081121327905}
   ultHB: {fileID: 5917709828283373379}
+  level: 1
+  gold: 0
   isMoving: 0
   isHurt: 0
   isDead: 0
@@ -1670,19 +1681,31 @@ MonoBehaviour:
   usingUlt: 0
   usingLimit: 0
   withinInteract: 0
+  inShop: 0
   lastSkill: 
   nameLabel: {fileID: 4463329325719624921}
   playerName: 
   statsPanel: {fileID: 744417340403447391}
+  levelText: {fileID: 0}
+  goldText: {fileID: 0}
+  meleeText: {fileID: 0}
+  rangedText: {fileID: 0}
+  speedText: {fileID: 0}
   skillsPanel: {fileID: 5180827317012394502}
+  s1: {fileID: 0}
+  s2: {fileID: 0}
+  s3: {fileID: 0}
+  s4: {fileID: 0}
+  gcd1: {fileID: 0}
+  gcd2: {fileID: 0}
+  gcd3: {fileID: 0}
+  gcd4: {fileID: 0}
   emotions:
   - {fileID: 1777636335936846685}
   - {fileID: 4730496375208121612}
   - {fileID: 6911469812571961797}
   - {fileID: 7445889583425294276}
   emotionLabel: {fileID: 1090278018142279527}
-  level: 1
-  gold: 0
   activeEmotion: 0
   nextEmotion: 0
 --- !u!54 &6443959240267633162 stripped

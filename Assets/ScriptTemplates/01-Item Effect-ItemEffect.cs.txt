@@ -4,19 +4,8 @@ using System.Threading;
 using NETWORK_ENGINE;
 using UnityEngine;
 
-public class ItemStats : NetworkComponent
+public class #SCRIPTNAME# : ItemStats
 {
-    public int itemID;
-    public int itemRarity;
-    public string itemName;
-    public string itemDescription;
-    public Sprite itemSprite;
-    #NOTRIM#
-    public int hpBonus;
-    public int meleeBonus;
-    public int rangedBonus;
-    public int spdBonus;
-    #NOTRIM#
     public override void HandleMessage(string flag, string value)
     {
         if(flag == "EFFECT") {

@@ -68,7 +68,7 @@ public class GameMaster : NetworkComponent
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
 
-            while(count < 60)
+            /*while(count < 60)
             {
                 count++;
                 if(count % 6 == 0)
@@ -79,7 +79,7 @@ public class GameMaster : NetworkComponent
                     MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn4").transform.position);
                 }
                 yield return new WaitForSeconds(1f);
-            }
+            }*/
 
             Debug.Log("grind phase start");
             while(!grindPhaseFinished) {

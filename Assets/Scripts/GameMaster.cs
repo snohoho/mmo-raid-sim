@@ -4,14 +4,20 @@ using UnityEngine;
 using NETWORK_ENGINE;
 using UnityEditor;
 using UnityEngine.UI;
+using TMPro;
+using System.Threading;
 
 public class GameMaster : NetworkComponent
 {
     public bool gameStarted;
     public bool grindPhaseFinished;
     public bool gameFinished;
-    public int time;
-    public int count;
+    public float time;
+    public int totalDamage;
+    public RectTransform timerPanel;
+    public TextMeshProUGUI timer;
+    public RectTransform finalStatsPanel;
+    public TextMeshProUGUI finalStats;
 
     public override void HandleMessage(string flag, string value) 
     {
@@ -22,11 +28,17 @@ public class GameMaster : NetworkComponent
                 foreach(NetworkPlayerManager n in npm) {
                     n.transform.GetChild(0).gameObject.SetActive(false);
                 }
+                timerPanel.gameObject.SetActive(true);
             }
         }
         if(flag == "GAMEFINISH") {
             if(IsClient) {
                 //disable movement
+            }
+        }
+        if(flag == "TIMER") {
+            if(IsClient) {
+                time = float.Parse(value);
             }
         }
     }
@@ -62,54 +74,64 @@ public class GameMaster : NetworkComponent
                 //create objects
                 MyCore.NetCreateObject(n.playerClass, n.Owner, GameObject.Find("spawn" + n.Owner).transform.position);
             }
+            MyCore.NetCreateObject(34, -1, new Vector3(6,0,5));
 
             Debug.Log("starting game");
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
-
-            while(count < 60)
-            {
-                count++;
-                if(count % 6 == 0)
-                {
-                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn1").transform.position);
-                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn2").transform.position);
-                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn3").transform.position);
-                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn4").transform.position);
-                }
-                yield return new WaitForSeconds(1f);
-            }
-
-            Debug.Log("grind phase start");
+            
+            
             while(!grindPhaseFinished) {
+                Debug.Log("grind phase start");
+                time = 180f;
+                SendUpdate("TIMER", time.ToString());
+                StartCoroutine(SpawnEnemies());
                 
-                yield return new WaitForSeconds(60f);
+                yield return new WaitUntil(() => time <= 0f);
+
+                grindPhaseFinished = true;
             }
 
             if(grindPhaseFinished)
             {
                 MyCore.NetCreateObject(29, -1, new Vector3(0, 0, 0));
+                MyCore.NetDestroyObject(FindAnyObjectByType<ItemManager>().NetId);
             }
 
             while(!gameFinished) {
-                Debug.Log("running game");
-
-                yield return new WaitForSeconds(5f);
+                Debug.Log("boss phase start");
+                time = 360f;
+                SendUpdate("TIMER", time.ToString());
+                yield return new WaitUntil(() => gameFinished == true || time <= 0f);
             }
 
-
-
-            gameFinished = true;
             Debug.Log("finishing game");
             SendUpdate("GAMEFINISH", "true");
+            foreach(PlayerController player in GameObject.FindObjectsOfType<PlayerController>()) {
+                totalDamage += player.totalDamage;
+            }
 
-            yield return new WaitForSeconds(1f);
+            
+
+            yield return new WaitForSeconds(15f);
             
             Debug.Log("game finished");
-            //StartCoroutine(MyCore.DisconnectServer());
+            StartCoroutine(MyCore.DisconnectServer());
         }
 
         yield return new WaitForSeconds(MyCore.MasterTimer);
+    }
+
+    public IEnumerator SpawnEnemies() 
+    {
+        while(!grindPhaseFinished) {
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn1").transform.position);
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn2").transform.position);
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn3").transform.position);
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn4").transform.position);
+
+            yield return new WaitForSeconds(20f);
+        }
     }
 
     void Start()
@@ -119,6 +141,17 @@ public class GameMaster : NetworkComponent
 
     void Update()
     {
-        
+        if(IsServer) {
+            time -= Time.deltaTime;
+        }
+        if(IsClient) {
+            time -= Time.deltaTime;
+            int min = (int)(time/60);
+            int sec = (int)(time%60);
+            timer.text = string.Format("{0:00}:{1:00}", min, sec);
+            if(gameFinished) {
+                finalStatsPanel.gameObject.SetActive(true);
+            }
+        }
     }
 }

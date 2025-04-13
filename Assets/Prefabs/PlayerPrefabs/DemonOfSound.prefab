@@ -958,6 +958,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2787904039896821000, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 3726466281052327465}
     - target: {fileID: 2823063515297768880, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1035,6 +1039,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3726466281052327465}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3726466281052327465}
+    - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Move
       objectReference: {fileID: 0}
@@ -1061,6 +1069,10 @@ PrefabInstance:
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[16].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: UseLimit
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Interact
       objectReference: {fileID: 0}
     - target: {fileID: 3700197217660463116, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_Value
@@ -1448,12 +1460,17 @@ MonoBehaviour:
   ultCD: 0
   gcd: 0
   gcdMod: 0
+  gcdMax: 0
   invuln: 0
   buffTimer: 0
   primaryHB: {fileID: 8177898088440311566}
   secondaryHB: {fileID: 7464247697203091859}
   defHB: {fileID: 973643112116697934}
   ultHB: {fileID: 8407916210582763376}
+  level: 1
+  gold: 0
+  exp: 0
+  totalDamage: 0
   isMoving: 0
   isHurt: 0
   isDead: 0
@@ -1464,14 +1481,26 @@ MonoBehaviour:
   usingUlt: 0
   usingLimit: 0
   withinInteract: 0
+  inShop: 0
   lastSkill: 
   nameLabel: {fileID: 3314692959277216957}
   playerName: 
   statsPanel: {fileID: 1847736231233691195}
+  levelText: {fileID: 0}
+  goldText: {fileID: 0}
+  meleeText: {fileID: 0}
+  rangedText: {fileID: 0}
+  speedText: {fileID: 0}
   skillsPanel: {fileID: 6058809408694458978}
+  s1: {fileID: 0}
+  s2: {fileID: 0}
+  s3: {fileID: 0}
+  s4: {fileID: 0}
+  gcd1: {fileID: 0}
+  gcd2: {fileID: 0}
+  gcd3: {fileID: 0}
+  gcd4: {fileID: 0}
   notesPanel: {fileID: 2735594363968783745}
-  level: 1
-  gold: 0
   defBonus: 0
   note: 000000
   inCr: 0

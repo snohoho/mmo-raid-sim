@@ -43,9 +43,7 @@ public class NavMeshController : NetworkComponent
             Goal = new Vector3(randx, Goal.y, randz);
             MyAgent.SetDestination(Goal);
 
-            if(HP<=0) {
-                MyCore.NetDestroyObject(NetId);
-            }
+            
         }
 
         while(IsServer)
@@ -66,6 +64,9 @@ public class NavMeshController : NetworkComponent
                 }
                 yield return new WaitForSeconds(1f);
             }
+            if(HP<=0) {
+                MyCore.NetDestroyObject(NetId);
+            }
         }
     }
 
@@ -77,6 +78,7 @@ public class NavMeshController : NetworkComponent
         {
             throw new System.Exception("ERROR: COULD NOT FIND NAV MESH AGENT!");
         }
+        Gold = Random.Range(75,150);
     }
 
     // Update is called once per frame

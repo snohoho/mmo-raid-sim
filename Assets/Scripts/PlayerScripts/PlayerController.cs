@@ -18,12 +18,14 @@ public class PlayerController : NetworkComponent
     public int rangedAtk;
     public int speed;
     public float skillDmg;
-    public float dmgBonus = 1f;
+    public float dmgBonusBase = 1f;
+    public float dmgBonus;
     public float primaryCD;
     public float secondaryCD;
     public float defCD;
     public float ultCD;
     public float gcd;
+    public float gcdBase = 0f;
     public float gcdMod = 0f;
     public float gcdMax;
     public bool invuln;
@@ -34,6 +36,8 @@ public class PlayerController : NetworkComponent
     public GameObject ultHB;
     public int level = 1;
     public int gold = 0;
+    public int exp = 0;
+    public int totalDamage = 0;
 
     public bool isMoving;
     public bool isHurt;
@@ -45,6 +49,7 @@ public class PlayerController : NetworkComponent
     public bool usingUlt;
     public bool usingLimit;
     public bool withinInteract;
+    public bool inShop;
     public string lastSkill;
 
     public TextMeshProUGUI nameLabel;
@@ -65,17 +70,69 @@ public class PlayerController : NetworkComponent
 
                 SendUpdate("MOVE", value);
             }
+            if(IsClient) {
+                isMoving = bool.Parse(value);
+            }
         }
         if(flag == "INTERACT") {
+            if(IsServer) {
+                withinInteract = bool.Parse(value);
+
+                SendUpdate("INTERACT","true");
+            }
             if(IsClient) {
                 withinInteract = bool.Parse(value);
+            }
+        }
+        if(flag == "SHOP") {
+            if(IsServer) {
+                inShop = bool.Parse(value);
+
+                SendUpdate("SHOP",inShop.ToString());
+            }
+            if(IsClient) {
+                inShop = bool.Parse(value);
             }
         }
         if(flag == "HURT") {
             if(IsServer) {
                 isHurt = bool.Parse(value);
+                hp--;
+                if(hp <= 0) {
+                    isDead = true;
+                    invuln = true;
+                }
+                if(hp > 0) {
+                    StartCoroutine(InvulnTimer(1f));
+                }
 
                 SendUpdate("HURT", value);
+            }
+            if(IsClient) {
+                isHurt = bool.Parse(value);
+                hp--;
+            }
+        }
+        if(flag == "DEAD") {
+            if(IsClient) {
+                deathTimer = float.Parse(value);
+                invuln = true;
+            }
+        }
+        if(flag == "REVIVE") {
+            if(IsServer) {
+                isDead = bool.Parse(value);
+                StartCoroutine(InvulnTimer(3f));
+
+                SendUpdate("REVIVE", value);
+            }
+            if(IsClient) {
+                isDead = bool.Parse(value);
+            }
+        }
+        if(flag == "INVULN") {
+            if(IsClient) {
+                invuln = bool.Parse(value);
             }
         }
         if(flag == "PRIMARY") {
@@ -178,6 +235,29 @@ public class PlayerController : NetworkComponent
                 }
             }
         }
+        if(flag == "GOLD") {
+            if(IsServer) {
+                gold = int.Parse(value);
+            }
+            if(IsClient) {
+                gold += int.Parse(value);
+                StartCoroutine(DistributeGoldExp(int.Parse(value),0));
+            }
+        }
+        if(flag == "EXP") {
+            if(IsServer) {
+                exp = int.Parse(value);
+            }
+            if(IsClient) {
+                exp += int.Parse(value);
+                StartCoroutine(DistributeGoldExp(0,int.Parse(value)));
+            }
+        }
+        if(flag == "DAMAGE") {
+            if(IsClient) {
+                totalDamage = int.Parse(value);
+            }
+        }
     }
 
     public override void NetworkedStart()
@@ -187,7 +267,8 @@ public class PlayerController : NetworkComponent
 
     public override IEnumerator SlowUpdate()
     {
-
+        
+        
         yield return new WaitForSeconds(MyCore.MasterTimer);
     }
 
@@ -204,9 +285,11 @@ public class PlayerController : NetworkComponent
 
             if(rb.velocity == Vector3.zero) {
                 isMoving = false;
+                SendUpdate("MOVE",isMoving.ToString());
             }
             else if(rb.velocity != Vector3.zero) {
                 isMoving = true;
+                SendUpdate("MOVE",isMoving.ToString());
             } 
         }
         if(IsClient) {
@@ -215,6 +298,10 @@ public class PlayerController : NetworkComponent
 
         //handle cooldown timers
         if(IsLocalPlayer) {
+            if(isDead && deathTimer > 0f) {
+                deathTimer -= Time.deltaTime;
+            }
+
             s1 = skillsPanel.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
             s2 = skillsPanel.GetChild(1).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
             s3 = skillsPanel.GetChild(2).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
@@ -271,7 +358,7 @@ public class PlayerController : NetworkComponent
                 SendUpdate("HURT",hp.ToString());
            }
         }
-        if(col.gameObject.CompareTag("Item")) {
+        if(col.gameObject.CompareTag("Shop")) {
             if(IsServer) {
                 withinInteract = true;
                 SendUpdate("INTERACT","true");
@@ -281,7 +368,7 @@ public class PlayerController : NetworkComponent
 
     public void OnTriggerExit(Collider col)
     {
-        if(col.gameObject.CompareTag("Item")) {
+        if(col.gameObject.CompareTag("Shop")) {
             if(IsServer) {
                 withinInteract = false;
                 SendUpdate("INTERACT","false");
@@ -289,13 +376,8 @@ public class PlayerController : NetworkComponent
         }
     }
 
-    public void OnTriggerStay(Collider col)
-    {
-        
-    }
-
     public void Move(InputAction.CallbackContext context) {
-        if(context.started || context.performed) {
+        if((context.started || context.performed) && !inShop) {
             SendCommand("MOVE", context.ReadValue<Vector2>().ToString());
         }
         if(context.canceled) {
@@ -304,38 +386,38 @@ public class PlayerController : NetworkComponent
     }
 
     public void UsePrimary(InputAction.CallbackContext context) {
-        if(context.started && !usingPrimary) {
+        if(context.started && !usingPrimary && !inShop) {
             SendCommand("PRIMARY", "true");
         }
     }
 
     public void UseSecondary(InputAction.CallbackContext context) {
-        if(context.started && !usingSecondary) {
+        if(context.started && !usingSecondary && !inShop) {
             SendCommand("SECONDARY", "true");
         }
     }
 
     public void UseDefensive(InputAction.CallbackContext context) {
-        if(context.started && !usingDefensive) {
+        if(context.started && !usingDefensive && !inShop) {
             SendCommand("DEFENSIVE", "true");
         }
     }
 
     public void UseUlt(InputAction.CallbackContext context) {
-        if(context.started && !usingUlt) {
+        if(context.started && !usingUlt && !inShop) {
             SendCommand("ULT", "true");
         }
     }
 
     public void UseLimit(InputAction.CallbackContext context) {
-        if(context.started && !usingLimit) {
+        if(context.started && !usingLimit && !inShop) {
             SendCommand("LIMIT", "true");
         }
     }
 
     public void Interact(InputAction.CallbackContext context) {
         if(context.started && withinInteract) {
-            SendCommand("INTERACT","true");
+            SendCommand("SHOP",(!inShop).ToString());
         }
     }
 
@@ -345,12 +427,27 @@ public class PlayerController : NetworkComponent
         }
     }
 
+    public IEnumerator DistributeGoldExp(int gold = 0, int exp = 0) {
+        foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
+            if(player.Owner != Owner) {
+                player.gold += gold;
+                player.exp += exp;
+                SendCommand("GOLD", player.gold.ToString());
+                SendCommand("EXP", player.exp.ToString());
+            }
+            
+            yield return null;
+        }
+    }
+
     public IEnumerator InvulnTimer(float invulnTime) {
         invuln = true;
+        SendUpdate("INVULN", invuln.ToString());
 
         yield return new WaitForSeconds(invulnTime);
 
         invuln = false;
+        SendUpdate("INVULN", invuln.ToString());
     }
 
     public IEnumerator EmotionTime(int emotion) {
@@ -366,15 +463,15 @@ public class PlayerController : NetworkComponent
             case 1:
                 meleeAtk += melBonus;
                 rangedAtk += rngBonus;
-                SendUpdate("STATCHANGE","MATK,"+meleeAtk.ToString());
-                SendUpdate("STATCHANGE","RATK,"+rangedAtk.ToString());
+                SendUpdate("STATCHANGE","MATK,"+meleeAtk);
+                SendUpdate("STATCHANGE","RATK,"+rangedAtk);
                 break;
             case 2:
                 invuln = true;
                 break;
             case 3:
                 speed += spdBonus;
-                SendUpdate("STATCHANGE","SPD,"+speed.ToString());
+                SendUpdate("STATCHANGE","SPD,"+speed);
                 break;
         }
 
@@ -393,15 +490,15 @@ public class PlayerController : NetworkComponent
             case 1:
                 meleeAtk -= melBonus;
                 rangedAtk -= rngBonus;
-                SendUpdate("STATCHANGE","MATK,"+meleeAtk.ToString());
-                SendUpdate("STATCHANGE","RATK,"+rangedAtk.ToString());
+                SendUpdate("STATCHANGE","MATK,"+meleeAtk);
+                SendUpdate("STATCHANGE","RATK,"+rangedAtk);
                 break;
             case 2:
                 invuln = false;
                 break;
             case 3:
                 speed -= spdBonus;
-                SendUpdate("STATCHANGE","SPD,"+speed.ToString());
+                SendUpdate("STATCHANGE","SPD,"+speed);
                 break;
         }
     }

@@ -18,12 +18,14 @@ public class PlayerController : NetworkComponent
     public int rangedAtk;
     public int speed;
     public float skillDmg;
-    public float dmgBonus = 1f;
+    public float dmgBonusBase = 1f;
+    public float dmgBonus;
     public float primaryCD;
     public float secondaryCD;
     public float defCD;
     public float ultCD;
     public float gcd;
+    public float gcdBase = 0f;
     public float gcdMod = 0f;
     public float gcdMax;
     public bool invuln;
@@ -67,6 +69,9 @@ public class PlayerController : NetworkComponent
                 lastInput = value.Vec2Parse();
 
                 SendUpdate("MOVE", value);
+            }
+            if(IsClient) {
+                isMoving = bool.Parse(value);
             }
         }
         if(flag == "INTERACT") {
@@ -280,9 +285,11 @@ public class PlayerController : NetworkComponent
 
             if(rb.velocity == Vector3.zero) {
                 isMoving = false;
+                SendUpdate("MOVE",isMoving.ToString());
             }
             else if(rb.velocity != Vector3.zero) {
                 isMoving = true;
+                SendUpdate("MOVE",isMoving.ToString());
             } 
         }
         if(IsClient) {

@@ -47,6 +47,7 @@ public class AttackHitbox : NetworkComponent
                 }
                 
                 enemy.HP -= (int)damage;
+                controller.totalDamage += (int)damage;
                 Debug.Log("ENEMY HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
                 controller.dmgBonus = 1;
 
@@ -57,6 +58,7 @@ public class AttackHitbox : NetworkComponent
 
                     controller.SendUpdate("EXP",controller.exp.ToString());
                     controller.SendUpdate("GOLD",controller.gold.ToString());
+                    controller.SendUpdate("DAMAGE", controller.totalDamage.ToString());
                 }
             }       
         }

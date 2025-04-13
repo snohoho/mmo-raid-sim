@@ -4,15 +4,14 @@ using UnityEngine;
 using NETWORK_ENGINE;
 using UnityEditor;
 using UnityEngine.UI;
-using Unity.VisualScripting;
 
 public class GameMaster : NetworkComponent
 {
     public bool gameStarted;
     public bool grindPhaseFinished;
     public bool gameFinished;
-    public int time;
-    public int count;
+    public float time;
+    public int totalDamage;
 
     public override void HandleMessage(string flag, string value) 
     {
@@ -28,6 +27,11 @@ public class GameMaster : NetworkComponent
         if(flag == "GAMEFINISH") {
             if(IsClient) {
                 //disable movement
+            }
+        }
+        if(flag == "TIMER") {
+            if(IsClient) {
+                time = int.Parse(value);
             }
         }
     }
@@ -68,11 +72,15 @@ public class GameMaster : NetworkComponent
             Debug.Log("starting game");
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
-            
             Debug.Log("grind phase start");
-            StartCoroutine(SpawnEnemies());
+            
             while(!grindPhaseFinished) {
-                yield return new WaitForSeconds(180f);
+                time = 0f;
+                SendUpdate("TIMER", time.ToString());
+                StartCoroutine(SpawnEnemies());
+                
+                yield return new WaitUntil(() => time >= 180f);
+
                 grindPhaseFinished = true;
             }
 
@@ -82,12 +90,12 @@ public class GameMaster : NetworkComponent
             }
 
             while(!gameFinished) {
-                Debug.Log("running game");
+                Debug.Log("boss phase start");
 
                 yield return new WaitForSeconds(5f);
+                gameFinished = true;
             }
 
-            gameFinished = true;
             Debug.Log("finishing game");
             SendUpdate("GAMEFINISH", "true");
 
@@ -119,6 +127,11 @@ public class GameMaster : NetworkComponent
 
     void Update()
     {
-        
+        if(IsServer) {
+            time += Time.deltaTime;
+        }
+        if(IsClient) {
+            time += Time.deltaTime;
+        }
     }
 }

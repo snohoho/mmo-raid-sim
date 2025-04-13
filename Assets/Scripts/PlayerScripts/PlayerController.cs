@@ -35,6 +35,7 @@ public class PlayerController : NetworkComponent
     public int level = 1;
     public int gold = 0;
     public int exp = 0;
+    public int totalDamage = 0;
 
     public bool isMoving;
     public bool isHurt;
@@ -203,6 +204,11 @@ public class PlayerController : NetworkComponent
         if(flag == "EXP") {
             if(IsClient) {
                 exp = int.Parse(value);
+            }
+        }
+        if(flag == "DAMAGE") {
+            if(IsClient) {
+                totalDamage = int.Parse(value);
             }
         }
     }

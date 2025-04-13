@@ -4,6 +4,7 @@ using UnityEngine;
 using NETWORK_ENGINE;
 using UnityEditor;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class GameMaster : NetworkComponent
 {
@@ -67,21 +68,9 @@ public class GameMaster : NetworkComponent
             Debug.Log("starting game");
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
-
-            /*while(count < 60)
-            {
-                count++;
-                if(count % 6 == 0)
-                {
-                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn1").transform.position);
-                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn2").transform.position);
-                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn3").transform.position);
-                    MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn4").transform.position);
-                }
-                yield return new WaitForSeconds(1f);
-            }*/
-
+            
             Debug.Log("grind phase start");
+            StartCoroutine(SpawnEnemies());
             while(!grindPhaseFinished) {
                 yield return new WaitForSeconds(180f);
                 grindPhaseFinished = true;
@@ -98,8 +87,6 @@ public class GameMaster : NetworkComponent
                 yield return new WaitForSeconds(5f);
             }
 
-
-
             gameFinished = true;
             Debug.Log("finishing game");
             SendUpdate("GAMEFINISH", "true");
@@ -111,6 +98,18 @@ public class GameMaster : NetworkComponent
         }
 
         yield return new WaitForSeconds(MyCore.MasterTimer);
+    }
+
+    public IEnumerator SpawnEnemies() 
+    {
+        while(!grindPhaseFinished) {
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn1").transform.position);
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn2").transform.position);
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn3").transform.position);
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn4").transform.position);
+
+            yield return new WaitForSeconds(20f);
+        }
     }
 
     void Start()

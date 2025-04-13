@@ -32,6 +32,12 @@ public class HPBarUI : MonoBehaviour
             RemoveSegment();
             slider.maxValue--;
         }
+        if(segments.Count < owner.maxHp) {
+            AddSegment();
+        }
+        else if(segments.Count > owner.maxHp) {
+            RemoveSegment();
+        }
     }
 
     public void AddSegment() {

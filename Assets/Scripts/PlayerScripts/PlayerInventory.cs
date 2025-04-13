@@ -21,18 +21,23 @@ public class PlayerInventory : NetworkComponent
 
     public override IEnumerator SlowUpdate()
     {
-        if(IsLocalPlayer) {
-            for(int i=0; i<10; i++) {
-                if(inventory[i] != null) {
-                    invPanel.GetChild(i).gameObject.SetActive(true);
-                }
-                else if(inventory[i] == null) {
-                    invPanel.GetChild(i).gameObject.SetActive(false);
+        while(IsConnected) {
+            if(IsLocalPlayer) {
+                for(int i=0; i<10; i++) {
+                    if(inventory[i] != null) {
+                        invPanel.GetChild(i).gameObject.SetActive(true);
+                    }
+                    else if(inventory[i] == null) {
+                        invPanel.GetChild(i).gameObject.SetActive(false);
+                    }
                 }
             }
+            if(IsServer) {
+                
+            }
+
+            yield return new WaitForSeconds(MyCore.MasterTimer);
         }
-        
-        yield return new WaitForSeconds(MyCore.MasterTimer);
     }
 
     void Start()

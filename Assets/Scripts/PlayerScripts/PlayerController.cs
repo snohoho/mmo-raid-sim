@@ -34,6 +34,7 @@ public class PlayerController : NetworkComponent
     public GameObject ultHB;
     public int level = 1;
     public int gold = 0;
+    public int exp = 0;
 
     public bool isMoving;
     public bool isHurt;
@@ -69,15 +70,22 @@ public class PlayerController : NetworkComponent
         }
         if(flag == "INTERACT") {
             if(IsServer) {
-                inShop = bool.Parse(value);
+                withinInteract = bool.Parse(value);
 
                 SendUpdate("INTERACT","true");
             }
-            if(IsClient && withinInteract) {
-                inShop = bool.Parse(value);
-            }
             if(IsClient) {
                 withinInteract = bool.Parse(value);
+            }
+        }
+        if(flag == "SHOP") {
+            if(IsServer) {
+                inShop = bool.Parse(value);
+
+                SendUpdate("SHOP",inShop.ToString());
+            }
+            if(IsClient) {
+                inShop = bool.Parse(value);
             }
         }
         if(flag == "HURT") {
@@ -187,6 +195,16 @@ public class PlayerController : NetworkComponent
                 }
             }
         }
+        if(flag == "GOLD") {
+            if(IsClient) {
+                gold = int.Parse(value);
+            }
+        }
+        if(flag == "EXP") {
+            if(IsClient) {
+                exp = int.Parse(value);
+            }
+        }
     }
 
     public override void NetworkedStart()
@@ -196,23 +214,7 @@ public class PlayerController : NetworkComponent
 
     public override IEnumerator SlowUpdate()
     {
-        if(IsLocalPlayer) {
-            Debug.Log("test1");
-            if(withinInteract) {
-                Debug.Log("test2");
-                if(inShop) {
-                    Debug.Log("open shop ui");
-                    GameObject shop = FindAnyObjectByType<Shop>().gameObject;
-                    Debug.Log(shop.name);
-                    shop.transform.GetChild(0).gameObject.SetActive(true);
-                }
-                if(!inShop) {
-                    Debug.Log("test3");
-                    GameObject shop = FindAnyObjectByType<Shop>().gameObject;
-                    shop.transform.GetChild(0).gameObject.SetActive(false);
-                }
-            }
-        }
+        
         
         yield return new WaitForSeconds(MyCore.MasterTimer);
     }
@@ -316,7 +318,7 @@ public class PlayerController : NetworkComponent
     }
 
     public void Move(InputAction.CallbackContext context) {
-        if(context.started || context.performed) {
+        if((context.started || context.performed) && !inShop) {
             SendCommand("MOVE", context.ReadValue<Vector2>().ToString());
         }
         if(context.canceled) {
@@ -325,38 +327,38 @@ public class PlayerController : NetworkComponent
     }
 
     public void UsePrimary(InputAction.CallbackContext context) {
-        if(context.started && !usingPrimary) {
+        if(context.started && !usingPrimary && !inShop) {
             SendCommand("PRIMARY", "true");
         }
     }
 
     public void UseSecondary(InputAction.CallbackContext context) {
-        if(context.started && !usingSecondary) {
+        if(context.started && !usingSecondary && !inShop) {
             SendCommand("SECONDARY", "true");
         }
     }
 
     public void UseDefensive(InputAction.CallbackContext context) {
-        if(context.started && !usingDefensive) {
+        if(context.started && !usingDefensive && !inShop) {
             SendCommand("DEFENSIVE", "true");
         }
     }
 
     public void UseUlt(InputAction.CallbackContext context) {
-        if(context.started && !usingUlt) {
+        if(context.started && !usingUlt && !inShop) {
             SendCommand("ULT", "true");
         }
     }
 
     public void UseLimit(InputAction.CallbackContext context) {
-        if(context.started && !usingLimit) {
+        if(context.started && !usingLimit && !inShop) {
             SendCommand("LIMIT", "true");
         }
     }
 
     public void Interact(InputAction.CallbackContext context) {
         if(context.started && withinInteract) {
-            SendCommand("INTERACT",(!inShop).ToString());
+            SendCommand("SHOP",(!inShop).ToString());
         }
     }
 

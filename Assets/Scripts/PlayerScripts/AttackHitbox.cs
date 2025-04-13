@@ -37,6 +37,7 @@ public class AttackHitbox : NetworkComponent
     {
         if(col.gameObject.CompareTag("Enemy")) {
             if(IsServer) {
+                NavMeshController enemy = col.gameObject.GetComponent<NavMeshController>();
                 float damage = 0f;
                 if(gameObject.CompareTag("Melee")) {
                     damage = (controller.meleeAtk + controller.skillDmg) * controller.dmgBonus; 
@@ -45,10 +46,18 @@ public class AttackHitbox : NetworkComponent
                     damage = (controller.rangedAtk + controller.skillDmg) * controller.dmgBonus; 
                 }
                 
+                enemy.HP -= (int)damage;
                 Debug.Log("ENEMY HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
-
-                col.gameObject.GetComponent<NavMeshController>().HP -= (int)damage;
                 controller.dmgBonus = 1;
+
+                if(enemy.HP <= 0) {
+                    Debug.Log("award exp and gold");
+                    controller.exp += enemy.XP;
+                    controller.gold += enemy.Gold;
+
+                    controller.SendUpdate("EXP",controller.exp.ToString());
+                    controller.SendUpdate("GOLD",controller.gold.ToString());
+                }
             }       
         }
     }

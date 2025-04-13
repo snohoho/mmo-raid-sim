@@ -92,8 +92,42 @@ public class PlayerController : NetworkComponent
         if(flag == "HURT") {
             if(IsServer) {
                 isHurt = bool.Parse(value);
+                hp--;
+                if(hp <= 0) {
+                    isDead = true;
+                    invuln = true;
+                }
+                if(hp > 0) {
+                    StartCoroutine(InvulnTimer(1f));
+                }
 
                 SendUpdate("HURT", value);
+            }
+            if(IsClient) {
+                isHurt = bool.Parse(value);
+                hp--;
+            }
+        }
+        if(flag == "DEAD") {
+            if(IsClient) {
+                deathTimer = float.Parse(value);
+                invuln = true;
+            }
+        }
+        if(flag == "REVIVE") {
+            if(IsServer) {
+                isDead = bool.Parse(value);
+                StartCoroutine(InvulnTimer(3f));
+
+                SendUpdate("REVIVE", value);
+            }
+            if(IsClient) {
+                isDead = bool.Parse(value);
+            }
+        }
+        if(flag == "INVULN") {
+            if(IsClient) {
+                invuln = bool.Parse(value);
             }
         }
         if(flag == "PRIMARY") {
@@ -257,6 +291,10 @@ public class PlayerController : NetworkComponent
 
         //handle cooldown timers
         if(IsLocalPlayer) {
+            if(isDead && deathTimer > 0f) {
+                deathTimer -= Time.deltaTime;
+            }
+
             s1 = skillsPanel.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
             s2 = skillsPanel.GetChild(1).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
             s3 = skillsPanel.GetChild(2).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
@@ -397,10 +435,12 @@ public class PlayerController : NetworkComponent
 
     public IEnumerator InvulnTimer(float invulnTime) {
         invuln = true;
+        SendUpdate("INVULN", invuln.ToString());
 
         yield return new WaitForSeconds(invulnTime);
 
         invuln = false;
+        SendUpdate("INVULN", invuln.ToString());
     }
 
     public IEnumerator EmotionTime(int emotion) {
@@ -416,15 +456,15 @@ public class PlayerController : NetworkComponent
             case 1:
                 meleeAtk += melBonus;
                 rangedAtk += rngBonus;
-                SendUpdate("STATCHANGE","MATK,"+meleeAtk.ToString());
-                SendUpdate("STATCHANGE","RATK,"+rangedAtk.ToString());
+                SendUpdate("STATCHANGE","MATK,"+meleeAtk);
+                SendUpdate("STATCHANGE","RATK,"+rangedAtk);
                 break;
             case 2:
                 invuln = true;
                 break;
             case 3:
                 speed += spdBonus;
-                SendUpdate("STATCHANGE","SPD,"+speed.ToString());
+                SendUpdate("STATCHANGE","SPD,"+speed);
                 break;
         }
 
@@ -443,15 +483,15 @@ public class PlayerController : NetworkComponent
             case 1:
                 meleeAtk -= melBonus;
                 rangedAtk -= rngBonus;
-                SendUpdate("STATCHANGE","MATK,"+meleeAtk.ToString());
-                SendUpdate("STATCHANGE","RATK,"+rangedAtk.ToString());
+                SendUpdate("STATCHANGE","MATK,"+meleeAtk);
+                SendUpdate("STATCHANGE","RATK,"+rangedAtk);
                 break;
             case 2:
                 invuln = false;
                 break;
             case 3:
                 speed -= spdBonus;
-                SendUpdate("STATCHANGE","SPD,"+speed.ToString());
+                SendUpdate("STATCHANGE","SPD,"+speed);
                 break;
         }
     }

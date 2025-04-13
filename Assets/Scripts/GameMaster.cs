@@ -4,6 +4,8 @@ using UnityEngine;
 using NETWORK_ENGINE;
 using UnityEditor;
 using UnityEngine.UI;
+using TMPro;
+using System.Threading;
 
 public class GameMaster : NetworkComponent
 {
@@ -12,6 +14,10 @@ public class GameMaster : NetworkComponent
     public bool gameFinished;
     public float time;
     public int totalDamage;
+    public RectTransform timerPanel;
+    public TextMeshProUGUI timer;
+    public RectTransform finalStatsPanel;
+    public TextMeshProUGUI finalStats;
 
     public override void HandleMessage(string flag, string value) 
     {
@@ -22,6 +28,7 @@ public class GameMaster : NetworkComponent
                 foreach(NetworkPlayerManager n in npm) {
                     n.transform.GetChild(0).gameObject.SetActive(false);
                 }
+                timerPanel.gameObject.SetActive(true);
             }
         }
         if(flag == "GAMEFINISH") {
@@ -31,7 +38,7 @@ public class GameMaster : NetworkComponent
         }
         if(flag == "TIMER") {
             if(IsClient) {
-                time = int.Parse(value);
+                time = float.Parse(value);
             }
         }
     }
@@ -72,14 +79,15 @@ public class GameMaster : NetworkComponent
             Debug.Log("starting game");
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
-            Debug.Log("grind phase start");
+            
             
             while(!grindPhaseFinished) {
-                time = 0f;
+                Debug.Log("grind phase start");
+                time = 180f;
                 SendUpdate("TIMER", time.ToString());
                 StartCoroutine(SpawnEnemies());
                 
-                yield return new WaitUntil(() => time >= 180f);
+                yield return new WaitUntil(() => time <= 0f);
 
                 grindPhaseFinished = true;
             }
@@ -87,22 +95,28 @@ public class GameMaster : NetworkComponent
             if(grindPhaseFinished)
             {
                 MyCore.NetCreateObject(29, -1, new Vector3(0, 0, 0));
+                MyCore.NetDestroyObject(FindAnyObjectByType<ItemManager>().NetId);
             }
 
             while(!gameFinished) {
                 Debug.Log("boss phase start");
-
-                yield return new WaitForSeconds(5f);
-                gameFinished = true;
+                time = 360f;
+                SendUpdate("TIMER", time.ToString());
+                yield return new WaitUntil(() => gameFinished == true || time <= 0f);
             }
 
             Debug.Log("finishing game");
             SendUpdate("GAMEFINISH", "true");
+            foreach(PlayerController player in GameObject.FindObjectsOfType<PlayerController>()) {
+                totalDamage += player.totalDamage;
+            }
 
-            yield return new WaitForSeconds(1f);
+            
+
+            yield return new WaitForSeconds(15f);
             
             Debug.Log("game finished");
-            //StartCoroutine(MyCore.DisconnectServer());
+            StartCoroutine(MyCore.DisconnectServer());
         }
 
         yield return new WaitForSeconds(MyCore.MasterTimer);
@@ -128,10 +142,16 @@ public class GameMaster : NetworkComponent
     void Update()
     {
         if(IsServer) {
-            time += Time.deltaTime;
+            time -= Time.deltaTime;
         }
         if(IsClient) {
-            time += Time.deltaTime;
+            time -= Time.deltaTime;
+            int min = (int)(time/60);
+            int sec = (int)(time%60);
+            timer.text = string.Format("{0:00}:{1:00}", min, sec);
+            if(gameFinished) {
+                finalStatsPanel.gameObject.SetActive(true);
+            }
         }
     }
 }

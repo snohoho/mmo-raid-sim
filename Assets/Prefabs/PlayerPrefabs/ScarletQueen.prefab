@@ -5159,7 +5159,7 @@ MonoBehaviour:
   defHB: {fileID: 6545685554605418132}
   ultHB: {fileID: 6678927780567878474}
   level: 1
-  gold: 500
+  gold: 0
   exp: 0
   totalDamage: 0
   isMoving: 0

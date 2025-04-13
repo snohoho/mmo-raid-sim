@@ -197,13 +197,21 @@ public class PlayerController : NetworkComponent
             }
         }
         if(flag == "GOLD") {
-            if(IsClient) {
+            if(IsServer) {
                 gold = int.Parse(value);
+            }
+            if(IsClient) {
+                gold += int.Parse(value);
+                StartCoroutine(DistributeGoldExp(int.Parse(value),0));
             }
         }
         if(flag == "EXP") {
-            if(IsClient) {
+            if(IsServer) {
                 exp = int.Parse(value);
+            }
+            if(IsClient) {
+                exp += int.Parse(value);
+                StartCoroutine(DistributeGoldExp(0,int.Parse(value)));
             }
         }
         if(flag == "DAMAGE") {
@@ -371,6 +379,19 @@ public class PlayerController : NetworkComponent
     public void Revive(InputAction.CallbackContext context) {
         if(context.started && isDead && deathTimer <= 0) {
             SendCommand("REVIVE", "false");
+        }
+    }
+
+    public IEnumerator DistributeGoldExp(int gold = 0, int exp = 0) {
+        foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
+            if(player.Owner != Owner) {
+                player.gold += gold;
+                player.exp += exp;
+                SendCommand("GOLD", player.gold.ToString());
+                SendCommand("EXP", player.exp.ToString());
+            }
+            
+            yield return null;
         }
     }
 

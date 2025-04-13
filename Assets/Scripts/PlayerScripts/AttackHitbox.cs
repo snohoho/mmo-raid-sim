@@ -56,8 +56,8 @@ public class AttackHitbox : NetworkComponent
                     controller.exp += enemy.XP;
                     controller.gold += enemy.Gold;
 
-                    controller.SendUpdate("EXP",controller.exp.ToString());
-                    controller.SendUpdate("GOLD",controller.gold.ToString());
+                    controller.SendUpdate("EXP",enemy.XP.ToString());
+                    controller.SendUpdate("GOLD",enemy.Gold.ToString());
                     controller.SendUpdate("DAMAGE", controller.totalDamage.ToString());
                 }
             }       

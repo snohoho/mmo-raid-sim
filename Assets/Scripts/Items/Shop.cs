@@ -7,102 +7,136 @@ using UnityEngine.UI;
 
 public class Shop : NetworkComponent
 {
-    public ItemStats[] items;
-    public PlayerController[] shoppers;
-    public PlayerInventory playerInventory;
-    public ItemStats[] itemsForSale = new ItemStats[5];
-    public ItemStats[] displayInventory = new ItemStats[10]; 
+    public PlayerController player;
+    public ItemStats[] allItems;
+    public RectTransform itemPanel;
+    public ItemStats[] itemsForSale;
+    public int[] buyPrice;
     public RectTransform invPanel;
-    public RectTransform itemsPanel;
-    public int[] sellPrice = new int[5];
-    public int[] buyPrice = new int[5];
+    public ItemStats[] inventory;
+    public int[] sellPrice;
+    public TextMeshProUGUI currentGold;
     public Button refreshButton;
-    public bool refreshing;
 
     public override void HandleMessage(string flag, string value)
     {
-        if(flag == "SALEITEM") {
-            string[] args = value.Split(',');
-            int slot = int.Parse(args[0]);
-            int randItem = int.Parse(args[1]);
-
+        if(flag == "REFRESH") {
+            if(IsServer) {
+                StartCoroutine(Refresh());
+            }
             if(IsClient) {
-                Debug.Log(slot + " " + randItem);
-                itemsForSale[slot] = items[randItem];
-                int rarity = itemsForSale[slot].itemRarity;
-                switch(rarity) {
-                    case 1:
-                        buyPrice[slot] = 100;
-                        break;
-                    case 2:
-                        buyPrice[slot] = 200;
-                        break;
-                    case 3:
-                        buyPrice[slot] = 300;
-                        break;
-                    case 4:
-                        buyPrice[slot] = 400;
-                        break;
-                    case 5:
-                        buyPrice[slot] = 500;
-                        break;
+                string[] args = value.Split(',');
+                int slot = int.Parse(args[0]);
+                int randItem = int.Parse(args[1]);
+
+                itemsForSale[slot] = allItems[randItem];
+                int price = allItems[randItem].itemRarity * 100;
+                itemPanel.GetChild(slot).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = price + "G"; 
+                itemPanel.GetChild(slot).GetChild(1).gameObject.SetActive(false);
+                if(slot == 4) {
+                    refreshButton.interactable = true;
                 }
-                itemsPanel.GetChild(slot).GetChild(0).GetComponent<TextMeshProUGUI>().text = buyPrice[slot] + "G";
             }
         }
         if(flag == "BUY") {
             if(IsServer) {
-                Debug.Log("BUY ITEM");
-            }
-        }
-        if(flag == "REFRESH") {
-            Debug.Log("TEST");
-            if(IsServer) {
-                Debug.Log("refresh server flag");
-                refreshing = bool.Parse(value);
-                StartCoroutine(RefreshShop());
+                int slot = int.Parse(value);
 
-                SendUpdate("REFRESH", refreshing.ToString());
+                if(player.gold - buyPrice[slot] >= 0) {
+                    int i=0;
+                    foreach(ItemStats item in player.GetComponent<PlayerInventory>().inventory) {
+                        if(item == null) {
+                            player.GetComponent<PlayerInventory>().inventory[i] = itemsForSale[slot];
+                            SendUpdate("INVENTORY",i+","+slot);
+                            break;
+                        }
+                        i++;
+                    }
+                    player.gold -= buyPrice[slot];
+                }
+                
+                SendUpdate("BUY", player.gold+","+slot); 
             }
             if(IsClient) {
-                Debug.Log("refresh client flag");
-                refreshing = bool.Parse(value);
-                refreshButton.interactable = !refreshing;
+                string[] args = value.Split(',');
+                int price = int.Parse(args[0]);
+                int slot = int.Parse(args[1]);
+
+                player.gold = price;
+                if(player.gold == price) {
+                    itemPanel.GetChild(slot).GetChild(1).gameObject.SetActive(true);
+                }
+            }
+        }
+        if(flag == "SELL") {
+            if(IsServer) {
+                int slot = int.Parse(value);
+
+                int price = player.GetComponent<PlayerInventory>().inventory[slot].itemRarity * 50;
+                player.GetComponent<PlayerInventory>().inventory[slot] = null;
+                player.gold += price;
+
+                SendUpdate("SELL", player.gold+","+slot);
+            }
+            if(IsClient) {
+                string[] args = value.Split(',');
+                int price = int.Parse(args[0]);
+                int slot = int.Parse(args[1]);
+
+                player.gold = price;
+                player.GetComponent<PlayerInventory>().inventory[slot] = null;
+            }
+        }
+        if(flag == "INVENTORY") {
+            if(IsClient) {
+                string[] args = value.Split(',');
+                int invSlot = int.Parse(args[0]);
+                int buySlot = int.Parse(args[1]);
+
+                player.GetComponent<PlayerInventory>().inventory[invSlot] = itemsForSale[buySlot];
             }
         }
     }
 
     public override void NetworkedStart()
     {
-        shoppers = FindObjectsOfType<PlayerController>();
-        StartCoroutine(RefreshShop());
+        allItems = FindAnyObjectByType<ItemManager>().items;
+        RefreshShop();
     }
 
     public override IEnumerator SlowUpdate()
     {
         while(IsConnected) {
-            if(IsClient) {
-                foreach(PlayerController shopper in shoppers) {
-                    transform.GetChild(0).gameObject.SetActive(shopper.inShop);
-                    if(shopper.inShop) {
-                        Cursor.lockState = CursorLockMode.None;
+            if(!IsLocalPlayer) {
+                transform.GetChild(3).gameObject.SetActive(false);
+            }
+            if(IsLocalPlayer) {
+                if(player.inShop) {
+                    transform.GetChild(0).gameObject.SetActive(false);
+                    transform.GetChild(3).gameObject.SetActive(true);
+                    Cursor.lockState = CursorLockMode.None;
+                }
+                if(!player.inShop) {
+                    transform.GetChild(0).gameObject.SetActive(true);
+                    transform.GetChild(3).gameObject.SetActive(false);
+                    Cursor.lockState = CursorLockMode.Locked;
+                }
+
+                currentGold.text = player.gold + "G";
+                inventory = player.GetComponent<PlayerInventory>().inventory;
+                for(int i=0; i<inventory.Length; i++) {
+                    if(inventory[i] == null) {
+                        invPanel.GetChild(i).gameObject.SetActive(false);
                     }
-                    if(!shopper.inShop) {
-                        Cursor.lockState = CursorLockMode.Locked;
+                    else if(inventory[i] != null) {
+                        invPanel.GetChild(i).gameObject.SetActive(true);
+                        invPanel.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = (inventory[i].itemRarity * 50).ToString();
                     }
                 }
-            }
-            if(IsServer) {
-
             }
 
             yield return new WaitForSeconds(MyCore.MasterTimer);
         }
-    }
-
-    void Start()
-    {
-        
     }
 
     void Update()
@@ -110,80 +144,45 @@ public class Shop : NetworkComponent
         
     }
 
-    public void ButtonRefresh(bool refresh) {
-        if(IsClient) {
-            Debug.Log("START REFRESH");
-            SendCommand("REFRESH",refresh.ToString());
-        }
+    public void RefreshShop() {
+        Debug.Log("REFRESH");
+        SendCommand("REFRESH", "true");
+        refreshButton.interactable = false;
     }
 
-    public IEnumerator RefreshShop() {
-        if(IsServer) {
-            Debug.Log("START REFRESH SERVER");
-            for(int i=0; i<itemsForSale.Length; i++) {
-                int randItem = Random.Range(0, items.Length);
-                itemsForSale[i] = items[randItem];
-                
-                int rarity = itemsForSale[i].itemRarity;
-                switch(rarity) {
-                    case 1:
-                        buyPrice[i] = 100;
-                        break;
-                    case 2:
-                        buyPrice[i] = 200;
-                        break;
-                    case 3:
-                        buyPrice[i] = 300;
-                        break;
-                    case 4:
-                        buyPrice[i] = 400;
-                        break;
-                    case 5:
-                        buyPrice[i] = 500;
-                        break;
-                }
-                SendUpdate("SALEITEM",i+","+randItem);
-                yield return new WaitForSeconds(MyCore.MasterTimer);
+    public IEnumerator Refresh() {
+        for(int i=0; i<itemsForSale.Length; i++) {
+            if(IsServer) {
+                int randItem = Random.Range(0,allItems.Length);
+                int price = allItems[randItem].itemRarity * 100;
+                itemsForSale[i] = allItems[randItem];
+                buyPrice[i] = price;
+
+                SendUpdate("REFRESH", i+","+randItem);
             }
 
-            SendUpdate("REFRESH", "false");
+            yield return new WaitForSeconds(MyCore.MasterTimer);
         }
     }
 
     public void BuyItem(int slot) {
-        if(IsClient) {
-            //handles VISUALS
-            Debug.Log("BUY ITEM");
-            SendCommand("BUY", slot.ToString());
-        }
+        Debug.Log("BUY " + slot);
+        if((inventory != null || inventory.Length != 0) && !itemPanel.GetChild(slot).GetChild(1).gameObject.activeSelf) {
+            SendCommand("BUY",slot.ToString());
+        } 
     }
 
     public void SellItem(int slot) {
-        int rarity = playerInventory.inventory[slot].itemRarity;
-        switch(rarity) {
-            case 1:
-                sellPrice[slot] = 50;
-                break;
-            case 2:
-                sellPrice[slot] = 100;
-                break;
-            case 3:
-                sellPrice[slot] = 150;
-                break;
-            case 4:
-                sellPrice[slot] = 200;
-                break;
-            case 5:
-                sellPrice[slot] = 250;
-                break;
+        if(inventory != null || inventory.Length != 0) {
+            SendCommand("SELL",slot.ToString());
         }
     }
 
-    public void ReplaceItem(int slot) {
+    public void HoverShopItem(int slot) {
 
     }
 
-    public void HoverItem(int slot) {
+    public void HoverInvItem(int slot) {
 
     }
 }

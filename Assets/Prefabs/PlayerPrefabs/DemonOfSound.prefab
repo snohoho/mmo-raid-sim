@@ -958,6 +958,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2787904039896821000, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 3726466281052327465}
     - target: {fileID: 2823063515297768880, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1465,6 +1469,8 @@ MonoBehaviour:
   ultHB: {fileID: 8407916210582763376}
   level: 1
   gold: 0
+  exp: 0
+  totalDamage: 0
   isMoving: 0
   isHurt: 0
   isDead: 0

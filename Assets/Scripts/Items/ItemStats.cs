@@ -16,7 +16,8 @@ public class ItemStats : NetworkComponent
     public int meleeBonus;
     public int rangedBonus;
     public int spdBonus;
-    
+    public float dmgBonus;
+    public float gcdMod;
 
     public override void HandleMessage(string flag, string value)
     {

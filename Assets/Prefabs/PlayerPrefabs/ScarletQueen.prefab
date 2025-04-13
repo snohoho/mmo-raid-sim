@@ -5144,12 +5144,14 @@ MonoBehaviour:
   rangedAtk: 50
   speed: 4
   skillDmg: 0
+  dmgBonusBase: 1
   dmgBonus: 1
   primaryCD: 0
   secondaryCD: 0
   defCD: 0
   ultCD: 0
   gcd: 0
+  gcdBase: 0
   gcdMod: 0
   gcdMax: 0
   invuln: 0
@@ -5159,7 +5161,7 @@ MonoBehaviour:
   defHB: {fileID: 6545685554605418132}
   ultHB: {fileID: 6678927780567878474}
   level: 1
-  gold: 0
+  gold: 1000
   exp: 0
   totalDamage: 0
   isMoving: 0
@@ -5232,6 +5234,7 @@ MonoBehaviour:
   MyCore: {fileID: 0}
   MyId: {fileID: 0}
   IsDirty: 0
+  player: {fileID: 8502833685162187290}
   invPanel: {fileID: 4441906569751636769}
   inventory:
   - {fileID: 0}
@@ -5244,6 +5247,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  totalHPBonus: 0
+  totalMelAtkBonus: 0
+  totalRngAtkBonus: 0
+  totalSpdBonus: 0
+  totalDmgBonus: 0
+  totalGcdMod: 0
+  newItem: 0
 --- !u!114 &2787904039896821000
 MonoBehaviour:
   m_ObjectHideFlags: 0

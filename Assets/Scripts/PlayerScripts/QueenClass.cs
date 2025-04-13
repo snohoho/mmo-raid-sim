@@ -105,7 +105,7 @@ public class QueenClass : PlayerController
                 }
 
                 if((primaryHB.activeSelf || secondaryHB.activeSelf || ultHB.activeSelf) && !inCr) {
-                    dmgBonus = 1f;
+                    dmgBonus = dmgBonusBase;
                 }
                 if(!inCr) {
                     primaryHB.SetActive(false);
@@ -174,13 +174,13 @@ public class QueenClass : PlayerController
                     heat = 0;
                     if(overheat) {
                         overheat = false;
-                        gcdMod = 0f;
+                        gcdMod = gcdBase + 0f;
                     }
                 }
                 else if(heat >= 100) {
                     heat = 100;
                     if(!overheat) {
-                        gcdMod = 1f;
+                        gcdMod = gcdBase + 1f;
                     }
                     overheat = true;
                 }
@@ -209,7 +209,7 @@ public class QueenClass : PlayerController
             if(usingPrimary && primaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 primaryCD = 0.5f;
-                gcd = 1f + gcdMod;
+                gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("PRIMARYCD",primaryCD.ToString());
             }
@@ -230,7 +230,7 @@ public class QueenClass : PlayerController
             if(usingSecondary && secondaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 secondaryCD = 0.5f;
-                gcd = 1f + gcdMod;
+                gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("SECONDARYCD",secondaryCD.ToString());
             }
@@ -251,7 +251,7 @@ public class QueenClass : PlayerController
             if(usingDefensive && defCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 defCD = 1f;
-                gcd = 1f + gcdMod;
+                gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("DEFCD",defCD.ToString());
             }
@@ -272,7 +272,7 @@ public class QueenClass : PlayerController
             if(usingUlt && ultCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 ultCD = 1f;
-                gcd = 1f + gcdMod;
+                gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());
             }

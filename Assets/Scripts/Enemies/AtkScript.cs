@@ -39,52 +39,53 @@ public class AtkScript : NetworkComponent
     {
         if(col.gameObject.CompareTag("Player")) {
             if(IsServer) {
+                PlayerController player = col.gameObject.GetComponent<PlayerController>();
                 if(hitboxes.count == 10){
                     if(gameObject.CompareTag("Atk1")) {
-                        if(col.gameObject.GetComponent<PlayerController>().invuln = false)
+                        if(player.invuln = false)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
                             hitboxes.atk1HB.SetActive(false);
                         } else {
-                            col.gameObject.GetComponent<PlayerController>().hp -= 1;
-                            Debug.Log("PLAYER HIT");
-                            SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
+                            player.hp -= 1;
+                            Debug.Log("PLAYER HIT" + "\nHP = " + player.hp);
+                            player.SendUpdate("HURT",true.ToString());
                             hitboxes.atk1HB.SetActive(false);
                         }
                     }
                     if(gameObject.CompareTag("Atk2")) {
-                        if(col.gameObject.GetComponent<PlayerController>().invuln = false)
+                        if(player.invuln = false)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
                             hitboxes.atk2HB.SetActive(false);
                         } else {
-                            col.gameObject.GetComponent<PlayerController>().hp -= 1;
-                            Debug.Log("PLAYER HIT");
-                            SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
+                            player.hp -= 1;
+                            Debug.Log("PLAYER HIT" + "\nHP = " + player.hp);
+                            player.SendUpdate("HURT",true.ToString());
                             hitboxes.atk2HB.SetActive(false);
                         }
                     }
                     if(gameObject.CompareTag("Atk3")) {
-                        if(col.gameObject.GetComponent<PlayerController>().invuln = false)
+                        if(player.invuln = false)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
                             hitboxes.atk3HB.SetActive(false);
                         } else {
-                            col.gameObject.GetComponent<PlayerController>().hp -= 1;
-                            Debug.Log("PLAYER HIT");
-                            SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
+                            player.hp -= 1;
+                            Debug.Log("PLAYER HIT" + "\nHP = " + player.hp);
+                            player.SendUpdate("HURT",true.ToString());
                             hitboxes.atk3HB.SetActive(false);
                         }
                     }
                     if(gameObject.CompareTag("Atk4")) {
-                        if(col.gameObject.GetComponent<PlayerController>().invuln = false)
+                        if(player.invuln = false)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
                             hitboxes.atk4HB.SetActive(false);
                         } else {
-                            col.gameObject.GetComponent<PlayerController>().hp -= 1;
-                            Debug.Log("PLAYER HIT");
-                            SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
+                            player.hp -= 1;
+                            Debug.Log("PLAYER HIT" + "\nHP = " + player.hp);
+                            player.SendUpdate("HURT",true.ToString());
                             hitboxes.atk4HB.SetActive(false);
                         }
                     }

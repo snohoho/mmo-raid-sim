@@ -10,10 +10,10 @@ using UnityEngine.AI;
 public class NavMeshController : NetworkComponent
 {
     public int HP = 1500;
-    public int Gold = 5;
+    public int Gold;
     public int XP = 10;
-    public int randx = 0;
-    public int randz = 0;
+    public int randx;
+    public int randz;
     public int count;
     public GameObject atkHB;
     public Vector3 Goal;
@@ -38,8 +38,8 @@ public class NavMeshController : NetworkComponent
 
         if(IsServer)
         {
-            randx = UnityEngine.Random.Range(-47,47);
-            randz = UnityEngine.Random.Range(-47,47);
+            randx = UnityEngine.Random.Range(-47,48);
+            randz = UnityEngine.Random.Range(-47,48);
             Goal = new Vector3(randx, Goal.y, randz);
             MyAgent.SetDestination(Goal);
 
@@ -55,8 +55,8 @@ public class NavMeshController : NetworkComponent
                 count++;
                 if(count == 4)
                 {
-                    randx = UnityEngine.Random.Range(-47,47);
-                    randz = UnityEngine.Random.Range(-47,47);
+                    randx = UnityEngine.Random.Range(-47,48);
+                    randz = UnityEngine.Random.Range(-47,48);
                     Goal = new Vector3(randx, Goal.y, randz);
                     yield return new WaitForSeconds(.1f);
                     count = 0;
@@ -78,7 +78,7 @@ public class NavMeshController : NetworkComponent
         {
             throw new System.Exception("ERROR: COULD NOT FIND NAV MESH AGENT!");
         }
-        Gold = Random.Range(75,150);
+        Gold = UnityEngine.Random.Range(75,151);
     }
 
     // Update is called once per frame

@@ -39,18 +39,19 @@ public class EnemyAtk : NetworkComponent
         {
             if(IsServer)
             {
+                PlayerController player = col.gameObject.GetComponent<PlayerController>();
                 if(hitbox.count == 4)
                 {
-                    if(col.gameObject.GetComponent<PlayerController>().invuln = false)
-                        {
-                            Debug.Log(col.gameObject.name + " INVULN");
-                            hitbox.atkHB.SetActive(false);
-                        } else {
-                            col.gameObject.GetComponent<PlayerController>().hp -= 1;
-                            Debug.Log("PLAYER HIT");
-                            SendUpdate("HURT",col.gameObject.GetComponent<PlayerController>().hp.ToString());
-                            hitbox.atkHB.SetActive(false);
-                        }
+                    if(player.invuln = false)
+                    {
+                        Debug.Log(col.gameObject.name + " INVULN");
+                        hitbox.atkHB.SetActive(false);
+                    } else {
+                        player.hp -= 1;
+                        Debug.Log("PLAYER HIT" + "\nHP = " + player.hp);
+                        player.SendUpdate("HURT",true.ToString());
+                        hitbox.atkHB.SetActive(false);
+                    }
                 }
             }
         }

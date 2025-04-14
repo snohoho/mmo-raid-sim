@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: elizMask
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: elizabeth
+    m_Weight: 0
+  - m_Path: elizabeth_armature
+    m_Weight: 0
+  - m_Path: elizabeth_armature/waist
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/flame
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/flame/flame_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/flame/flame_end/flame_end_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/neck
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/neck/head
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/neck/head/ahoge
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/neck/head/ahoge/ahoge_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/neck/head/ahoge/ahoge_end/ahoge_end_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/neck/head/hood
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/neck/head/hood/hood_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/neck/head/hood/hood_end/hood_end_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_L
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_L/upperarm_L
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_L/upperarm_L/lowerarm_L
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_L/upperarm_L/lowerarm_L/hand_L
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_L/upperarm_L/lowerarm_L/hand_L/hand_L_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_L/upperarm_L/lowerarm_L/hand_L/hand_L_end/hand_L_end_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_L/upperarm_L/pauldron_L
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_L/upperarm_L/pauldron_L/pauldron_L_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_L/upperarm_L/pauldron_L/pauldron_L_end/pauldron_L_end_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_R
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_R/upperarm_R
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_R/upperarm_R/lowerarm_R
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_R/upperarm_R/lowerarm_R/hand_R
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_R/upperarm_R/lowerarm_R/hand_R/hand_R_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_R/upperarm_R/lowerarm_R/hand_R/hand_R_end/hand_R_end_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_R/upperarm_R/pauldron_R
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_R/upperarm_R/pauldron_R/pauldron_R_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/chest/shoulder_R/upperarm_R/pauldron_R/pauldron_R_end/pauldron_R_end_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_L
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_L/upperleg_L
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_L/upperleg_L/lowerleg_L
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_L/upperleg_L/lowerleg_L/foot_L
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_L/upperleg_L/lowerleg_L/foot_L/foot_L_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_L/upperleg_L/lowerleg_L/foot_L/foot_L_end/foot_L_end_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_R
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_R/upperleg_R
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_R/upperleg_R/lowerleg_R
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_R/upperleg_R/lowerleg_R/foot_R
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_R/upperleg_R/lowerleg_R/foot_R/foot_R_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/hip_R/upperleg_R/lowerleg_R/foot_R/foot_R_end/foot_R_end_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/skirt
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/skirt/skirt_end
+    m_Weight: 1
+  - m_Path: elizabeth_armature/waist/skirt/skirt_end/skirt_end_end
+    m_Weight: 1
+  - m_Path: elizabeth_sword
+    m_Weight: 1

@@ -15,6 +15,7 @@ public class QueenClass : PlayerController
     public bool overheat;
     public bool uiOverheat;
     public bool inCr;
+    public Animator propAnimator;
 
     public override void HandleMessage(string flag, string value)
     {
@@ -29,6 +30,17 @@ public class QueenClass : PlayerController
                 }
                 if(heat >= 100) {
                     overheat = true;
+                }
+            }
+        }
+
+        if (flag == "ULT")
+        {
+            if (IsClient)
+            {
+                if (usingUlt)
+                {
+                    StartCoroutine(SetUltAnimation(propAnimator));
                 }
             }
         }
@@ -186,6 +198,13 @@ public class QueenClass : PlayerController
                 }
 
                 SendUpdate("HEAT", heat.ToString());
+            }
+
+            if (IsClient)
+            {
+                propAnimator.SetBool("DoingPrimary", usingPrimary);
+                propAnimator.SetBool("DoingDefensive", usingDefensive);
+                propAnimator.SetBool("Die", isDead);
             }
 
             yield return new WaitForSeconds(MyCore.MasterTimer);

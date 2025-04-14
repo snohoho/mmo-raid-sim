@@ -61,6 +61,7 @@ public class PlayerController : NetworkComponent
     public Image gcd1, gcd2, gcd3, gcd4;
 
     public Animator animator;
+    public GameObject shield;
 
 
     public override void HandleMessage(string flag, string value)
@@ -69,8 +70,6 @@ public class PlayerController : NetworkComponent
             if(IsServer) {
                 isMoving = true;
                 lastInput = value.Vec2Parse();
-
-                SendUpdate("MOVE", value);
             }
             if(IsClient) {
                 isMoving = bool.Parse(value);
@@ -97,22 +96,10 @@ public class PlayerController : NetworkComponent
             }
         }
         if(flag == "HURT") {
-            if(IsServer) {
-                isHurt = bool.Parse(value);
-                hp--;
-                if(hp <= 0) {
-                    isDead = true;
-                    invuln = true;
-                }
-                if(hp > 0) {
-                    StartCoroutine(InvulnTimer(1f));
-                }
-
-                SendUpdate("HURT", value);
-            }
             if(IsClient) {
                 isHurt = bool.Parse(value);
                 hp--;
+                isHurt = false;
             }
         }
         if(flag == "DEAD") {
@@ -135,6 +122,7 @@ public class PlayerController : NetworkComponent
         if(flag == "INVULN") {
             if(IsClient) {
                 invuln = bool.Parse(value);
+                shield.SetActive(invuln);
             }
         }
         if(flag == "PRIMARY") {
@@ -181,7 +169,7 @@ public class PlayerController : NetworkComponent
                 usingUlt = bool.Parse(value);
                 if (usingUlt)
                 {
-                    StartCoroutine(SetUltAnimation(animator));
+                    StartCoroutine(SetAnimation(animator, "DoingSpecial"));
                 }
             }
         }
@@ -246,8 +234,7 @@ public class PlayerController : NetworkComponent
                 gold = int.Parse(value);
             }
             if(IsClient) {
-                gold += int.Parse(value);
-                StartCoroutine(DistributeGoldExp(int.Parse(value),0));
+                gold = int.Parse(value);
             }
         }
         if(flag == "EXP") {
@@ -255,8 +242,14 @@ public class PlayerController : NetworkComponent
                 exp = int.Parse(value);
             }
             if(IsClient) {
-                exp += int.Parse(value);
-                StartCoroutine(DistributeGoldExp(0,int.Parse(value)));
+                exp = int.Parse(value);
+            }
+        }
+        if(flag == "LVLUP") {
+            if(IsClient) {
+                level = int.Parse(value);
+                meleeAtk += 10;
+                rangedAtk += 10;
             }
         }
         if(flag == "DAMAGE") {
@@ -268,21 +261,37 @@ public class PlayerController : NetworkComponent
 
     public override void NetworkedStart()
     {
+        StartCoroutine(SetPrefs());
+        //disable other player uis
+        if(!IsLocalPlayer) {
+            transform.GetChild(0).gameObject.SetActive(false);
+        }
+        if(IsLocalPlayer) {
+            levelText = statsPanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+            goldText = statsPanel.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
+            meleeText = statsPanel.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
+            rangedText = statsPanel.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
+            speedText = statsPanel.transform.GetChild(4).gameObject.GetComponent<TextMeshProUGUI>();
 
+            levelText.text = "LVL" + level.ToString();
+            goldText.text = gold.ToString() + "G";
+            meleeText.text = meleeAtk.ToString();
+            rangedText.text = rangedAtk.ToString();
+            speedText.text = speed.ToString();
+        }
     }
 
     public override IEnumerator SlowUpdate()
     {
         
-        
         yield return new WaitForSeconds(MyCore.MasterTimer);
     }
 
-    public IEnumerator SetUltAnimation(Animator anim)
+    public IEnumerator SetAnimation(Animator anim, string boolToSet)
     {
-        anim.SetBool("DoingSpecial", true);
+        anim.SetBool(boolToSet, true);
         yield return new WaitForEndOfFrame();
-        anim.SetBool("DoingSpecial", false);
+        anim.SetBool(boolToSet, false);
     }
 
     void Start()
@@ -370,12 +379,6 @@ public class PlayerController : NetworkComponent
 
     public void OnTriggerEnter(Collider col)
     {
-        if(col.gameObject.CompareTag("Enemy") && !invuln) {
-           if(IsServer) {
-                hp--;
-                SendUpdate("HURT",hp.ToString());
-           }
-        }
         if(col.gameObject.CompareTag("Shop")) {
             if(IsServer) {
                 withinInteract = true;
@@ -445,16 +448,29 @@ public class PlayerController : NetworkComponent
         }
     }
 
+    public IEnumerator SetPrefs() {
+        foreach(NetworkPlayerManager n in FindObjectsOfType<NetworkPlayerManager>()) {
+            if(n.Owner == Owner) {
+                playerName = n.playerName;
+                nameLabel.text = playerName;
+            }
+
+            yield return null;
+        }
+    }
+
     public IEnumerator DistributeGoldExp(int gold = 0, int exp = 0) {
-        foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
-            if(player.Owner != Owner) {
+        if(IsServer) {
+            foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
+                Debug.Log("gold earned " + gold);
+                Debug.Log("exp earned " + exp);
                 player.gold += gold;
                 player.exp += exp;
-                SendCommand("GOLD", player.gold.ToString());
-                SendCommand("EXP", player.exp.ToString());
+                SendUpdate("GOLD", player.gold.ToString());
+                SendUpdate("EXP", player.exp.ToString());
+                 
+                yield return null;
             }
-            
-            yield return null;
         }
     }
 

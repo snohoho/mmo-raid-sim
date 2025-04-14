@@ -1010,6 +1010,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3456384126958339121, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 3726466281052327465}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1453,12 +1457,14 @@ MonoBehaviour:
   rangedAtk: 100
   speed: 5
   skillDmg: 0
+  dmgBonusBase: 1
   dmgBonus: 1
   primaryCD: 0
   secondaryCD: 0
   defCD: 0
   ultCD: 0
   gcd: 0
+  gcdBase: 0
   gcdMod: 0
   gcdMax: 0
   invuln: 0

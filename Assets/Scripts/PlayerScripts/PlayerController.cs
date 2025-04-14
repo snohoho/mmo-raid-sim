@@ -377,7 +377,7 @@ public class PlayerController : NetworkComponent
     }
 
     public void Move(InputAction.CallbackContext context) {
-        if((context.started || context.performed) && !inShop) {
+        if((context.started || context.performed) && !inShop && !isDead) {
             SendCommand("MOVE", context.ReadValue<Vector2>().ToString());
         }
         if(context.canceled) {
@@ -386,37 +386,37 @@ public class PlayerController : NetworkComponent
     }
 
     public void UsePrimary(InputAction.CallbackContext context) {
-        if(context.started && !usingPrimary && !inShop) {
+        if(context.started && !usingPrimary && !inShop && !isDead) {
             SendCommand("PRIMARY", "true");
         }
     }
 
     public void UseSecondary(InputAction.CallbackContext context) {
-        if(context.started && !usingSecondary && !inShop) {
+        if(context.started && !usingSecondary && !inShop && !isDead) {
             SendCommand("SECONDARY", "true");
         }
     }
 
     public void UseDefensive(InputAction.CallbackContext context) {
-        if(context.started && !usingDefensive && !inShop) {
+        if(context.started && !usingDefensive && !inShop && !isDead) {
             SendCommand("DEFENSIVE", "true");
         }
     }
 
     public void UseUlt(InputAction.CallbackContext context) {
-        if(context.started && !usingUlt && !inShop) {
+        if(context.started && !usingUlt && !inShop && !isDead) {
             SendCommand("ULT", "true");
         }
     }
 
     public void UseLimit(InputAction.CallbackContext context) {
-        if(context.started && !usingLimit && !inShop) {
+        if(context.started && !usingLimit && !inShop && !isDead) {
             SendCommand("LIMIT", "true");
         }
     }
 
     public void Interact(InputAction.CallbackContext context) {
-        if(context.started && withinInteract) {
+        if(context.started && withinInteract && !isDead) {
             SendCommand("SHOP",(!inShop).ToString());
         }
     }
@@ -429,12 +429,10 @@ public class PlayerController : NetworkComponent
 
     public IEnumerator DistributeGoldExp(int gold = 0, int exp = 0) {
         foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
-            if(player.Owner != Owner) {
-                player.gold += gold;
-                player.exp += exp;
-                SendCommand("GOLD", player.gold.ToString());
-                SendCommand("EXP", player.exp.ToString());
-            }
+            player.gold += gold;
+            player.exp += exp;
+            SendCommand("GOLD", player.gold.ToString());
+            SendCommand("EXP", player.exp.ToString());
             
             yield return null;
         }

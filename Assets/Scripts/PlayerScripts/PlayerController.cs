@@ -18,14 +18,12 @@ public class PlayerController : NetworkComponent
     public int rangedAtk;
     public int speed;
     public float skillDmg;
-    public float dmgBonusBase = 1f;
-    public float dmgBonus;
+    public float dmgBonus = 1f;
     public float primaryCD;
     public float secondaryCD;
     public float defCD;
     public float ultCD;
     public float gcd;
-    public float gcdBase = 0f;
     public float gcdMod = 0f;
     public float gcdMax;
     public bool invuln;
@@ -59,6 +57,7 @@ public class PlayerController : NetworkComponent
     public RectTransform skillsPanel; 
     public TextMeshProUGUI s1, s2, s3, s4;
     public Image gcd1, gcd2, gcd3, gcd4;
+    public Animator animator;
     
 
     public override void HandleMessage(string flag, string value)
@@ -69,9 +68,6 @@ public class PlayerController : NetworkComponent
                 lastInput = value.Vec2Parse();
 
                 SendUpdate("MOVE", value);
-            }
-            if(IsClient) {
-                isMoving = bool.Parse(value);
             }
         }
         if(flag == "INTERACT") {
@@ -175,8 +171,13 @@ public class PlayerController : NetworkComponent
 
                 SendUpdate("ULT", value);
             }
-            if(IsClient) {
+            if (IsClient)
+            {
                 usingUlt = bool.Parse(value);
+                if (usingUlt)
+                {
+                    StartCoroutine(SetUltAnimation(animator));
+                }
             }
         }
         if(flag == "LIMIT") {
@@ -272,6 +273,13 @@ public class PlayerController : NetworkComponent
         yield return new WaitForSeconds(MyCore.MasterTimer);
     }
 
+    public IEnumerator SetUltAnimation(Animator anim)
+    {
+        anim.SetBool("DoingSpecial", true);
+        yield return new WaitForEndOfFrame();
+        anim.SetBool("DoingSpecial", false);
+    }
+
     void Start()
     {
         
@@ -285,15 +293,20 @@ public class PlayerController : NetworkComponent
 
             if(rb.velocity == Vector3.zero) {
                 isMoving = false;
-                SendUpdate("MOVE",isMoving.ToString());
             }
             else if(rb.velocity != Vector3.zero) {
                 isMoving = true;
-                SendUpdate("MOVE",isMoving.ToString());
             } 
         }
         if(IsClient) {
             //perform anim
+            animator.SetBool("Walking", isMoving);
+            animator.SetBool("DoingPrimary", usingPrimary);
+            animator.SetBool("DoingSecondary", usingSecondary);
+            animator.SetBool("DoingDefensive", usingDefensive);
+            animator.SetBool("Dead", isDead);
+
+            
         }
 
         //handle cooldown timers

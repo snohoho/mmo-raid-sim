@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemID
-      value: 23
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemName
@@ -109,3 +109,5 @@ MonoBehaviour:
   meleeBonus: 0
   rangedBonus: 0
   spdBonus: 0
+  dmgBonus: 0
+  gcdMod: 0

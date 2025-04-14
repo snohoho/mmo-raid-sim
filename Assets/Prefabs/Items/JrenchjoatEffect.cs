@@ -59,6 +59,8 @@ public class JrenchjoatEffect : ItemStats
                         stats.meleeBonus += 300;
                         stats.hpBonus += 5;
                         stats.spdBonus += 5;
+                        stats.dmgBonus += 0.5f;
+                        stats.gcdMod -= 0.25f;
                         StatsSet = true;
                     }
                 }

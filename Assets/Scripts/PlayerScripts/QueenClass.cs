@@ -40,7 +40,7 @@ public class QueenClass : PlayerController
             {
                 if (usingUlt)
                 {
-                    StartCoroutine(SetUltAnimation(propAnimator));
+                    StartCoroutine(SetAnimation(animator, "DoingSpecial"));
                 }
             }
         }
@@ -48,24 +48,7 @@ public class QueenClass : PlayerController
 
     public override void NetworkedStart()
     {
-        StartCoroutine(SetPrefs());
-        //disable other player uis
-        if(!IsLocalPlayer) {
-            transform.GetChild(0).gameObject.SetActive(false);
-        }
-        if(IsLocalPlayer) {
-            levelText = statsPanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            goldText = statsPanel.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
-            meleeText = statsPanel.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
-            rangedText = statsPanel.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
-            speedText = statsPanel.transform.GetChild(4).gameObject.GetComponent<TextMeshProUGUI>();
-
-            levelText.text = level.ToString();
-            goldText.text = gold.ToString();
-            meleeText.text = meleeAtk.ToString();
-            rangedText.text = rangedAtk.ToString();
-            speedText.text = speed.ToString();
-        }
+        
     }
 
     public override IEnumerator SlowUpdate()
@@ -100,8 +83,8 @@ public class QueenClass : PlayerController
                     }
                 }
 
-                levelText.text = level.ToString();
-                goldText.text = gold.ToString();
+                levelText.text = "LVL" + level.ToString();
+                goldText.text = gold.ToString() + "G";
                 meleeText.text = meleeAtk.ToString();
                 rangedText.text = rangedAtk.ToString();
                 speedText.text = speed.ToString();
@@ -109,11 +92,10 @@ public class QueenClass : PlayerController
             if(IsServer) {
                 if(exp >= 100) {
                     exp -= 100;
-                    level++;
                     meleeAtk += 10;
                     rangedAtk += 10;
-                    SendUpdate("STATCHANGE","MATK"+","+meleeAtk);
-                    SendUpdate("STATCHANGE","RATK"+","+rangedAtk);
+                    level++;
+                    SendUpdate("LVLUP",level.ToString());
                 }
 
                 if((primaryHB.activeSelf || secondaryHB.activeSelf || ultHB.activeSelf) && !inCr) {
@@ -308,17 +290,6 @@ public class QueenClass : PlayerController
                     SendUpdate("ULT", "false");
                 }
             }
-        }
-    }
-
-    public IEnumerator SetPrefs() {
-        foreach(NetworkPlayerManager n in FindObjectsOfType<NetworkPlayerManager>()) {
-            if(n.Owner == Owner) {
-                playerName = n.playerName;
-                nameLabel.text = playerName;
-            }
-
-            yield return null;
         }
     }
 

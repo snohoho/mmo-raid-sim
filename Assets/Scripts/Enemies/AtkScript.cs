@@ -42,7 +42,7 @@ public class AtkScript : NetworkComponent
                 PlayerController player = col.gameObject.GetComponent<PlayerController>();
                 if(hitboxes.count == 10){
                     if(gameObject.CompareTag("Atk1")) {
-                        if(player.invuln = false)
+                        if(player.invuln)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
                             hitboxes.atk1HB.SetActive(false);
@@ -54,7 +54,7 @@ public class AtkScript : NetworkComponent
                         }
                     }
                     if(gameObject.CompareTag("Atk2")) {
-                        if(player.invuln = false)
+                        if(player.invuln)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
                             hitboxes.atk2HB.SetActive(false);
@@ -66,7 +66,7 @@ public class AtkScript : NetworkComponent
                         }
                     }
                     if(gameObject.CompareTag("Atk3")) {
-                        if(player.invuln = false)
+                        if(player.invuln)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
                             hitboxes.atk3HB.SetActive(false);
@@ -78,7 +78,7 @@ public class AtkScript : NetworkComponent
                         }
                     }
                     if(gameObject.CompareTag("Atk4")) {
-                        if(player.invuln = false)
+                        if(player.invuln)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
                             hitboxes.atk4HB.SetActive(false);

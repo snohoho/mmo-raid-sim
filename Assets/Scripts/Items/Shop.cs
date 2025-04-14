@@ -17,6 +17,7 @@ public class Shop : NetworkComponent
     public int[] sellPrice;
     public TextMeshProUGUI currentGold;
     public Button refreshButton;
+    public RectTransform itemDescPanel;
 
     public override void HandleMessage(string flag, string value)
     {
@@ -60,13 +61,13 @@ public class Shop : NetworkComponent
             }
             if(IsClient) {
                 string[] args = value.Split(',');
-                int price = int.Parse(args[0]);
+                int newGold = int.Parse(args[0]);
                 int slot = int.Parse(args[1]);
 
-                player.gold = price;
-                if(player.gold == price) {
+                if(player.gold != newGold) {
                     itemPanel.GetChild(slot).GetChild(1).gameObject.SetActive(true);
                 }
+                player.gold = newGold;
             }
         }
         if(flag == "SELL") {
@@ -143,7 +144,9 @@ public class Shop : NetworkComponent
 
     void Update()
     {
-        
+        if(IsClient) {
+            itemDescPanel.transform.position = Input.mousePosition;
+        }
     }
 
     public void RefreshShop() {
@@ -181,10 +184,24 @@ public class Shop : NetworkComponent
     }
 
     public void HoverShopItem(int slot) {
+        itemDescPanel.gameObject.SetActive(true);
+        TextMeshProUGUI name = itemDescPanel.GetChild(0).GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI desc = itemDescPanel.GetChild(1).GetComponent<TextMeshProUGUI>();
 
+        name.text = itemsForSale[slot].name;
+        desc.text = itemsForSale[slot].itemDescription;
     }
 
     public void HoverInvItem(int slot) {
+        itemDescPanel.gameObject.SetActive(true);
+        TextMeshProUGUI name = itemDescPanel.GetChild(0).GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI desc = itemDescPanel.GetChild(1).GetComponent<TextMeshProUGUI>();
 
+        name.text = itemsForSale[slot].name;
+        desc.text = itemsForSale[slot].itemDescription;
+    }
+
+    public void UnhoverItem() {
+        itemDescPanel.gameObject.SetActive(false);
     }
 }

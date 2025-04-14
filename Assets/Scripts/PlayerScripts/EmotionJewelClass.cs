@@ -28,28 +28,7 @@ public class EmotionJewelClass : PlayerController
 
     public override void NetworkedStart()
     {
-        StartCoroutine(SetPrefs());
-        //disable other player uis
-        if(!IsLocalPlayer) {
-            transform.GetChild(0).gameObject.SetActive(false);
-        }
-        if(IsLocalPlayer) {
-            levelText = statsPanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            goldText = statsPanel.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
-            meleeText = statsPanel.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
-            rangedText = statsPanel.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
-            speedText = statsPanel.transform.GetChild(4).gameObject.GetComponent<TextMeshProUGUI>();
-
-            levelText.text = level.ToString();
-            goldText.text = gold.ToString();
-            meleeText.text = meleeAtk.ToString();
-            rangedText.text = rangedAtk.ToString();
-            speedText.text = speed.ToString();
-        }
-        if(IsServer) {
-            activeEmotion = UnityEngine.Random.Range(0,emotions.Length);
-            SendUpdate("EMOTION",activeEmotion.ToString());
-        }
+       
     }
 
     public override IEnumerator SlowUpdate()
@@ -76,13 +55,21 @@ public class EmotionJewelClass : PlayerController
                         break;
                 }
 
-                levelText.text = level.ToString();
-                goldText.text = gold.ToString();
+                levelText.text = "LVL" + level.ToString();
+                goldText.text = gold.ToString() + "G";
                 meleeText.text = meleeAtk.ToString();
                 rangedText.text = rangedAtk.ToString();
                 speedText.text = speed.ToString();
             }
             if(IsServer) {
+                if(exp >= 100) {
+                    exp -= 100;
+                    meleeAtk += 10;
+                    rangedAtk += 10;
+                    level++;
+                    SendUpdate("LVLUP",level.ToString());
+                }
+
                 if(primaryHB.activeSelf || ultHB.activeSelf) {
                     dmgBonus = 1f;
                 }
@@ -233,17 +220,6 @@ public class EmotionJewelClass : PlayerController
                     SendUpdate("ULT", "false");
                 }
             }
-        }
-    }
-
-    public IEnumerator SetPrefs() {
-        foreach(NetworkPlayerManager n in FindObjectsOfType<NetworkPlayerManager>()) {
-            if(n.Owner == Owner) {
-                playerName = n.playerName;
-                nameLabel.text = playerName;
-            }
-
-            yield return new WaitForEndOfFrame();
         }
     }
 }

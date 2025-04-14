@@ -42,12 +42,19 @@ public class EnemyAtk : NetworkComponent
                 PlayerController player = col.gameObject.GetComponent<PlayerController>();
                 if(hitbox.count == 4)
                 {
-                    if(player.invuln = false)
+                    if(player.invuln)
                     {
                         Debug.Log(col.gameObject.name + " INVULN");
                         hitbox.atkHB.SetActive(false);
                     } else {
                         player.hp -= 1;
+                        if(player.hp <= 0) {
+                            player.isDead = true;
+                            player.invuln = true;
+                        }
+                        if(player.hp > 0) {
+                            player.StartCoroutine(player.InvulnTimer(1f));
+                        }
                         Debug.Log("PLAYER HIT" + "\nHP = " + player.hp);
                         player.SendUpdate("HURT",true.ToString());
                         hitbox.atkHB.SetActive(false);

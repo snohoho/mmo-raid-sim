@@ -3,12 +3,7 @@ guid: dd882e66670bd4d4786455cfff06796e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: kaela2_mat
-    second: {fileID: 2100000, guid: 4ffafa567e7bd78459dc38c79d2127cf, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

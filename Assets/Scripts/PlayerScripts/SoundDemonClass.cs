@@ -154,7 +154,7 @@ public class SoundDemonClass : PlayerController
             if(usingPrimary && primaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 primaryCD = 0.5f;
-                gcd = 1f + gcdMod;
+                gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("PRIMARYCD",primaryCD.ToString());
             }
@@ -175,7 +175,7 @@ public class SoundDemonClass : PlayerController
             if(usingSecondary && secondaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 secondaryCD = 0.5f;
-                gcd = 1f + gcdMod;
+                gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("SECONDARYCD",secondaryCD.ToString());
             }
@@ -196,7 +196,7 @@ public class SoundDemonClass : PlayerController
             if(usingDefensive && defCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 defCD = 1f;
-                gcd = 1f + gcdMod;
+                gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("DEFCD",defCD.ToString());
             }
@@ -217,7 +217,7 @@ public class SoundDemonClass : PlayerController
             if(usingUlt && ultCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 ultCD = 1f;
-                gcd = 1f + gcdMod;
+                gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());
             }

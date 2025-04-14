@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dd45696ec25b0d847a942f96393ac6aa
+guid: d4f47395b48ea61498a4b81ef38fb858
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -31,39 +31,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: bijou_armature|Idle
-      takeName: bijou_armature|bijou_armatureAction
-      internalID: 1013937150444385235
+      name: FubuzillaArmature|Idle
+      takeName: FubuzillaArmature|FubuzillaArmatureAction
+      internalID: 7848753813774085998
       firstFrame: 0
-      lastFrame: 30
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: bijou_armature|Walk
-      takeName: bijou_armature|bijou_armatureAction
-      internalID: -8340375174922996334
-      firstFrame: 40
       lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
@@ -89,11 +60,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: bijou_armature|Primary
-      takeName: bijou_armature|bijou_armatureAction
-      internalID: -8716429307921913240
-      firstFrame: 70
-      lastFrame: 100
+      name: FubuzillaArmature|Attack1
+      takeName: FubuzillaArmature|FubuzillaArmatureAction
+      internalID: 9129745120070002188
+      firstFrame: 60
+      lastFrame: 80
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -118,11 +89,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: bijou_armature|Secondary
-      takeName: bijou_armature|bijou_armatureAction
-      internalID: -4541296481582684271
-      firstFrame: 100
-      lastFrame: 130
+      name: FubuzillaArmature|Attack2
+      takeName: FubuzillaArmature|FubuzillaArmatureAction
+      internalID: 4129929313773578293
+      firstFrame: 80
+      lastFrame: 120
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -147,10 +118,10 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: bijou_armature|Special
-      takeName: bijou_armature|bijou_armatureAction
-      internalID: -1479084903862972729
-      firstFrame: 130
+      name: FubuzillaArmature|Attack3
+      takeName: FubuzillaArmature|FubuzillaArmatureAction
+      internalID: -1474340780572516121
+      firstFrame: 120
       lastFrame: 160
       wrapMode: 0
       orientationOffsetY: 0
@@ -176,9 +147,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: bijou_armature|Defensive
-      takeName: bijou_armature|bijou_armatureAction
-      internalID: -344193109802441538
+      name: FubuzillaArmature|Attack4
+      takeName: FubuzillaArmature|FubuzillaArmatureAction
+      internalID: 3072888227562099220
       firstFrame: 160
       lastFrame: 180
       wrapMode: 0
@@ -205,40 +176,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: bijou_armature|Die
-      takeName: bijou_armature|bijou_armatureAction
-      internalID: 7126923794377427116
+      name: FubuzillaArmature|Die
+      takeName: FubuzillaArmature|FubuzillaArmatureAction
+      internalID: 4030688068021695557
       firstFrame: 180
-      lastFrame: 200
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: bijou_armature|Revive
-      takeName: bijou_armature|bijou_armatureAction
-      internalID: -1492329811980788951
-      firstFrame: 200
-      lastFrame: 210
+      lastFrame: 219
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

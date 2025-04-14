@@ -80,6 +80,7 @@ public class FisterClass : PlayerController
                 }   
 
                 while(isDead) {
+                    
 
                 }
 

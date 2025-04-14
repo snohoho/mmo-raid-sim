@@ -53,7 +53,6 @@ public class Shop : NetworkComponent
                         i++;
                     }
                     player.gold -= buyPrice[slot];
-                    player.GetComponent<PlayerInventory>().newItem = true;
                 }
                 
                 SendUpdate("BUY", player.gold+","+slot); 
@@ -76,7 +75,6 @@ public class Shop : NetworkComponent
                 int price = player.GetComponent<PlayerInventory>().inventory[slot].itemRarity * 50;
                 player.GetComponent<PlayerInventory>().inventory[slot] = null;
                 player.gold += price;
-                player.GetComponent<PlayerInventory>().newItem = true;
 
                 SendUpdate("SELL", player.gold+","+slot);
             }

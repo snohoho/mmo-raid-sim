@@ -50,15 +50,11 @@ public class AttackHitbox : NetworkComponent
                 controller.totalDamage += (int)damage;
                 Debug.Log("ENEMY HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
                 controller.dmgBonus = 1;
+                controller.SendUpdate("DAMAGE", controller.totalDamage.ToString());
 
                 if(enemy.HP <= 0) {
                     Debug.Log("award exp and gold");
-                    controller.exp += enemy.XP;
-                    controller.gold += enemy.Gold;
-
-                    controller.SendUpdate("EXP",enemy.XP.ToString());
-                    controller.SendUpdate("GOLD",enemy.Gold.ToString());
-                    controller.SendUpdate("DAMAGE", controller.totalDamage.ToString());
+                    controller.StartCoroutine(controller.DistributeGoldExp(enemy.Gold,enemy.XP));
                 }
             }       
         }

@@ -18,14 +18,12 @@ public class PlayerController : NetworkComponent
     public int rangedAtk;
     public int speed;
     public float skillDmg;
-    public float dmgBonusBase = 1f;
-    public float dmgBonus;
+    public float dmgBonus = 1f;
     public float primaryCD;
     public float secondaryCD;
     public float defCD;
     public float ultCD;
     public float gcd;
-    public float gcdBase = 0f;
     public float gcdMod = 0f;
     public float gcdMax;
     public bool invuln;
@@ -59,6 +57,7 @@ public class PlayerController : NetworkComponent
     public RectTransform skillsPanel; 
     public TextMeshProUGUI s1, s2, s3, s4;
     public Image gcd1, gcd2, gcd3, gcd4;
+    public Animator animator;
     
 
     public override void HandleMessage(string flag, string value)
@@ -69,9 +68,6 @@ public class PlayerController : NetworkComponent
                 lastInput = value.Vec2Parse();
 
                 SendUpdate("MOVE", value);
-            }
-            if(IsClient) {
-                isMoving = bool.Parse(value);
             }
         }
         if(flag == "INTERACT") {
@@ -175,8 +171,13 @@ public class PlayerController : NetworkComponent
 
                 SendUpdate("ULT", value);
             }
-            if(IsClient) {
+            if (IsClient)
+            {
                 usingUlt = bool.Parse(value);
+                if (usingUlt)
+                {
+                    StartCoroutine(SetUltAnimation(animator));
+                }
             }
         }
         if(flag == "LIMIT") {
@@ -272,6 +273,13 @@ public class PlayerController : NetworkComponent
         yield return new WaitForSeconds(MyCore.MasterTimer);
     }
 
+    public IEnumerator SetUltAnimation(Animator anim)
+    {
+        anim.SetBool("DoingSpecial", true);
+        yield return new WaitForEndOfFrame();
+        anim.SetBool("DoingSpecial", false);
+    }
+
     void Start()
     {
         
@@ -285,15 +293,20 @@ public class PlayerController : NetworkComponent
 
             if(rb.velocity == Vector3.zero) {
                 isMoving = false;
-                SendUpdate("MOVE",isMoving.ToString());
             }
             else if(rb.velocity != Vector3.zero) {
                 isMoving = true;
-                SendUpdate("MOVE",isMoving.ToString());
             } 
         }
         if(IsClient) {
             //perform anim
+            animator.SetBool("Walking", isMoving);
+            animator.SetBool("DoingPrimary", usingPrimary);
+            animator.SetBool("DoingSecondary", usingSecondary);
+            animator.SetBool("DoingDefensive", usingDefensive);
+            animator.SetBool("Dead", isDead);
+
+            
         }
 
         //handle cooldown timers
@@ -377,7 +390,7 @@ public class PlayerController : NetworkComponent
     }
 
     public void Move(InputAction.CallbackContext context) {
-        if((context.started || context.performed) && !inShop) {
+        if((context.started || context.performed) && !inShop && !isDead) {
             SendCommand("MOVE", context.ReadValue<Vector2>().ToString());
         }
         if(context.canceled) {
@@ -386,37 +399,37 @@ public class PlayerController : NetworkComponent
     }
 
     public void UsePrimary(InputAction.CallbackContext context) {
-        if(context.started && !usingPrimary && !inShop) {
+        if(context.started && !usingPrimary && !inShop && !isDead) {
             SendCommand("PRIMARY", "true");
         }
     }
 
     public void UseSecondary(InputAction.CallbackContext context) {
-        if(context.started && !usingSecondary && !inShop) {
+        if(context.started && !usingSecondary && !inShop && !isDead) {
             SendCommand("SECONDARY", "true");
         }
     }
 
     public void UseDefensive(InputAction.CallbackContext context) {
-        if(context.started && !usingDefensive && !inShop) {
+        if(context.started && !usingDefensive && !inShop && !isDead) {
             SendCommand("DEFENSIVE", "true");
         }
     }
 
     public void UseUlt(InputAction.CallbackContext context) {
-        if(context.started && !usingUlt && !inShop) {
+        if(context.started && !usingUlt && !inShop && !isDead) {
             SendCommand("ULT", "true");
         }
     }
 
     public void UseLimit(InputAction.CallbackContext context) {
-        if(context.started && !usingLimit && !inShop) {
+        if(context.started && !usingLimit && !inShop && !isDead) {
             SendCommand("LIMIT", "true");
         }
     }
 
     public void Interact(InputAction.CallbackContext context) {
-        if(context.started && withinInteract) {
+        if(context.started && withinInteract && !isDead) {
             SendCommand("SHOP",(!inShop).ToString());
         }
     }
@@ -429,12 +442,10 @@ public class PlayerController : NetworkComponent
 
     public IEnumerator DistributeGoldExp(int gold = 0, int exp = 0) {
         foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
-            if(player.Owner != Owner) {
-                player.gold += gold;
-                player.exp += exp;
-                SendCommand("GOLD", player.gold.ToString());
-                SendCommand("EXP", player.exp.ToString());
-            }
+            player.gold += gold;
+            player.exp += exp;
+            SendCommand("GOLD", player.gold.ToString());
+            SendCommand("EXP", player.exp.ToString());
             
             yield return null;
         }

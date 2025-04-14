@@ -59,7 +59,9 @@ public class PlayerController : NetworkComponent
     public RectTransform skillsPanel; 
     public TextMeshProUGUI s1, s2, s3, s4;
     public Image gcd1, gcd2, gcd3, gcd4;
-    
+
+    public Animator animator;
+
 
     public override void HandleMessage(string flag, string value)
     {
@@ -177,6 +179,10 @@ public class PlayerController : NetworkComponent
             }
             if(IsClient) {
                 usingUlt = bool.Parse(value);
+                if (usingUlt)
+                {
+                    StartCoroutine(SetUltAnimation(animator));
+                }
             }
         }
         if(flag == "LIMIT") {
@@ -272,6 +278,13 @@ public class PlayerController : NetworkComponent
         yield return new WaitForSeconds(MyCore.MasterTimer);
     }
 
+    public IEnumerator SetUltAnimation(Animator anim)
+    {
+        anim.SetBool("DoingSpecial", true);
+        yield return new WaitForEndOfFrame();
+        anim.SetBool("DoingSpecial", false);
+    }
+
     void Start()
     {
         
@@ -294,6 +307,11 @@ public class PlayerController : NetworkComponent
         }
         if(IsClient) {
             //perform anim
+            animator.SetBool("Walking", isMoving);
+            animator.SetBool("DoingPrimary", usingPrimary);
+            animator.SetBool("DoingSecondary", usingSecondary);
+            animator.SetBool("DoingDefensive", usingDefensive);
+            animator.SetBool("Dead", isDead);
         }
 
         //handle cooldown timers

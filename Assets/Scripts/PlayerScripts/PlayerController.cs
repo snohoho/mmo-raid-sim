@@ -281,12 +281,6 @@ public class PlayerController : NetworkComponent
             transform.GetChild(0).gameObject.SetActive(false);
         }
         if(IsLocalPlayer) {
-            levelText = statsPanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            goldText = statsPanel.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
-            meleeText = statsPanel.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
-            rangedText = statsPanel.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
-            speedText = statsPanel.transform.GetChild(4).gameObject.GetComponent<TextMeshProUGUI>();
-
             levelText.text = "LVL" + level.ToString();
             goldText.text = gold.ToString() + "G";
             meleeText.text = meleeAtk.ToString();
@@ -345,14 +339,6 @@ public class PlayerController : NetworkComponent
                 worldSpaceUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "PRESS ANY BUTTON TO REVIVE\n" + deathTimer.ToString("N1");
             }
 
-            s1 = skillsPanel.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s2 = skillsPanel.GetChild(1).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s3 = skillsPanel.GetChild(2).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s4 = skillsPanel.GetChild(3).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            gcd1 = skillsPanel.GetChild(0).GetChild(1).gameObject.GetComponent<Image>();
-            gcd2 = skillsPanel.GetChild(1).GetChild(1).gameObject.GetComponent<Image>();
-            gcd3 = skillsPanel.GetChild(2).GetChild(1).gameObject.GetComponent<Image>();
-            gcd4 = skillsPanel.GetChild(3).GetChild(1).gameObject.GetComponent<Image>();
             if(gcd > 0) {
                 gcd1.fillAmount = gcd/gcdMax;
                 gcd2.fillAmount = gcd/gcdMax;
@@ -406,8 +392,6 @@ public class PlayerController : NetworkComponent
                     s4.text = "";
                 }
             }
-
-
         }
     }
 

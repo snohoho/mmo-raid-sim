@@ -20,6 +20,39 @@ public class FisterClass : PlayerController
     {
         base.HandleMessage(flag, value);
 
+        if(flag == "PRIMARY") {
+            if(IsServer && gcd <= 0 && primaryCD <= 0) {
+                primaryCD = 0.3f;
+                gcd = 1f + gcdMod + gcdBase;
+                SendUpdate("GBLCD",gcd.ToString());
+                SendUpdate("PRIMARYCD",primaryCD.ToString());
+            }
+        }
+        if(flag == "SECONDARY") {
+            if(IsServer && gcd <= 0 && secondaryCD <= 0) {
+                secondaryCD = 0.5f;
+                gcd = 1.4f + gcdMod + gcdBase;
+                SendUpdate("GBLCD",gcd.ToString());
+                SendUpdate("SECONDARYCD",secondaryCD.ToString());
+            }
+        }
+        if(flag == "DEFENSIVE") {
+            if(IsServer && gcd <= 0 && defCD <= 0) {
+                defCD = 6f;
+                gcd = 1.2f + gcdMod + gcdBase;
+                SendUpdate("GBLCD",gcd.ToString());
+                SendUpdate("DEFCD",defCD.ToString());
+            }
+        }
+        if(flag == "ULT") {
+            if(IsServer && gcd <= 0 && ultCD <= 0) {
+                ultCD = 16f;
+                gcd = 1f + gcdMod + gcdBase;
+                SendUpdate("GBLCD",gcd.ToString());
+                SendUpdate("ULTCD",ultCD.ToString());
+            }
+        }
+
         if(flag == "GREMLIN") {
             int newGrem = int.Parse(value);
             if(IsClient) {
@@ -146,50 +179,35 @@ public class FisterClass : PlayerController
         }
     }
 
-    void Start()
-    {
-        
-    }
-
     public override void Update()
     {       
         base.Update();
 
         if(IsServer) {
-            if(usingPrimary && primaryCD <= 0 && gcd <= 0) {
-                //actual cd gets set here
-                primaryCD = 0.3f;
-                gcd = 1f + gcdMod + gcdBase;
-                SendUpdate("GBLCD",gcd.ToString());
-                SendUpdate("PRIMARYCD",primaryCD.ToString());
+            if(isDead && deathTimer > 0f) {
+                deathTimer -= Time.deltaTime;
             }
-            else if(usingPrimary) {
+            
+            if(gcd > 0) {
+                gcd -= Time.deltaTime;
+            }
+
+            if(usingPrimary) {
                 if(primaryCD > 0) {
+                    Debug.Log("test");
                     primaryCD -= Time.deltaTime;
-                }
-                if(gcd > 0) {
-                    gcd -= Time.deltaTime;
                 }
 
                 if(primaryCD <= 0 && gcd <= 0) {
+                    Debug.Log("test2");
                     usingPrimary = false;
                     SendUpdate("PRIMARY", "false");
                 }
             }
 
-            if(usingSecondary && secondaryCD <= 0 && gcd <= 0) {
-                //actual cd gets set here
-                secondaryCD = 0.5f;
-                gcd = 1.2f + gcdMod + gcdBase;
-                SendUpdate("GBLCD",gcd.ToString());
-                SendUpdate("SECONDARYCD",secondaryCD.ToString());
-            }
-            else if(usingSecondary) {
+            if(usingSecondary) {
                 if(secondaryCD > 0) {
                     secondaryCD -= Time.deltaTime;
-                }
-                if(gcd > 0) {
-                    gcd -= Time.deltaTime;
                 }
                 
                 if(secondaryCD <= 0 && gcd <= 0) {
@@ -198,19 +216,9 @@ public class FisterClass : PlayerController
                 }
             }
 
-            if(usingDefensive && defCD <= 0 && gcd <= 0) {
-                //actual cd gets set here
-                defCD = 6f;
-                gcd = 1.2f + gcdMod + gcdBase;
-                SendUpdate("GBLCD",gcd.ToString());
-                SendUpdate("DEFCD",defCD.ToString());
-            }
-            else if(usingDefensive) {
+            if(usingDefensive) {
                 if(defCD > 0) {
                     defCD -= Time.deltaTime;
-                }
-                if(gcd > 0) {
-                    gcd -= Time.deltaTime;
                 }
                 
                 if(defCD <= 0 && gcd <= 0) {
@@ -219,19 +227,9 @@ public class FisterClass : PlayerController
                 }
             }
 
-            if(usingUlt && ultCD <= 0 && gcd <= 0) {
-                //actual cd gets set here
-                ultCD = 16f;
-                gcd = 1f + gcdMod + gcdBase;
-                SendUpdate("GBLCD",gcd.ToString());
-                SendUpdate("ULTCD",ultCD.ToString());
-            }
-            else if(usingUlt) {
+            if(usingUlt) {
                 if(ultCD > 0) {
                     ultCD -= Time.deltaTime;
-                }
-                if(gcd > 0) {
-                    gcd -= Time.deltaTime;
                 }
                 
                 if(ultCD <= 0 && gcd <= 0) {

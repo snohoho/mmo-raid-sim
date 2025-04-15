@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: itemRarity
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
+      propertyPath: itemSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6e28953accbd45a4d86ddb542c7ba168, type: 3}
     - target: {fileID: 7309268987623219551, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: m_Name
       value: Hotdog

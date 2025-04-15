@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7488208102826561718}
   - component: {fileID: 2832517316745591217}
   - component: {fileID: 8993430366431404409}
-  - component: {fileID: 8412210249145100079}
+  - component: {fileID: 8519999115216396247}
   m_Layer: 3
   m_Name: SQSecondary
   m_TagString: Ranged
@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 4080227600993964921}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 9.4}
+  m_LocalScale: {x: 1.5, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -70,8 +70,8 @@ MonoBehaviour:
   MyId: {fileID: 0}
   IsDirty: 0
   controller: {fileID: 0}
---- !u!65 &8412210249145100079
-BoxCollider:
+--- !u!64 &8519999115216396247
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -88,6 +88,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3, y: 1.5, z: 10}
-  m_Center: {x: 0, y: 0, z: 5}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5495902117074765545, guid: 01627e4ed0e4f2a468347253e78726a0, type: 3}

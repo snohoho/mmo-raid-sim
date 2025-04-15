@@ -32,6 +32,7 @@ public class Shop : NetworkComponent
 
                 itemsForSale[slot] = allItems[randItem];
                 int price = allItems[randItem].itemRarity * 100;
+                itemPanel.GetChild(slot).GetComponent<Image>().sprite = allItems[randItem].itemSprite;
                 itemPanel.GetChild(slot).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = price + "G"; 
                 itemPanel.GetChild(slot).GetChild(1).gameObject.SetActive(false);
                 if(slot == 4) {
@@ -133,6 +134,7 @@ public class Shop : NetworkComponent
                     }
                     else if(inventory[i] != null) {
                         invPanel.GetChild(i).gameObject.SetActive(true);
+                        invPanel.GetChild(i).GetComponent<Image>().sprite = inventory[i].itemSprite;
                         invPanel.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = (inventory[i].itemRarity * 50).ToString();
                     }
                 }
@@ -197,8 +199,8 @@ public class Shop : NetworkComponent
         TextMeshProUGUI name = itemDescPanel.GetChild(0).GetComponent<TextMeshProUGUI>();
         TextMeshProUGUI desc = itemDescPanel.GetChild(1).GetComponent<TextMeshProUGUI>();
 
-        name.text = itemsForSale[slot].name;
-        desc.text = itemsForSale[slot].itemDescription;
+        name.text = inventory[slot].name;
+        desc.text = inventory[slot].itemDescription;
     }
 
     public void UnhoverItem() {

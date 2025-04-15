@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using NETWORK_ENGINE;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerInventory : NetworkComponent
 {
     public PlayerController player;
     public RectTransform invPanel;
+    public Sprite emptyImg;
     public ItemStats[] inventory = new ItemStats[10];
     public int baseHP;
     public int baseMelAtk;
@@ -69,9 +72,10 @@ public class PlayerInventory : NetworkComponent
                 for(int i=0; i<inventory.Length; i++) {
                     if(inventory[i] != null) {
                         invPanel.GetChild(i).gameObject.SetActive(true);
+                        invPanel.GetChild(i).GetComponent<Image>().sprite = inventory[i].itemSprite; 
                     }
                     else if(inventory[i] == null) {
-                        invPanel.GetChild(i).gameObject.SetActive(false);
+                        invPanel.GetChild(i).GetComponent<Image>().sprite = emptyImg;
                     }
                 }
             }

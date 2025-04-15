@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemID
-      value: 43
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: dmgBonus
@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: itemRarity
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
+      propertyPath: itemSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d6dc4d5bc7aba4b4d99b1d961a5b8654, type: 3}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemDescription
       value: Increases damage by 10%

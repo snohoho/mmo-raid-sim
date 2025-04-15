@@ -65,6 +65,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
+      propertyPath: itemSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7fcf700c69ace5d4f8be963106af0f83, type: 3}
+    - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: meleeBonus
       value: 50
       objectReference: {fileID: 0}

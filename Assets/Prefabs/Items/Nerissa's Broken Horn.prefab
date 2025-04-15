@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemID
-      value: 34
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: hpBonus
@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: itemRarity
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
+      propertyPath: itemSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f0ca3263ab6725a4796535d5ddcd0b56, type: 3}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: rangedBonus
       value: 180

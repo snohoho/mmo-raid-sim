@@ -44,7 +44,7 @@ public class PlayerCamera : NetworkComponent
 
     void Update()
     {
-        if(IsServer) {
+        if(IsServer && !GetComponent<PlayerController>().isDead) {
             rb.transform.forward = Vector3.RotateTowards(rb.transform.forward, target, Mathf.PI, 0.0f);
         }
         if(IsLocalPlayer) {

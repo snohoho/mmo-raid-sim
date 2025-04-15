@@ -34,11 +34,6 @@ public class FisterClass : PlayerController
         }
     }
 
-    public override void NetworkedStart()
-    {
-        
-    }
-
     public override IEnumerator SlowUpdate()
     {
         while(IsConnected) {
@@ -61,7 +56,7 @@ public class FisterClass : PlayerController
                 }
 
                 if((primaryHB.activeSelf || secondaryHB.activeSelf || ultHB.activeSelf) && !gremmingOut && !inCr) {
-                    dmgBonus = 1f;
+                    dmgBonus = dmgBonusBase;
                 }
                 if(!inCr) {
                     primaryHB.SetActive(false);
@@ -70,12 +65,18 @@ public class FisterClass : PlayerController
                     ultHB.SetActive(false);
                 }   
 
+                if(hp <= 0) {
+                    isDead = true;
+                    invuln = true;
+                }
                 while(isDead) {
-
+                    deathTimer = 10f;
+                    SendUpdate("DEAD",deathTimer.ToString());
+                    yield return new WaitUntil(() => !isDead);
                 }
 
                 if(lastSkill == "PRIMARY") {
-                    if(!gremmingOut) gremlin += 10f;
+                    if(!gremmingOut) gremlin += 15f;
 
                     skillDmg = 100;
                     defBonus = false;
@@ -94,7 +95,7 @@ public class FisterClass : PlayerController
                     lastSkill = "";
                 }
                 if(lastSkill == "DEFENSIVE") {
-                    if(!gremmingOut) gremlin += 20f;
+                    gremlin += 20f;
 
                     invuln = true;
                     if(!defBonus) {
@@ -126,14 +127,14 @@ public class FisterClass : PlayerController
                     if(gremmingOut) {
                         gremmingOut = false;
                         dmgBonus = 1f;
-                        gcdMod = 0f;
+                        gcdMod = gcdBase;
                     }
                 }
                 else if(gremlin >= 100) {
                     gremlin = 100;
                     if(!gremmingOut) {
                         dmgBonus = 2f;
-                        gcdMod -= 0.5f;
+                        gcdMod = -0.5f + gcdBase;
                     }
                     gremmingOut = true;
                 }
@@ -157,7 +158,7 @@ public class FisterClass : PlayerController
         if(IsServer) {
             if(usingPrimary && primaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
-                primaryCD = 0.5f;
+                primaryCD = 0.3f;
                 gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("PRIMARYCD",primaryCD.ToString());
@@ -179,7 +180,7 @@ public class FisterClass : PlayerController
             if(usingSecondary && secondaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 secondaryCD = 0.5f;
-                gcd = 1f + gcdMod + gcdBase;
+                gcd = 1.2f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("SECONDARYCD",secondaryCD.ToString());
             }
@@ -199,8 +200,8 @@ public class FisterClass : PlayerController
 
             if(usingDefensive && defCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
-                defCD = 1f;
-                gcd = 1f + gcdMod + gcdBase;
+                defCD = 6f;
+                gcd = 1.2f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("DEFCD",defCD.ToString());
             }
@@ -220,7 +221,7 @@ public class FisterClass : PlayerController
 
             if(usingUlt && ultCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
-                ultCD = 10f;
+                ultCD = 16f;
                 gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());

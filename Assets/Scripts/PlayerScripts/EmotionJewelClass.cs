@@ -26,11 +26,6 @@ public class EmotionJewelClass : PlayerController
         }
     }
 
-    public override void NetworkedStart()
-    {
-       
-    }
-
     public override IEnumerator SlowUpdate()
     {
         while(IsConnected) {
@@ -70,8 +65,8 @@ public class EmotionJewelClass : PlayerController
                     SendUpdate("LVLUP",level.ToString());
                 }
 
-                if(primaryHB.activeSelf || ultHB.activeSelf) {
-                    dmgBonus = 1f;
+                if(ultHB.activeSelf) {
+                    dmgBonus = dmgBonusBase;
                 }
                 primaryHB.SetActive(false);
                 secondaryHB.SetActive(false);
@@ -79,8 +74,14 @@ public class EmotionJewelClass : PlayerController
                 ultHB.SetActive(false);
                 activeEmotion = nextEmotion;
 
+                if(hp <= 0) {
+                    isDead = true;
+                    invuln = true;
+                }
                 while(isDead) {
-
+                    deathTimer = 10f;
+                    SendUpdate("DEAD",deathTimer.ToString());
+                    yield return new WaitUntil(() => !isDead);
                 }
 
                 if(lastSkill == "PRIMARY") {
@@ -96,7 +97,7 @@ public class EmotionJewelClass : PlayerController
                     //fear == speed bonus 5s
                     secondaryHB.SetActive(true);
                     StartCoroutine(EmotionTime(activeEmotion));
-                    if(dmgBonus < 3f) {
+                    if(dmgBonus < 3f + dmgBonusBase) {
                         dmgBonus += 0.5f;
                     }
                     
@@ -116,7 +117,7 @@ public class EmotionJewelClass : PlayerController
                     lastSkill = "";
                 }
                 if(lastSkill == "ULT") {
-                    skillDmg = 200;
+                    skillDmg = 500;
                     ultHB.SetActive(true);
 
                     lastSkill = "";
@@ -160,8 +161,8 @@ public class EmotionJewelClass : PlayerController
 
             if(usingSecondary && secondaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
-                secondaryCD = 0.5f;
-                gcd = 1f + gcdMod + gcdBase;
+                secondaryCD = 3f;
+                gcd = 1.4f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("SECONDARYCD",secondaryCD.ToString());
             }
@@ -181,8 +182,8 @@ public class EmotionJewelClass : PlayerController
 
             if(usingDefensive && defCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
-                defCD = 1f;
-                gcd = 1f + gcdMod + gcdBase;
+                defCD = 8f;
+                gcd = 1.4f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("DEFCD",defCD.ToString());
             }
@@ -202,7 +203,7 @@ public class EmotionJewelClass : PlayerController
 
             if(usingUlt && ultCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
-                ultCD = 1f;
+                ultCD = 18f;
                 gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());

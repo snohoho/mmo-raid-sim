@@ -43,11 +43,6 @@ public class SoundDemonClass : PlayerController
         }
     }
 
-    public override void NetworkedStart()
-    {
-        
-    }
-
     public override IEnumerator SlowUpdate()
     {
         while(IsConnected) {
@@ -75,7 +70,7 @@ public class SoundDemonClass : PlayerController
                 }
 
                 if((primaryHB.activeSelf || secondaryHB.activeSelf || ultHB.activeSelf) && !inCr) {
-                    dmgBonus = 1f;
+                    dmgBonus = dmgBonusBase;
                 }
                 if(!inCr) {
                     primaryHB.SetActive(false);
@@ -84,14 +79,20 @@ public class SoundDemonClass : PlayerController
                     ultHB.SetActive(false);
                 }   
 
+                if(hp <= 0) {
+                    isDead = true;
+                    invuln = true;
+                }
                 while(isDead) {
-
+                    deathTimer = 10f;
+                    SendUpdate("DEAD",deathTimer.ToString());
+                    yield return new WaitUntil(() => !isDead);
                 }
 
                 if(lastSkill == "PRIMARY") {
                     note[0] = true;
 
-                    skillDmg = 100;
+                    skillDmg = 300;
                     primaryHB.SetActive(true);
                     defBonus = false;
 
@@ -112,7 +113,7 @@ public class SoundDemonClass : PlayerController
                     note[2] = true;
 
                     if(!defBonus) {
-                        dmgBonus += 0.5f;
+                        dmgBonus = 0.5f + dmgBonusBase;
                         defBonus = true;
                     }
                     
@@ -145,7 +146,7 @@ public class SoundDemonClass : PlayerController
             if(usingPrimary && primaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 primaryCD = 0.5f;
-                gcd = 1f + gcdMod + gcdBase;
+                gcd = 1.2f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("PRIMARYCD",primaryCD.ToString());
             }
@@ -166,7 +167,7 @@ public class SoundDemonClass : PlayerController
             if(usingSecondary && secondaryCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 secondaryCD = 0.5f;
-                gcd = 1f + gcdMod + gcdBase;
+                gcd = 1.2f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("SECONDARYCD",secondaryCD.ToString());
             }
@@ -187,7 +188,7 @@ public class SoundDemonClass : PlayerController
             if(usingDefensive && defCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
                 defCD = 1f;
-                gcd = 1f + gcdMod + gcdBase;
+                gcd = 1.2f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("DEFCD",defCD.ToString());
             }
@@ -207,7 +208,7 @@ public class SoundDemonClass : PlayerController
 
             if(usingUlt && ultCD <= 0 && gcd <= 0) {
                 //actual cd gets set here
-                ultCD = 1f;
+                ultCD = 12f;
                 gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());
@@ -235,7 +236,7 @@ public class SoundDemonClass : PlayerController
        
         for(int i=0; i<note.Length; i++) {
             if(note[i]) {
-                skillDmg += 100;
+                skillDmg += 150;
                 totalDmgBonus += 0.5f;
                 dmgBonus = totalDmgBonus;
 

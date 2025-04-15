@@ -203,6 +203,7 @@ MonoBehaviour:
   count: 0
   atkHB: {fileID: 6943018572180370585}
   Goal: {x: 0, y: 0, z: 0}
+  CurrentPos: {fileID: 0}
 --- !u!95 &5963784908568096517
 Animator:
   serializedVersion: 7
@@ -331,6 +332,10 @@ PrefabInstance:
     - target: {fileID: 1570205075945869032, guid: 4089a670b52f9634ca68b731eee6b739, type: 3}
       propertyPath: m_Name
       value: Enemy1Atk
+      objectReference: {fileID: 0}
+    - target: {fileID: 1570205075945869032, guid: 4089a670b52f9634ca68b731eee6b739, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2999274963624787044, guid: 4089a670b52f9634ca68b731eee6b739, type: 3}
       propertyPath: hitbox

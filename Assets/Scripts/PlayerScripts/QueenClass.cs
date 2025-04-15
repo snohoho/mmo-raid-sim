@@ -149,7 +149,7 @@ public class QueenClass : PlayerController
                     primaryCD = 0.5f;
                     gcd = 1.2f + gcdMod + gcdBase;
                     SendUpdate("GBLCD",gcd.ToString());
-                    SendUpdate("PRIMARYCD",primaryCD.ToString());
+                    SendUpdate("PRIMARYCD",primaryCD.ToString()); 
 
                     heat += 10;
 
@@ -312,11 +312,12 @@ public class QueenClass : PlayerController
             dmgBonus = totalDmgBonus;
 
             ultHB.SetActive(true); 
+            SendUpdate("ULT", "true");
             yield return new WaitForSeconds(0.05f);
 
             ultHB.SetActive(false);
 
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.05f);
         }
         dmgBonus = 1;
         inCr = false;

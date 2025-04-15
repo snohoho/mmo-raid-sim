@@ -34,6 +34,7 @@ public class PlayerController : NetworkComponent
     public GameObject secondaryHB;
     public GameObject defHB;
     public GameObject ultHB;
+    public GameObject hitboxVisualization;
     public int level = 1;
     public int gold = 0;
     public int exp = 0;
@@ -141,6 +142,7 @@ public class PlayerController : NetworkComponent
                 usingPrimary = bool.Parse(value);
                 if(usingPrimary) {
                     StartCoroutine(SetAnimation(animator, "DoingPrimary"));
+                    hitboxVisualization.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
                 }
             }
         }
@@ -154,6 +156,7 @@ public class PlayerController : NetworkComponent
             if(IsClient) {
                 usingSecondary = bool.Parse(value);
                 if(usingSecondary) {
+                    hitboxVisualization.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
                     StartCoroutine(SetAnimation(animator, "DoingSecondary"));
                 }
             }
@@ -168,6 +171,7 @@ public class PlayerController : NetworkComponent
             if(IsClient) {
                 usingDefensive = bool.Parse(value);
                 if(usingDefensive) {
+                    hitboxVisualization.transform.GetChild(2).GetComponent<ParticleSystem>().Play();
                     StartCoroutine(SetAnimation(animator, "DoingDefensive"));
                 }
             }
@@ -182,6 +186,7 @@ public class PlayerController : NetworkComponent
             if(IsClient) {
                 usingUlt = bool.Parse(value);
                 if(usingUlt){
+                    hitboxVisualization.transform.GetChild(3).GetComponent<ParticleSystem>().Play();
                     StartCoroutine(SetAnimation(animator, "DoingSpecial"));
                 }
             }

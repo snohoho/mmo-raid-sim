@@ -48,8 +48,9 @@ public class AttackHitbox : NetworkComponent
                 
                 enemy.HP -= (int)damage;
                 controller.totalDamage += (int)damage;
+                enemy.SendUpdate("HP", enemy.HP.ToString());
                 Debug.Log("ENEMY HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
-                controller.dmgBonus = 1;
+                controller.dmgBonus = controller.dmgBonusBase;
                 controller.SendUpdate("DAMAGE", controller.totalDamage.ToString());
 
                 if(enemy.HP <= 0) {
@@ -57,6 +58,30 @@ public class AttackHitbox : NetworkComponent
                     controller.StartCoroutine(controller.DistributeGoldExp(enemy.Gold,enemy.XP));
                 }
             }       
+        }
+        if(col.gameObject.CompareTag("Fubuzilla")) {
+            if(IsServer) {
+                BossHitboxes enemy = col.gameObject.GetComponent<BossHitboxes>();
+                float damage = 0f;
+                if(gameObject.CompareTag("Melee")) {
+                    damage = (controller.meleeAtk + controller.skillDmg) * controller.dmgBonus; 
+                }
+                else if(gameObject.CompareTag("Ranged")) {
+                    damage = (controller.rangedAtk + controller.skillDmg) * controller.dmgBonus; 
+                }
+                
+                enemy.hp -= (int)damage;
+                enemy.SendUpdate("HP", enemy.hp.ToString());
+                controller.totalDamage += (int)damage;
+                Debug.Log("ENEMY HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
+                controller.dmgBonus = controller.dmgBonusBase;
+                controller.SendUpdate("DAMAGE", controller.totalDamage.ToString());
+
+                if(enemy.hp <= 0) {
+                    Debug.Log("FUBUZILLA KILLED !!");
+                    
+                }
+            }
         }
     }
 }

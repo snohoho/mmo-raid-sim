@@ -34,6 +34,7 @@ public class PlayerController : NetworkComponent
     public GameObject secondaryHB;
     public GameObject defHB;
     public GameObject ultHB;
+    public GameObject hitboxVisualization;
     public int level = 1;
     public int gold = 0;
     public int exp = 0;
@@ -52,13 +53,14 @@ public class PlayerController : NetworkComponent
     public bool inShop;
     public string lastSkill;
 
-    public TextMeshProUGUI nameLabel;
+    public RectTransform worldSpaceUI;
     public string playerName;
     public RectTransform statsPanel;
     public TextMeshProUGUI levelText, goldText, meleeText, rangedText, speedText; 
     public RectTransform skillsPanel; 
     public TextMeshProUGUI s1, s2, s3, s4;
     public Image gcd1, gcd2, gcd3, gcd4;
+    public RectTransform otherPlayersPanel;
 
     public Animator animator;
     public GameObject shield;
@@ -104,19 +106,23 @@ public class PlayerController : NetworkComponent
         }
         if(flag == "DEAD") {
             if(IsClient) {
-                deathTimer = float.Parse(value);
+                isDead = true;
                 invuln = true;
+                deathTimer = float.Parse(value);
             }
         }
         if(flag == "REVIVE") {
             if(IsServer) {
+                hp = maxHp;
                 isDead = bool.Parse(value);
                 StartCoroutine(InvulnTimer(3f));
 
                 SendUpdate("REVIVE", value);
             }
             if(IsClient) {
+                hp = maxHp;
                 isDead = bool.Parse(value);
+                worldSpaceUI.transform.GetChild(1).gameObject.SetActive(false);
             }
         }
         if(flag == "INVULN") {
@@ -134,6 +140,10 @@ public class PlayerController : NetworkComponent
             }
             if(IsClient) {
                 usingPrimary = bool.Parse(value);
+                if(usingPrimary) {
+                    StartCoroutine(SetAnimation(animator, "DoingPrimary"));
+                    hitboxVisualization.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+                }
             }
         }
         if(flag == "SECONDARY") {
@@ -145,6 +155,10 @@ public class PlayerController : NetworkComponent
             }
             if(IsClient) {
                 usingSecondary = bool.Parse(value);
+                if(usingSecondary) {
+                    hitboxVisualization.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
+                    StartCoroutine(SetAnimation(animator, "DoingSecondary"));
+                }
             }
         }
         if(flag == "DEFENSIVE") {
@@ -156,6 +170,10 @@ public class PlayerController : NetworkComponent
             }
             if(IsClient) {
                 usingDefensive = bool.Parse(value);
+                if(usingDefensive) {
+                    hitboxVisualization.transform.GetChild(2).GetComponent<ParticleSystem>().Play();
+                    StartCoroutine(SetAnimation(animator, "DoingDefensive"));
+                }
             }
         }
         if(flag == "ULT") {
@@ -167,8 +185,8 @@ public class PlayerController : NetworkComponent
             }
             if(IsClient) {
                 usingUlt = bool.Parse(value);
-                if (usingUlt)
-                {
+                if(usingUlt){
+                    hitboxVisualization.transform.GetChild(3).GetComponent<ParticleSystem>().Play();
                     StartCoroutine(SetAnimation(animator, "DoingSpecial"));
                 }
             }
@@ -262,17 +280,12 @@ public class PlayerController : NetworkComponent
     public override void NetworkedStart()
     {
         StartCoroutine(SetPrefs());
+        StartCoroutine(UpdatePlayerInfo());
         //disable other player uis
         if(!IsLocalPlayer) {
             transform.GetChild(0).gameObject.SetActive(false);
         }
         if(IsLocalPlayer) {
-            levelText = statsPanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            goldText = statsPanel.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
-            meleeText = statsPanel.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>();
-            rangedText = statsPanel.transform.GetChild(3).gameObject.GetComponent<TextMeshProUGUI>();
-            speedText = statsPanel.transform.GetChild(4).gameObject.GetComponent<TextMeshProUGUI>();
-
             levelText.text = "LVL" + level.ToString();
             goldText.text = gold.ToString() + "G";
             meleeText.text = meleeAtk.ToString();
@@ -317,26 +330,20 @@ public class PlayerController : NetworkComponent
         if(IsClient) {
             //perform anim
             animator.SetBool("Walking", isMoving);
-            animator.SetBool("DoingPrimary", usingPrimary);
-            animator.SetBool("DoingSecondary", usingSecondary);
-            animator.SetBool("DoingDefensive", usingDefensive);
             animator.SetBool("Dead", isDead);
         }
 
         //handle cooldown timers
         if(IsLocalPlayer) {
             if(isDead && deathTimer > 0f) {
+                worldSpaceUI.transform.GetChild(1).gameObject.SetActive(true);
                 deathTimer -= Time.deltaTime;
+                worldSpaceUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "KNOCKED OUT...\n" + deathTimer.ToString("N1");
+            }
+            if(deathTimer <= 0) {
+                worldSpaceUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "PRESS ANY BUTTON TO REVIVE\n" + deathTimer.ToString("N1");
             }
 
-            s1 = skillsPanel.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s2 = skillsPanel.GetChild(1).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s3 = skillsPanel.GetChild(2).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            s4 = skillsPanel.GetChild(3).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            gcd1 = skillsPanel.GetChild(0).GetChild(1).gameObject.GetComponent<Image>();
-            gcd2 = skillsPanel.GetChild(1).GetChild(1).gameObject.GetComponent<Image>();
-            gcd3 = skillsPanel.GetChild(2).GetChild(1).gameObject.GetComponent<Image>();
-            gcd4 = skillsPanel.GetChild(3).GetChild(1).gameObject.GetComponent<Image>();
             if(gcd > 0) {
                 gcd1.fillAmount = gcd/gcdMax;
                 gcd2.fillAmount = gcd/gcdMax;
@@ -355,11 +362,19 @@ public class PlayerController : NetworkComponent
                 if(primaryCD > 0) {
                     primaryCD -= Time.deltaTime;
                 }
+                if(primaryCD <= 0) {
+                    primaryCD = 0;
+                    s1.text = "";
+                }
             }
             if(usingSecondary) {
                 s2.text = secondaryCD.ToString("N1");
                 if(secondaryCD > 0) {
                     secondaryCD -= Time.deltaTime;
+                }
+                if(secondaryCD <= 0) {
+                    secondaryCD = 0;
+                    s2.text = "";
                 }
             }
             if(usingDefensive) {
@@ -367,11 +382,19 @@ public class PlayerController : NetworkComponent
                 if(defCD > 0) {
                     defCD -= Time.deltaTime;
                 }
+                if(defCD <= 0) {
+                    defCD = 0;
+                    s3.text = "";
+                }
             }
             if(usingUlt) {
                 s4.text = ultCD.ToString("N1");
                 if(ultCD > 0) {
                     ultCD -= Time.deltaTime;
+                }
+                if(ultCD <= 0) {
+                    ultCD = 0;
+                    s4.text = "";
                 }
             }
         }
@@ -398,7 +421,7 @@ public class PlayerController : NetworkComponent
     }
 
     public void Move(InputAction.CallbackContext context) {
-        if((context.started || context.performed) && !inShop) {
+        if((context.started || context.performed) && !inShop && !isDead) {
             SendCommand("MOVE", context.ReadValue<Vector2>().ToString());
         }
         if(context.canceled) {
@@ -407,37 +430,37 @@ public class PlayerController : NetworkComponent
     }
 
     public void UsePrimary(InputAction.CallbackContext context) {
-        if(context.started && !usingPrimary && !inShop) {
+        if(context.started && !usingPrimary && !inShop && !isDead) {
             SendCommand("PRIMARY", "true");
         }
     }
 
     public void UseSecondary(InputAction.CallbackContext context) {
-        if(context.started && !usingSecondary && !inShop) {
+        if(context.started && !usingSecondary && !inShop && !isDead) {
             SendCommand("SECONDARY", "true");
         }
     }
 
     public void UseDefensive(InputAction.CallbackContext context) {
-        if(context.started && !usingDefensive && !inShop) {
+        if(context.started && !usingDefensive && !inShop && !isDead) {
             SendCommand("DEFENSIVE", "true");
         }
     }
 
     public void UseUlt(InputAction.CallbackContext context) {
-        if(context.started && !usingUlt && !inShop) {
+        if(context.started && !usingUlt && !inShop && !isDead) {
             SendCommand("ULT", "true");
         }
     }
 
     public void UseLimit(InputAction.CallbackContext context) {
-        if(context.started && !usingLimit && !inShop) {
+        if(context.started && !usingLimit && !inShop && !isDead) {
             SendCommand("LIMIT", "true");
         }
     }
 
     public void Interact(InputAction.CallbackContext context) {
-        if(context.started && withinInteract) {
+        if(context.started && withinInteract && !isDead) {
             SendCommand("SHOP",(!inShop).ToString());
         }
     }
@@ -452,10 +475,33 @@ public class PlayerController : NetworkComponent
         foreach(NetworkPlayerManager n in FindObjectsOfType<NetworkPlayerManager>()) {
             if(n.Owner == Owner) {
                 playerName = n.playerName;
-                nameLabel.text = playerName;
+                worldSpaceUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = playerName;
             }
 
             yield return null;
+        }
+    }
+
+    public IEnumerator UpdatePlayerInfo() {
+        while(IsConnected) {
+            int ct = 0;
+            foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
+                if(player.Owner != Owner) {
+                    Transform currPlayer = otherPlayersPanel.transform.GetChild(ct);
+                    currPlayer.gameObject.SetActive(true);
+                    
+                    currPlayer.GetChild(0).GetComponent<TextMeshProUGUI>().text = player.playerName;
+                    if(player.isDead) {
+                        currPlayer.GetChild(1).GetComponent<TextMeshProUGUI>().text = player.deathTimer.ToString("N1");
+                    }
+                    else {
+                        currPlayer.GetChild(1).GetComponent<TextMeshProUGUI>().text = "HP: " + player.hp + "/" + player.maxHp;
+                    }
+                    ct++;
+                }
+
+                yield return null;
+            }
         }
     }
 

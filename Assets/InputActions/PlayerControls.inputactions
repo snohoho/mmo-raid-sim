@@ -69,15 +69,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Open Inventory",
-                    "type": "Button",
-                    "id": "f10cd388-5799-47a4-a7b9-8d256650957f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "cc88d8c8-c9d3-45e8-ab06-be5693beb95f",
@@ -319,17 +310,6 @@
                 },
                 {
                     "name": "",
-                    "id": "9a5bfd1c-31b2-4f64-8164-8324cd34a4e6",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Open Inventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "5f9fea6d-62ff-48cc-b517-2a38d750bce1",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -343,6 +323,28 @@
                     "name": "",
                     "id": "74321094-b182-418a-9962-a0127ba36829",
                     "path": "<Keyboard>/anyKey",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Revive",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e521f7cf-cea3-4324-a3dc-4837de92e040",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Revive",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c75ef13-21a0-48d5-b34a-4f75d6e83dfe",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

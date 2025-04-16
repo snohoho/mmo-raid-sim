@@ -69,17 +69,19 @@ public class GameMaster : NetworkComponent
                 yield return new WaitForSeconds(.1f);
             } while(!tempStart || npm.Length < 1);
 
+            //spawn shop first
+            MyCore.NetCreateObject(34, -1, new Vector3(6,0,5));
+            
+            //spawn players
             npm = FindObjectsOfType<NetworkPlayerManager>();
             foreach(NetworkPlayerManager n in npm) {
                 //create objects
                 MyCore.NetCreateObject(n.playerClass, n.Owner, GameObject.Find("spawn" + n.Owner).transform.position);
             }
-            MyCore.NetCreateObject(34, -1, new Vector3(6,0,5));
 
             Debug.Log("starting game");
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
-            
             
             while(!grindPhaseFinished) {
                 Debug.Log("grind phase start");
@@ -89,33 +91,44 @@ public class GameMaster : NetworkComponent
                 
                 yield return new WaitUntil(() => time <= 0f);
 
-                grindPhaseFinished = true;
-            }
+                //destroy all enemies
+                foreach(NavMeshController enemy in FindObjectsOfType<NavMeshController>()) {
+                    MyCore.NetDestroyObject(enemy.NetId);
 
-            if(grindPhaseFinished)
-            {
+                    yield return null;
+                }
+
+                //teleport players back to spawn
+                foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
+                    player.transform.position = GameObject.Find("spawn" + player.Owner).transform.position;
+                }
+
+                //spawn boss
                 MyCore.NetCreateObject(29, -1, new Vector3(0, 0, 0));
+                
+                //destroy shop
                 MyCore.NetDestroyObject(FindAnyObjectByType<ItemManager>().NetId);
+                grindPhaseFinished = true;
             }
 
             while(!gameFinished) {
                 Debug.Log("boss phase start");
-                time = 360f;
+                time = 300f;
                 SendUpdate("TIMER", time.ToString());
+
                 yield return new WaitUntil(() => gameFinished == true || time <= 0f);
             }
 
-            Debug.Log("finishing game");
+            Debug.Log("game finished");
             SendUpdate("GAMEFINISH", "true");
-            foreach(PlayerController player in GameObject.FindObjectsOfType<PlayerController>()) {
+            foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
                 totalDamage += player.totalDamage;
             }
 
-            
-
+            //wait on final screen for x amount of seconds
             yield return new WaitForSeconds(15f);
             
-            Debug.Log("game finished");
+            //kill server
             StartCoroutine(MyCore.DisconnectServer());
         }
 
@@ -124,7 +137,7 @@ public class GameMaster : NetworkComponent
 
     public IEnumerator SpawnEnemies() 
     {
-        while(!grindPhaseFinished) {
+        while(time >= 0f) {
             MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn1").transform.position);
             MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn2").transform.position);
             MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn3").transform.position);

@@ -4130,7 +4130,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 1ae9a5e4fdcbccf4f990aec792fc2b47, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5680,7 +5680,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 15ee8e70fd230344cb0111d614792d53, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11278,6 +11278,7 @@ MonoBehaviour:
   lastSkill: 
   worldSpaceUI: {fileID: 1322441312134214931}
   playerName: 
+  playerClass: 0
   statsPanel: {fileID: 9095496724903733906}
   levelText: {fileID: 4555232955503115486}
   goldText: {fileID: 8849031166382408377}
@@ -11294,8 +11295,14 @@ MonoBehaviour:
   gcd3: {fileID: 5523221359887419887}
   gcd4: {fileID: 6448376978768395297}
   otherPlayersPanel: {fileID: 1142626117415223080}
+  playerClassIcons:
+  - {fileID: 21300000, guid: 7638d92006747004e9856a05f7dc5633, type: 3}
+  - {fileID: 21300000, guid: 15ee8e70fd230344cb0111d614792d53, type: 3}
+  - {fileID: 21300000, guid: 1ae9a5e4fdcbccf4f990aec792fc2b47, type: 3}
+  - {fileID: 21300000, guid: 2d52c61c0d52eb5498cb7adcb877f994, type: 3}
   animator: {fileID: -5890827112252927298}
   shield: {fileID: 5437623108067207620}
+  model: {fileID: 647190202589482031}
   heatBar: {fileID: 6108324577434235568}
   heat: 0
   overheat: 0
@@ -14421,7 +14428,7 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
+          value: 0.9750023
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -14430,7 +14437,7 @@ ParticleSystem:
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 0
+          value: -1
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -23254,7 +23261,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 2d52c61c0d52eb5498cb7adcb877f994, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -26807,7 +26814,7 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
+          value: 0.9750023
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -26816,7 +26823,7 @@ ParticleSystem:
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 0
+          value: -0.6124954
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -33806,7 +33813,7 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
+          value: 0.9750023
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -33815,7 +33822,7 @@ ParticleSystem:
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 0
+          value: -0.6124954
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -41831,6 +41838,11 @@ PrefabInstance:
 --- !u!4 &265880207985333909 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 34a43e37e39eb364c836b7721496e384, type: 3}
+  m_PrefabInstance: {fileID: 304593164507328894}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &647190202589482031 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 34a43e37e39eb364c836b7721496e384, type: 3}
   m_PrefabInstance: {fileID: 304593164507328894}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1203438980605065420 stripped

@@ -20500,6 +20500,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3422966895952892826, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4c0d35908408fc24799c74c4d836c696, type: 3}
     - target: {fileID: 3456384126958339121, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: player
       value: 
@@ -20732,6 +20736,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4342891964018919196, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4c7ff1dcee907f74ebe9d7b17b33e4e6, type: 3}
     - target: {fileID: 4448466605566710784, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -20760,6 +20768,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DemonOfSound
       objectReference: {fileID: 0}
+    - target: {fileID: 4511637100916244024, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: da0f72342994e094bac992b3320d9eda, type: 3}
     - target: {fileID: 5602907005481642198, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -20976,6 +20988,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7887145828382998932, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c53a3ef4565a38a43bdbf1f93ed5ccfe, type: 3}
     - target: {fileID: 8009293624901869122, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -21435,6 +21451,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2d52c61c0d52eb5498cb7adcb877f994, type: 3}
   animator: {fileID: 5305904152637646359}
   shield: {fileID: 3236849175616101741}
+  damageIndicator: {fileID: 0}
   model: {fileID: 2750381840508183839}
   notesPanel: {fileID: 2735594363968783745}
   defBonus: 0

@@ -44739,6 +44739,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3422966895952892826, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8d0ec7352b5e08d4a969a76aeebb7f4f, type: 3}
     - target: {fileID: 3456384126958339121, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: player
       value: 
@@ -44963,6 +44967,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4342891964018919196, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: af0c07baff4fdc44aad79599d2e62cb6, type: 3}
     - target: {fileID: 4358530734359931926, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_Name
       value: FSPrimaryParticle
@@ -45067,6 +45075,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TheFister
       objectReference: {fileID: 0}
+    - target: {fileID: 4511637100916244024, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d36b1bab742c9f04daed2d1577c94776, type: 3}
     - target: {fileID: 5602907005481642198, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -45315,6 +45327,10 @@ PrefabInstance:
       propertyPath: controller
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7887145828382998932, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 81b98275766127d41b519f52b4c617f3, type: 3}
     - target: {fileID: 8009293624901869122, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -45780,6 +45796,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2d52c61c0d52eb5498cb7adcb877f994, type: 3}
   animator: {fileID: -3735625053020400912}
   shield: {fileID: 2338635278721121005}
+  damageIndicator: {fileID: 0}
   model: {fileID: 1832335167840987786}
   gremlinBar: {fileID: 3610066462008297191}
   gremlin: 0

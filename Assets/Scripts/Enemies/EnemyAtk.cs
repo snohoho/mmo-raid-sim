@@ -7,6 +7,7 @@ using UnityEngine;
 public class EnemyAtk : NetworkComponent
 {
     public NavMeshController hitbox;
+
     public override void HandleMessage(string flag, string value)
     {
         
@@ -19,7 +20,7 @@ public class EnemyAtk : NetworkComponent
 
     public override IEnumerator SlowUpdate()
     {
-        
+
         yield return new WaitForSeconds(MyCore.MasterTimer);
     }
 

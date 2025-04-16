@@ -45,48 +45,48 @@ public class AtkScript : NetworkComponent
                         if(player.invuln)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
-                            hitboxes.atk1HB.SetActive(false);
+                            hitboxes.count = 0;
                         } else {
                             player.hp -= 1;
                             Debug.Log("PLAYER HIT" + "\nHP = " + player.hp);
                             player.SendUpdate("HURT",true.ToString());
-                            hitboxes.atk1HB.SetActive(false);
+                            hitboxes.count = 0;
                         }
                     }
                     if(gameObject.CompareTag("Atk2")) {
                         if(player.invuln)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
-                            hitboxes.atk2HB.SetActive(false);
+                            hitboxes.count = 0;
                         } else {
                             player.hp -= 1;
                             Debug.Log("PLAYER HIT" + "\nHP = " + player.hp);
                             player.SendUpdate("HURT",true.ToString());
-                            hitboxes.atk2HB.SetActive(false);
+                            hitboxes.count = 0;
                         }
                     }
                     if(gameObject.CompareTag("Atk3")) {
                         if(player.invuln)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
-                            hitboxes.atk3HB.SetActive(false);
+                            hitboxes.count = 0;
                         } else {
                             player.hp -= 1;
                             Debug.Log("PLAYER HIT" + "\nHP = " + player.hp);
                             player.SendUpdate("HURT",true.ToString());
-                            hitboxes.atk3HB.SetActive(false);
+                            hitboxes.count = 0;
                         }
                     }
                     if(gameObject.CompareTag("Atk4")) {
                         if(player.invuln)
                         {
                             Debug.Log(col.gameObject.name + " INVULN");
-                            hitboxes.atk4HB.SetActive(false);
+                            hitboxes.count = 0;
                         } else {
                             player.hp -= 1;
                             Debug.Log("PLAYER HIT" + "\nHP = " + player.hp);
                             player.SendUpdate("HURT",true.ToString());
-                            hitboxes.atk4HB.SetActive(false);
+                            hitboxes.count = 0;
                         }
                     }
                 }

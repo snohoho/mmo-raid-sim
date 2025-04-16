@@ -11,7 +11,7 @@ public class NavMeshController : NetworkComponent
 {
     public int HP = 1500;
     public int Gold;
-    public int XP = 10;
+    public int XP = 20;
     public int randx;
     public int randz;
     public int count;
@@ -41,7 +41,6 @@ public class NavMeshController : NetworkComponent
         {
             randx = UnityEngine.Random.Range(-47,48);
             randz = UnityEngine.Random.Range(-47,48);
-            atkHB.SetActive(false);
             
         }
 
@@ -67,8 +66,8 @@ public class NavMeshController : NetworkComponent
                 Goal = CurrentPos.position;
                 MyAgent.SetDestination(Goal);
                 atkHB.SetActive(true);
-                count++;
-                if(count == 4)
+                ++count;
+                if(count == 5)
                 {
                     randx = UnityEngine.Random.Range(-47,48);
                     randz = UnityEngine.Random.Range(-47,48);
@@ -77,11 +76,16 @@ public class NavMeshController : NetworkComponent
                     count = 0;
                     MyAgent.SetDestination(Goal);
                 }
+                if(count == 0)
+                {
+                    atkHB.SetActive(false);
+                }
                 yield return new WaitForSeconds(1f);
             }
             if(HP<=0) {
                 MyCore.NetDestroyObject(NetId);
             }
+
         }
     }
 

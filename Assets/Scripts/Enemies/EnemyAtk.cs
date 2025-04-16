@@ -40,12 +40,12 @@ public class EnemyAtk : NetworkComponent
             if(IsServer)
             {
                 PlayerController player = col.gameObject.GetComponent<PlayerController>();
-                if(hitbox.count == 4)
+                if(hitbox.count == 5)
                 {
                     if(player.invuln)
                     {
                         Debug.Log(col.gameObject.name + " INVULN");
-                        hitbox.atkHB.SetActive(false);
+                        hitbox.count = 0;
                     } else {
                         player.hp -= 1;
                         if(player.hp <= 0) {
@@ -57,7 +57,7 @@ public class EnemyAtk : NetworkComponent
                         }
                         Debug.Log("PLAYER HIT" + "\nHP = " + player.hp);
                         player.SendUpdate("HURT",true.ToString());
-                        hitbox.atkHB.SetActive(false);
+                        hitbox.count = 0;
                     }
                 }
             }

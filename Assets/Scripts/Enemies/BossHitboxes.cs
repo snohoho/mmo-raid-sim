@@ -53,6 +53,13 @@ public class BossHitboxes : NetworkComponent
                 yield return new WaitForSeconds(.1f);
                 count = 0;
             }
+            if(count == 0)
+            {
+                atk1HB.SetActive(false);
+                atk2HB.SetActive(false);
+                atk3HB.SetActive(false);
+                atk4HB.SetActive(false);
+            }
             yield return new WaitForSeconds(1f);
         }
     }

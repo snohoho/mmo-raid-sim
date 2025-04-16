@@ -4,12 +4,13 @@ using UnityEngine;
 using System.Net;
 using NETWORK_ENGINE;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 
 public class NavMeshController : NetworkComponent
 {
-    public int HP = 1500;
+    public int HP = 1000;
     public int Gold;
     public int XP = 20;
     public int randx;
@@ -19,10 +20,15 @@ public class NavMeshController : NetworkComponent
     public Vector3 Goal;
     public Transform CurrentPos;
     NavMeshAgent MyAgent;
+    public Slider hpBar;
 
     public override void HandleMessage(string flag, string value)
     {
-
+        if(flag == "HP") {
+            if(IsClient) {
+                HP = int.Parse(value);
+            }
+        }
     }
 
     public override void NetworkedStart()
@@ -114,6 +120,8 @@ public class NavMeshController : NetworkComponent
             {
                 atkHB.SetActive(false);
             }
+
+            hpBar.value = HP;
         }
     }
 }

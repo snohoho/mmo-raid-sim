@@ -18,6 +18,7 @@ public class Shop : NetworkComponent
     public TextMeshProUGUI currentGold;
     public Button refreshButton;
     public RectTransform itemDescPanel;
+    public bool firstTime;
 
     public override void HandleMessage(string flag, string value)
     {
@@ -104,6 +105,7 @@ public class Shop : NetworkComponent
 
     public override void NetworkedStart()
     {
+        firstTime = true;
         allItems = FindAnyObjectByType<ItemManager>().items;
         RefreshShop();
     }
@@ -147,6 +149,12 @@ public class Shop : NetworkComponent
     void Update()
     {
         if(IsClient) {
+            if(player.gold < 50) {
+                refreshButton.interactable = false;
+            }
+            else if(player.gold >= 50) {
+                refreshButton.interactable = true;
+            }
             itemDescPanel.transform.position = Input.mousePosition;
         }
     }
@@ -158,6 +166,10 @@ public class Shop : NetworkComponent
     }
 
     public IEnumerator Refresh() {
+        if(!firstTime) {
+            player.gold -= 50;
+            player.SendUpdate("GOLD", player.gold.ToString());
+        }
         for(int i=0; i<itemsForSale.Length; i++) {
             if(IsServer) {
                 int randItem = Random.Range(0,allItems.Length);
@@ -170,6 +182,8 @@ public class Shop : NetworkComponent
 
             yield return new WaitForSeconds(MyCore.MasterTimer);
         }
+
+        firstTime = false;
     }
 
     public void BuyItem(int slot) {

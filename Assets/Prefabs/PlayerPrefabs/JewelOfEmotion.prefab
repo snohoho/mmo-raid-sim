@@ -344,7 +344,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -5402,7 +5402,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -10235,7 +10235,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -15068,7 +15068,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -20562,6 +20562,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3422966895952892826, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5c0e14ce1c797ec48b1ab7c38926a5da, type: 3}
     - target: {fileID: 3456384126958339121, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: player
       value: 
@@ -20698,6 +20702,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4342891964018919196, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 74f8097e3474a3e42a99259e9c75d333, type: 3}
     - target: {fileID: 4448466605566710784, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -20726,6 +20734,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: JewelOfEmotion
       objectReference: {fileID: 0}
+    - target: {fileID: 4511637100916244024, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 40e040ca66d03c2429e3b7db4aa1a7e4, type: 3}
     - target: {fileID: 5602907005481642198, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -20894,6 +20906,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7887145828382998932, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5a88f448d6f491541875eecfb495802e, type: 3}
     - target: {fileID: 8009293624901869122, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -21239,6 +21255,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2d52c61c0d52eb5498cb7adcb877f994, type: 3}
   animator: {fileID: 6164688776770925483}
   shield: {fileID: 4547317156701009161}
+  damageIndicator: {fileID: 0}
   model: {fileID: 5182563505847764477}
   emotions:
   - {fileID: 1777636335936846685}

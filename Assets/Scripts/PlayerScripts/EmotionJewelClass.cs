@@ -140,7 +140,7 @@ public class EmotionJewelClass : PlayerController
                     lastSkill = "";
                 }
                 if(lastSkill == "DEFENSIVE") {
-                    buffTimer = 2f;
+                    buffTimer = 3f;
                     defHB.SetActive(true);
                     StartCoroutine(InvulnTimer(buffTimer));
 

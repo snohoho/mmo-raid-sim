@@ -66,6 +66,7 @@ public class PlayerController : NetworkComponent
 
     public Animator animator;
     public GameObject shield;
+    public GameObject damageIndicator;
     public GameObject model;
 
     public override void HandleMessage(string flag, string value)

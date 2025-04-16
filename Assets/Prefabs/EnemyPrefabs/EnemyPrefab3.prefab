@@ -657,6 +657,7 @@ MonoBehaviour:
   count: 0
   atkHB: {fileID: 5661664895646723476}
   Goal: {x: 0, y: 0, z: 0}
+  CurrentPos: {fileID: 0}
 --- !u!1 &6981799833823686015
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,6 +812,10 @@ PrefabInstance:
     - target: {fileID: 3447049616766565609, guid: ef7326c3cc3cfc646a12f15e50539621, type: 3}
       propertyPath: m_Name
       value: Enemy3Atk
+      objectReference: {fileID: 0}
+    - target: {fileID: 3447049616766565609, guid: ef7326c3cc3cfc646a12f15e50539621, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3559319419933560935, guid: ef7326c3cc3cfc646a12f15e50539621, type: 3}
       propertyPath: m_LocalPosition.x

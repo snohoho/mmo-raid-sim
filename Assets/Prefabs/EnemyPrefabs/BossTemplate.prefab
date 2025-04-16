@@ -736,6 +736,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Atk3
       objectReference: {fileID: 0}
+    - target: {fileID: 8397547524183087262, guid: 4ab6bb29ae0588e4ca9ddc7c7b9ba47c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -766,6 +770,10 @@ PrefabInstance:
     - target: {fileID: 7657705768371001910, guid: fe6f82fc1726181499f2f9b387f5d760, type: 3}
       propertyPath: m_Name
       value: Atk4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657705768371001910, guid: fe6f82fc1726181499f2f9b387f5d760, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8615620265927375839, guid: fe6f82fc1726181499f2f9b387f5d760, type: 3}
       propertyPath: m_LocalPosition.x
@@ -833,6 +841,10 @@ PrefabInstance:
     - target: {fileID: 768052004967390464, guid: 7ec6a9cfe489a3048aa3f2ce44096ccc, type: 3}
       propertyPath: m_Name
       value: Atk2
+      objectReference: {fileID: 0}
+    - target: {fileID: 768052004967390464, guid: 7ec6a9cfe489a3048aa3f2ce44096ccc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1252049867709700887, guid: 7ec6a9cfe489a3048aa3f2ce44096ccc, type: 3}
       propertyPath: hitboxes
@@ -904,6 +916,10 @@ PrefabInstance:
     - target: {fileID: 453985046246062913, guid: 977278c5e13ed9f48823d3205b62bfca, type: 3}
       propertyPath: m_Name
       value: Atk1
+      objectReference: {fileID: 0}
+    - target: {fileID: 453985046246062913, guid: 977278c5e13ed9f48823d3205b62bfca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3411197901763944253, guid: 977278c5e13ed9f48823d3205b62bfca, type: 3}
       propertyPath: m_LocalPosition.x

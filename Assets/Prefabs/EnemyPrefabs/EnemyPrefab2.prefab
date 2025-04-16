@@ -306,6 +306,7 @@ MonoBehaviour:
   count: 0
   atkHB: {fileID: 3173038840473382747}
   Goal: {x: 0, y: 0, z: 0}
+  CurrentPos: {fileID: 0}
 --- !u!95 &4914628862108671763
 Animator:
   serializedVersion: 7
@@ -879,6 +880,10 @@ PrefabInstance:
     - target: {fileID: 4610289174372852436, guid: 57cd63f82790fb3439479abd86f29956, type: 3}
       propertyPath: m_Name
       value: Enemy2Atk
+      objectReference: {fileID: 0}
+    - target: {fileID: 4610289174372852436, guid: 57cd63f82790fb3439479abd86f29956, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

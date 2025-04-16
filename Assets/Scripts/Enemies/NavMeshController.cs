@@ -10,23 +10,58 @@ using UnityEngine.UI;
 
 public class NavMeshController : NetworkComponent
 {
-    public int HP = 1000;
+    public int HP = 1500;
     public int Gold;
     public int XP = 20;
     public int randx;
     public int randz;
     public int count;
+    public bool isArrived;
+    public MeshRenderer renderer;
+    public Material[] MColor;
     public GameObject atkHB;
+    public GameObject hb;
     public Vector3 Goal;
     public Transform CurrentPos;
     NavMeshAgent MyAgent;
     public Slider hpBar;
+
+    public static Vector3 VectorFromString(string value)
+    {
+        char[] temp = { '(', ')' };
+        string[] args = value.Trim(temp).Split(',');
+        return new Vector3(float.Parse(args[0].Trim()), float.Parse(args[1].Trim()), float.Parse(args[2].Trim()));
+    }
 
     public override void HandleMessage(string flag, string value)
     {
         if(flag == "HP") {
             if(IsClient) {
                 HP = int.Parse(value);
+            }
+        }
+
+        if(flag == "ARRIVED")
+        {
+            if(IsClient)
+            {
+                isArrived = bool.Parse(value);
+            }
+        }
+
+        if(flag == "COUNT")
+        {
+            if(IsClient)
+            {
+                count = int.Parse(value);
+            }
+        }
+
+        if(flag == "GOAL")
+        {
+            if(IsClient)
+            {
+                Goal = NavMeshController.VectorFromString(value);
             }
         }
     }
@@ -47,7 +82,6 @@ public class NavMeshController : NetworkComponent
         {
             randx = UnityEngine.Random.Range(-47,48);
             randz = UnityEngine.Random.Range(-47,48);
-            
         }
 
         while(IsServer)
@@ -62,32 +96,54 @@ public class NavMeshController : NetworkComponent
                 {
                     Goal = p.gameObject.transform.position;
                     MyAgent.SetDestination(Goal);
+                    SendUpdate("GOAL", Goal.ToString("F2"));
                 } else {
                     Goal = new Vector3(randx, 0, randz);
                     MyAgent.SetDestination(Goal);
+                    SendUpdate("GOAL", Goal.ToString("F2"));
                 }
             }
             if(MyAgent.remainingDistance<3f)
             {
+                atkHB.SetActive(true);
+                hb.SetActive(true);
+                renderer.material = MColor[0];
+                SendUpdate("ARRIVED", true.ToString());
                 Goal = CurrentPos.position;
                 MyAgent.SetDestination(Goal);
-                atkHB.SetActive(true);
+                SendUpdate("GOAL", Goal.ToString("F2"));
                 ++count;
+                SendUpdate("COUNT", count.ToString());
                 if(count == 5)
                 {
+                    renderer.material = MColor[1];
+                    SendUpdate("ATTACKING", count.ToString());
                     randx = UnityEngine.Random.Range(-47,48);
                     randz = UnityEngine.Random.Range(-47,48);
                     Goal = new Vector3(randx, 0, randz);
                     yield return new WaitForSeconds(.1f);
-                    count = 0;
                     MyAgent.SetDestination(Goal);
+                    SendUpdate("GOAL", Goal.ToString("F2"));
+                    count = 0;
+                    SendUpdate("COUNT", count.ToString());
                 }
                 if(count == 0)
                 {
+                    renderer.material = MColor[0];
+                    SendUpdate("ARRIVED", false.ToString());
+                    hb.SetActive(false);
                     atkHB.SetActive(false);
                 }
                 yield return new WaitForSeconds(1f);
+            } else {
+                renderer.material = MColor[0];
+                SendUpdate("ARRIVED", false.ToString());
+                hb.SetActive(false);
+                atkHB.SetActive(false);
+                count = 0;
+                SendUpdate("COUNT", count.ToString());
             }
+            
             if(HP<=0) {
                 MyCore.NetDestroyObject(NetId);
             }
@@ -111,17 +167,26 @@ public class NavMeshController : NetworkComponent
     {
         if(IsClient)
         {
-            if(MyAgent.remainingDistance<3f)
-            {
-                atkHB.SetActive(true);
-            }
-            
-            if(count == 0)
-            {
-                atkHB.SetActive(false);
-            }
-
             hpBar.value = HP;
+            MyAgent.SetDestination(Goal);
+            if(isArrived)
+            {
+                hb.SetActive(true);
+                Debug.Log("hb active");
+            }
+            if(count < 5)
+            {
+                renderer.material = MColor[0];
+            }
+            if(count == 5)
+            {
+                renderer.material = MColor[1];
+            }
+            if(!isArrived)
+            {
+                hb.SetActive(false);
+                Debug.Log("hb false");
+            }
         }
     }
 }

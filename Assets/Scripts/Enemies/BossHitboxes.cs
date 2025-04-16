@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using NETWORK_ENGINE;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossHitboxes : NetworkComponent
 {
@@ -13,9 +14,16 @@ public class BossHitboxes : NetworkComponent
     public GameObject atk2HB;
     public GameObject atk3HB;
     public GameObject atk4HB;
+    public Animator animator;
+    public Slider hpBar;
+
     public override void HandleMessage(string flag, string value)
     {
-        
+        if(flag == "HP") {
+            if(IsClient) {
+                hp = int.Parse(value);
+            }
+        }
     }
 
     public override void NetworkedStart()
@@ -102,6 +110,8 @@ public class BossHitboxes : NetworkComponent
                 atk3HB.SetActive(false);
                 atk4HB.SetActive(false);
             }
+
+            hpBar.value = hp; 
         }
     }
 }

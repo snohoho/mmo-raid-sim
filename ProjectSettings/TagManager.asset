@@ -15,6 +15,7 @@ TagManager:
   - Atk4
   - Emotion
   - Shop
+  - Fubuzilla
   layers:
   - Default
   - TransparentFX

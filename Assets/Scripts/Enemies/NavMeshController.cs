@@ -103,6 +103,17 @@ public class NavMeshController : NetworkComponent
     // Update is called once per frame
     void Update()
     {
-        
+        if(IsClient)
+        {
+            if(MyAgent.remainingDistance<3f)
+            {
+                atkHB.SetActive(true);
+            }
+            
+            if(count == 0)
+            {
+                atkHB.SetActive(false);
+            }
+        }
     }
 }

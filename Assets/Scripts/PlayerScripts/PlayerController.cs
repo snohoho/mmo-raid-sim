@@ -55,16 +55,18 @@ public class PlayerController : NetworkComponent
 
     public RectTransform worldSpaceUI;
     public string playerName;
+    public int playerClass;
     public RectTransform statsPanel;
     public TextMeshProUGUI levelText, goldText, meleeText, rangedText, speedText; 
     public RectTransform skillsPanel; 
     public TextMeshProUGUI s1, s2, s3, s4;
     public Image gcd1, gcd2, gcd3, gcd4;
     public RectTransform otherPlayersPanel;
+    public Sprite[] playerClassIcons;
 
     public Animator animator;
     public GameObject shield;
-
+    public GameObject model;
 
     public override void HandleMessage(string flag, string value)
     {
@@ -300,13 +302,6 @@ public class PlayerController : NetworkComponent
         yield return new WaitForSeconds(MyCore.MasterTimer);
     }
 
-    public IEnumerator SetAnimation(Animator anim, string boolToSet)
-    {
-        anim.SetBool(boolToSet, true);
-        yield return new WaitForEndOfFrame();
-        anim.SetBool(boolToSet, false);
-    }
-
     void Start()
     {
         
@@ -475,6 +470,7 @@ public class PlayerController : NetworkComponent
         foreach(NetworkPlayerManager n in FindObjectsOfType<NetworkPlayerManager>()) {
             if(n.Owner == Owner) {
                 playerName = n.playerName;
+                playerClass = n.playerClass;
                 worldSpaceUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = playerName;
             }
 
@@ -497,6 +493,7 @@ public class PlayerController : NetworkComponent
                     else {
                         currPlayer.GetChild(1).GetComponent<TextMeshProUGUI>().text = "HP: " + player.hp + "/" + player.maxHp;
                     }
+                    currPlayer.GetChild(2).GetComponent<Image>().sprite = playerClassIcons[player.playerClass];
                     ct++;
                 }
 
@@ -520,6 +517,13 @@ public class PlayerController : NetworkComponent
         }
     }
 
+    public IEnumerator SetAnimation(Animator anim, string boolToSet)
+    {
+        anim.SetBool(boolToSet, true);
+        yield return new WaitForEndOfFrame();
+        anim.SetBool(boolToSet, false);
+    }
+
     public IEnumerator InvulnTimer(float invulnTime) {
         invuln = true;
         SendUpdate("INVULN", invuln.ToString());
@@ -528,6 +532,21 @@ public class PlayerController : NetworkComponent
 
         invuln = false;
         SendUpdate("INVULN", invuln.ToString());
+    }
+
+    public IEnumerator InvulnBlink() {
+        invuln = true;
+        SendUpdate("INVULN", invuln.ToString());
+
+        int flickerCt = 0;
+        while(flickerCt < 5) {
+            model.SetActive(false);
+            yield return new WaitForSeconds(0.1f);
+            model.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
+
+            flickerCt++;
+        }
     }
 
     public IEnumerator EmotionTime(int emotion) {

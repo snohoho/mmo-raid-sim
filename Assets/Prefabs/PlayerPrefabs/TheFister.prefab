@@ -44062,6 +44062,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 147ef5476cfd75345a5b5b749244c79e, type: 3}
   m_PrefabInstance: {fileID: 1561811124474812379}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1832335167840987786 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 147ef5476cfd75345a5b5b749244c79e, type: 3}
+  m_PrefabInstance: {fileID: 1561811124474812379}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2088132604191426571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44805,7 +44810,7 @@ PrefabInstance:
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[17].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7668720485115543640}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -44843,8 +44848,12 @@ PrefabInstance:
       value: UseLimit
       objectReference: {fileID: 0}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
-      propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      propertyPath: m_ActionEvents.Array.data[17].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Interact
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Revive
       objectReference: {fileID: 0}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -45728,7 +45737,7 @@ MonoBehaviour:
   secondaryHB: {fileID: 9109575844011264642}
   defHB: {fileID: 2418028095055914235}
   ultHB: {fileID: 5212773316503478596}
-  hitboxVisualization: {fileID: 0}
+  hitboxVisualization: {fileID: 8354236511958139406}
   level: 1
   gold: 0
   exp: 0
@@ -45747,6 +45756,7 @@ MonoBehaviour:
   lastSkill: 
   worldSpaceUI: {fileID: 8743897353630311994}
   playerName: 
+  playerClass: 0
   statsPanel: {fileID: 1529925460837726651}
   levelText: {fileID: 6067933300490055671}
   goldText: {fileID: 1282615477419823504}
@@ -45763,8 +45773,14 @@ MonoBehaviour:
   gcd3: {fileID: 2856616546848201414}
   gcd4: {fileID: 3638888430560653064}
   otherPlayersPanel: {fileID: 7267047742508985345}
+  playerClassIcons:
+  - {fileID: 21300000, guid: 7638d92006747004e9856a05f7dc5633, type: 3}
+  - {fileID: 21300000, guid: 15ee8e70fd230344cb0111d614792d53, type: 3}
+  - {fileID: 21300000, guid: 1ae9a5e4fdcbccf4f990aec792fc2b47, type: 3}
+  - {fileID: 21300000, guid: 2d52c61c0d52eb5498cb7adcb877f994, type: 3}
   animator: {fileID: -3735625053020400912}
   shield: {fileID: 2338635278721121005}
+  model: {fileID: 1832335167840987786}
   gremlinBar: {fileID: 3610066462008297191}
   gremlin: 0
   gremmingOut: 0
@@ -45817,6 +45833,11 @@ MonoBehaviour:
 --- !u!4 &8131535132888985613 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2007432340395500324, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+  m_PrefabInstance: {fileID: 7710955365870031657}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8354236511958139406 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1797750806184612135, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
   m_PrefabInstance: {fileID: 7710955365870031657}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &8604714752710551372 stripped

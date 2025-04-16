@@ -170,8 +170,8 @@ RectTransform:
   m_Children:
   - {fileID: 4723421740786919778}
   - {fileID: 608706117797433098}
-  - {fileID: 3892478672032509305}
   - {fileID: 7158349409758461090}
+  - {fileID: 3892478672032509305}
   - {fileID: 4540108222850126381}
   - {fileID: 9175319796508479036}
   m_Father: {fileID: 7014164894782792091}
@@ -254,7 +254,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 146.7439, y: 146.7439}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8530359175939265129
 CanvasRenderer:
@@ -277,14 +277,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8944549, b: 0.19339621, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 56dcf31a48a154040a8daece7a94e748, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5162,7 +5162,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 146.7439, y: 146.7439}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1329122717120310167
 CanvasRenderer:
@@ -5185,14 +5185,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.77814895, g: 0.5518868, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 3e9d2dae184f1034b8a588f9cf267f91, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5237,7 +5237,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 146.7439, y: 146.7439}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &305434008973780510
 CanvasRenderer:
@@ -5260,14 +5260,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9433962, g: 0.31594875, b: 0.5098073, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 189cdaa4ffc6d9347b82ee378e6f99a7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5312,7 +5312,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 146.7439, y: 146.7439}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5620181895862227656
 CanvasRenderer:
@@ -5335,14 +5335,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.21787111, g: 0.532182, b: 0.9056604, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 66fb8b6efb96f5349b0a1625ca39c8c2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5379,7 +5379,7 @@ Transform:
   m_GameObject: {fileID: 4959469693746464612}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10212,7 +10212,7 @@ Transform:
   m_GameObject: {fileID: 5200501393485197316}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10472,7 +10472,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -20194,6 +20194,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd45696ec25b0d847a942f96393ac6aa, type: 3}
+--- !u!1 &5182563505847764477 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dd45696ec25b0d847a942f96393ac6aa, type: 3}
+  m_PrefabInstance: {fileID: 5417060544135346348}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5523659034391338823 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: dd45696ec25b0d847a942f96393ac6aa, type: 3}
@@ -20592,7 +20597,7 @@ PrefabInstance:
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[17].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6524560042421249209}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -20626,8 +20631,12 @@ PrefabInstance:
       value: UseUlt
       objectReference: {fileID: 0}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
-      propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      propertyPath: m_ActionEvents.Array.data[17].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Interact
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_ActionEvents.Array.data[18].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Revive
       objectReference: {fileID: 0}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -21187,7 +21196,7 @@ MonoBehaviour:
   secondaryHB: {fileID: 1672710043246839077}
   defHB: {fileID: 6979654081121327905}
   ultHB: {fileID: 5917709828283373379}
-  hitboxVisualization: {fileID: 0}
+  hitboxVisualization: {fileID: 7827226882598800874}
   level: 1
   gold: 0
   exp: 0
@@ -21206,6 +21215,7 @@ MonoBehaviour:
   lastSkill: 
   worldSpaceUI: {fileID: 7365427087927241182}
   playerName: 
+  playerClass: 0
   statsPanel: {fileID: 744417340403447391}
   levelText: {fileID: 5429777135199100947}
   goldText: {fileID: 1054707913574801012}
@@ -21222,8 +21232,14 @@ MonoBehaviour:
   gcd3: {fileID: 4092484688035075362}
   gcd4: {fileID: 3247162428147179756}
   otherPlayersPanel: {fileID: 8914433261462152165}
+  playerClassIcons:
+  - {fileID: 21300000, guid: 7638d92006747004e9856a05f7dc5633, type: 3}
+  - {fileID: 21300000, guid: 15ee8e70fd230344cb0111d614792d53, type: 3}
+  - {fileID: 21300000, guid: 1ae9a5e4fdcbccf4f990aec792fc2b47, type: 3}
+  - {fileID: 21300000, guid: 2d52c61c0d52eb5498cb7adcb877f994, type: 3}
   animator: {fileID: 6164688776770925483}
   shield: {fileID: 4547317156701009161}
+  model: {fileID: 5182563505847764477}
   emotions:
   - {fileID: 1777636335936846685}
   - {fileID: 4730496375208121612}
@@ -21324,6 +21340,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7827226882598800874 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1797750806184612135, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+  m_PrefabInstance: {fileID: 8389363554758614221}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8049855200566542313 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2007432340395500324, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}

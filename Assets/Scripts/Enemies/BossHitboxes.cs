@@ -73,6 +73,35 @@ public class BossHitboxes : NetworkComponent
     // Update is called once per frame
     void Update()
     {
-        
+        if(IsClient)
+        {
+            if(count == 5)
+            {
+                if(randAtk == 1)
+                {
+                    atk1HB.SetActive(true);
+                }
+                if(randAtk == 2)
+                {
+                    atk2HB.SetActive(true);
+                }
+                if(randAtk == 3)
+                {
+                    atk3HB.SetActive(true);
+                }
+                if(randAtk == 4)
+                {
+                    atk4HB.SetActive(true);
+                }
+            }
+
+            if(count == 0)
+            {
+                atk1HB.SetActive(false);
+                atk2HB.SetActive(false);
+                atk3HB.SetActive(false);
+                atk4HB.SetActive(false);
+            }
+        }
     }
 }

@@ -102,7 +102,9 @@ public class PlayerInventory : NetworkComponent
                 }
 
                 totalHPBonus = tempHpBonus;
+                int hpToGain = totalHPBonus - player.maxHp;
                 player.maxHp = totalHPBonus;
+                player.hp += hpToGain;
                 SendUpdate("HP",totalHPBonus.ToString());
 
                 totalMelAtkBonus = tempMelBonus;

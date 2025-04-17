@@ -888,9 +888,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 100000
+  m_MaxValue: 3000000
   m_WholeNumbers: 1
-  m_Value: 100000
+  m_Value: 3000000
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -1769,7 +1769,8 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 281e90a612551674da87b98586d04533, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: d4f47395b48ea61498a4b81ef38fb858, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -92,7 +92,7 @@ ModelImporter:
       name: gigi_armature|Primary
       takeName: gigi_armature|gigi_armatureAction
       internalID: 8655424153899870299
-      firstFrame: 90
+      firstFrame: 105
       lastFrame: 120
       wrapMode: 0
       orientationOffsetY: 0

@@ -489,9 +489,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1000
+  m_MaxValue: 1500
   m_WholeNumbers: 1
-  m_Value: 1000
+  m_Value: 1500
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -793,6 +793,7 @@ MonoBehaviour:
   Goal: {x: 0, y: 0, z: 0}
   CurrentPos: {fileID: 0}
   hpBar: {fileID: 668523433935168675}
+  animator: {fileID: 0}
 --- !u!1 &8338466087768441126
 GameObject:
   m_ObjectHideFlags: 0

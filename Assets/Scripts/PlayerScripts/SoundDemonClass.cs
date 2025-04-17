@@ -125,7 +125,7 @@ public class SoundDemonClass : PlayerController
                 if(lastSkill == "PRIMARY") {
                     note[0] = true;
 
-                    skillDmg = 300;
+                    skillDmg = 150;
                     primaryHB.SetActive(true);
                     defBonus = false;
 
@@ -135,7 +135,7 @@ public class SoundDemonClass : PlayerController
                 if(lastSkill == "SECONDARY") {
                     note[1] = true;
                     
-                    skillDmg = 200;
+                    skillDmg = 50;
                     secondaryHB.SetActive(true);
                     defBonus = false;
 

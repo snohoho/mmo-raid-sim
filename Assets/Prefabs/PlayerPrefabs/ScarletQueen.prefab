@@ -11658,7 +11658,6 @@ MonoBehaviour:
   overheat: 0
   uiOverheat: 0
   inCr: 0
-  propAnimator: {fileID: 0}
 --- !u!114 &6428358393306544964
 MonoBehaviour:
   m_ObjectHideFlags: 0

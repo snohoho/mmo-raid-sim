@@ -104,6 +104,10 @@ public class BossHitboxes : NetworkComponent
     {
         while(IsServer)
         {
+            if(hp <= 0) {
+                MyCore.NetDestroyObject(NetId);
+            }
+            
             count++;
             if(count == 5)
             {

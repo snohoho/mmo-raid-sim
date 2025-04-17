@@ -510,6 +510,7 @@ MonoBehaviour:
   Goal: {x: 0, y: 0, z: 0}
   CurrentPos: {fileID: 0}
   hpBar: {fileID: 6384380951214225205}
+  animator: {fileID: 5963784908568096517}
 --- !u!95 &5963784908568096517
 Animator:
   serializedVersion: 7

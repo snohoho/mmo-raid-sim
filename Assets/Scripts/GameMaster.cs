@@ -48,10 +48,12 @@ public class GameMaster : NetworkComponent
                 }
 
                 foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
+                    player.transform.GetChild(0).gameObject.SetActive(false);
+
                     finalStats.text =
                     header +
                     "Time\n" + string.Format("{0:00}:{1:00}", timeSpent/60, timeSpent%60) + "\n" +
-                    "Team DPS\n" + Mathf.Round(totalDamage/timeSpent) +
+                    "Team DPS\n" + Mathf.Round(totalDamage/timeSpent) + "\n" +
                     "Personal DPS\n" + Mathf.Round(player.totalDamage/timeSpent);
                 }
                 
@@ -170,13 +172,21 @@ public class GameMaster : NetworkComponent
 
     public IEnumerator SpawnEnemies() 
     {
-        while(time >= 0f) {
+        while(!grindPhaseFinished) {
             MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn1").transform.position);
             MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn2").transform.position);
             MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn3").transform.position);
             MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn4").transform.position);
 
             yield return new WaitForSeconds(5f);
+        }
+        while(!gameFinished && grindPhaseFinished) {
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn1").transform.position);
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn2").transform.position);
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn3").transform.position);
+            MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn4").transform.position);
+
+            yield return new WaitForSeconds(10f);
         }
     }
 

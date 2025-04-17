@@ -5,7 +5,6 @@ using NETWORK_ENGINE;
 using UnityEditor;
 using UnityEngine.UI;
 using TMPro;
-using System.Threading;
 
 public class GameMaster : NetworkComponent
 {
@@ -18,6 +17,7 @@ public class GameMaster : NetworkComponent
     public TextMeshProUGUI timer;
     public RectTransform finalStatsPanel;
     public TextMeshProUGUI finalStats;
+    public bool gameLost;
 
     public override void HandleMessage(string flag, string value) 
     {
@@ -33,7 +33,26 @@ public class GameMaster : NetworkComponent
         }
         if(flag == "GAMEFINISH") {
             if(IsClient) {
-                //disable movement
+                int timeSpent = (int)(300f-time);
+                foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
+                    totalDamage += player.totalDamage;
+                }
+                string header = "";
+                if(!gameLost) {
+                    header = "FUBUZILLA HAS BEEN DEFEATED!\n";
+                }
+                else if(gameLost) {
+                    header = "FUBUZILLA HAS DEFEATED YOU..!\n";
+                }
+
+                foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
+                    finalStats.text =
+                    header +
+                    "Time\n" + string.Format("{0:00}:{1:00}", timeSpent/60, timeSpent%60) + "\n" +
+                    "Team DPS\n" + Mathf.Round(totalDamage/timeSpent) +
+                    "Personal DPS\n" + Mathf.Round(player.totalDamage/timeSpent);
+                }
+                
             }
         }
         if(flag == "TIMER") {
@@ -83,13 +102,15 @@ public class GameMaster : NetworkComponent
             SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
             
+            PlayerController[] players = FindObjectsOfType<PlayerController>();
             while(!grindPhaseFinished) {
                 Debug.Log("grind phase start");
                 time = 180f;
                 SendUpdate("TIMER", time.ToString());
                 StartCoroutine(SpawnEnemies());
+                StartCoroutine(CheckDeaths(players));
                 
-                yield return new WaitUntil(() => time <= 0f);
+                yield return new WaitUntil(() => gameFinished == true || gameLost == true || time <= 0f);
 
                 //destroy all enemies
                 foreach(NavMeshController enemy in FindObjectsOfType<NavMeshController>()) {
@@ -99,8 +120,10 @@ public class GameMaster : NetworkComponent
                 }
 
                 //teleport players back to spawn
-                foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
+                foreach(PlayerController player in players) {
                     player.transform.position = GameObject.Find("spawn" + player.Owner).transform.position;
+                    player.inShop = false;
+                    player.withinInteract = false;
                 }
 
                 //spawn boss
@@ -116,14 +139,16 @@ public class GameMaster : NetworkComponent
                 time = 300f;
                 SendUpdate("TIMER", time.ToString());
 
-                yield return new WaitUntil(() => gameFinished == true || time <= 0f);
+                yield return new WaitUntil(() => gameFinished == true || gameLost == true || time <= 0f);
+
+                if(time <= 0f) {
+                    gameLost = true;
+                }
+                gameFinished = true;
             }
 
             Debug.Log("game finished");
             SendUpdate("GAMEFINISH", "true");
-            foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
-                totalDamage += player.totalDamage;
-            }
 
             //wait on final screen for x amount of seconds
             yield return new WaitForSeconds(15f);
@@ -143,25 +168,41 @@ public class GameMaster : NetworkComponent
             MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn3").transform.position);
             MyCore.NetCreateObject(UnityEngine.Random.Range(30,34), -1, GameObject.Find("EnemySpawn4").transform.position);
 
-            yield return new WaitForSeconds(20f);
+            yield return new WaitForSeconds(5f);
         }
     }
 
-    void Start()
-    {
-        
+    public IEnumerator CheckDeaths(PlayerController[] players) {
+        int deathCt = 0;
+        while(!gameFinished) {
+            foreach(PlayerController player in players) {
+                if(player.isDead) {
+                    deathCt++;
+                }
+
+                yield return null;
+            }
+            if(deathCt == players.Length) {
+                gameLost = true;
+                gameFinished = true;
+            }
+            deathCt = 0;
+        }
     }
+
 
     void Update()
     {
         if(IsServer) {
-            time -= Time.deltaTime;
+            if(!gameFinished) time -= Time.deltaTime;
         }
         if(IsClient) {
-            time -= Time.deltaTime;
-            int min = (int)(time/60);
-            int sec = (int)(time%60);
-            timer.text = string.Format("{0:00}:{1:00}", min, sec);
+            if(!gameFinished) {
+                time -= Time.deltaTime;
+                int min = (int)(time/60);
+                int sec = (int)(time%60);
+                timer.text = string.Format("{0:00}:{1:00}", min, sec);
+            }
             if(gameFinished) {
                 finalStatsPanel.gameObject.SetActive(true);
             }

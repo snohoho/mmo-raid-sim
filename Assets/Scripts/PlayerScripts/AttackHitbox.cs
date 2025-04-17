@@ -79,7 +79,8 @@ public class AttackHitbox : NetworkComponent
 
                 if(enemy.hp <= 0) {
                     Debug.Log("FUBUZILLA KILLED !!");
-                    
+                    GameMaster gameMaster = FindAnyObjectByType<GameMaster>();
+                    gameMaster.gameFinished = true;
                 }
             }
         }

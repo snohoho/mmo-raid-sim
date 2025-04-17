@@ -269,6 +269,7 @@ GameObject:
   - component: {fileID: 1216678132503605643}
   - component: {fileID: 5003608358466748394}
   - component: {fileID: 5335873647698450701}
+  - component: {fileID: -2660648294265179458}
   m_Layer: 0
   m_Name: BossTemplate
   m_TagString: Fubuzilla
@@ -407,7 +408,7 @@ MonoBehaviour:
   renderer34: {fileID: 4285943153900201799}
   renderer41: {fileID: 2502481879410637937}
   renderer42: {fileID: 7545467677365496244}
-  animator: {fileID: 2700617496080880684}
+  animator: {fileID: -2660648294265179458}
   hpBar: {fileID: 4034434993770762397}
 --- !u!65 &5335873647698450701
 BoxCollider:
@@ -430,6 +431,28 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5, y: 2.5, z: 2.5}
   m_Center: {x: 0, y: 0.5, z: -0.4}
+--- !u!95 &-2660648294265179458
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977360595166631212}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: d4f47395b48ea61498a4b81ef38fb858, type: 3}
+  m_Controller: {fileID: 9100000, guid: 281e90a612551674da87b98586d04533, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2414336273234716441
 GameObject:
   m_ObjectHideFlags: 0
@@ -1751,11 +1774,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4f47395b48ea61498a4b81ef38fb858, type: 3}
---- !u!95 &2700617496080880684 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: d4f47395b48ea61498a4b81ef38fb858, type: 3}
-  m_PrefabInstance: {fileID: 8363203079932979645}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8330156937071480406 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d4f47395b48ea61498a4b81ef38fb858, type: 3}

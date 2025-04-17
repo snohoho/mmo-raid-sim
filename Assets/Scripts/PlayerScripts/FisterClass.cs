@@ -270,7 +270,7 @@ public class FisterClass : PlayerController
         float totalDmgBonus = dmgBonus;
        
         while(hbCount < 5) {
-            skillDmg += 50;
+            skillDmg += 75;
             totalDmgBonus += 0.2f;
             dmgBonus = totalDmgBonus;
 

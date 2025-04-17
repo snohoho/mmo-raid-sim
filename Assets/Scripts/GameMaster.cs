@@ -33,6 +33,8 @@ public class GameMaster : NetworkComponent
         }
         if(flag == "GAMEFINISH") {
             if(IsClient) {
+                gameFinished = bool.Parse(value);
+
                 int timeSpent = (int)(300f-time);
                 foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
                     totalDamage += player.totalDamage;
@@ -53,6 +55,11 @@ public class GameMaster : NetworkComponent
                     "Personal DPS\n" + Mathf.Round(player.totalDamage/timeSpent);
                 }
                 
+            }
+        }
+        if(flag == "GAMELOST") {
+            if(IsClient) {
+                gameLost = bool.Parse(value);
             }
         }
         if(flag == "TIMER") {
@@ -143,6 +150,7 @@ public class GameMaster : NetworkComponent
 
                 if(time <= 0f) {
                     gameLost = true;
+                    SendUpdate("GAMELOST", "true");
                 }
                 gameFinished = true;
             }

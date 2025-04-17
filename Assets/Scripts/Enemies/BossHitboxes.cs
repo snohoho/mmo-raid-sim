@@ -209,7 +209,7 @@ public class BossHitboxes : NetworkComponent
     public IEnumerator SetAnimatorBool(Animator anim, string boolToSet)
     {
         anim.SetBool(boolToSet, true);
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(.1f);
         anim.SetBool(boolToSet, false);
     }
 

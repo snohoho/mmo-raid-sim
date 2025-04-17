@@ -26,6 +26,8 @@ public class NavMeshController : NetworkComponent
     NavMeshAgent MyAgent;
     public Slider hpBar;
 
+    public Animator animator;
+
     public static Vector3 VectorFromString(string value)
     {
         char[] temp = { '(', ')' };
@@ -63,6 +65,11 @@ public class NavMeshController : NetworkComponent
             {
                 Goal = NavMeshController.VectorFromString(value);
             }
+        }
+
+        if(flag == "DOINGATTACK")
+        {
+            StartCoroutine(SetAnimatorBool(animator, "DoingAttack"));
         }
     }
 
@@ -117,6 +124,7 @@ public class NavMeshController : NetworkComponent
                 if(count == 5)
                 {
                     renderer.material = MColor[1];
+                    SendUpdate("DOINGATTACK", "0");
                     SendUpdate("ATTACKING", count.ToString());
                     randx = UnityEngine.Random.Range(-47,48);
                     randz = UnityEngine.Random.Range(-47,48);
@@ -149,6 +157,13 @@ public class NavMeshController : NetworkComponent
             }
 
         }
+    }
+
+    public IEnumerator SetAnimatorBool(Animator anim, string boolToSet)
+    {
+        anim.SetBool(boolToSet, true);
+        yield return new WaitForEndOfFrame();
+        anim.SetBool(boolToSet, false);
     }
 
     // Start is called before the first frame update

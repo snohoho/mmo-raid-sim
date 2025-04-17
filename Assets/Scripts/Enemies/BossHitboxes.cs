@@ -60,6 +60,39 @@ public class BossHitboxes : NetworkComponent
                 count = int.Parse(value);
             }
         }
+
+        if(flag == "ATTACK1")
+        {
+            if (IsClient)
+            {
+                StartCoroutine(SetAnimatorBool(animator, "Attack1"));
+            }
+        }
+
+        if (flag == "ATTACK2")
+        {
+            if (IsClient)
+            {
+                StartCoroutine(SetAnimatorBool(animator, "Attack4"));
+            }
+        }
+
+        if (flag == "ATTACK3")
+        {
+            if (IsClient)
+            {
+                StartCoroutine(SetAnimatorBool(animator, "Attack2"));
+            }
+        }
+
+        if (flag == "ATTACK4")
+        {
+            if (IsClient)
+            {
+                StartCoroutine(SetAnimatorBool(animator, "Attack3"));
+            }
+
+        }
     }
 
     public override void NetworkedStart()
@@ -80,6 +113,7 @@ public class BossHitboxes : NetworkComponent
                     atk1HB.SetActive(true);
                     hb1.SetActive(true);
                     renderer1.material = MColor[0];
+
                 }
                 if(randAtk == 2)
                 {
@@ -115,10 +149,12 @@ public class BossHitboxes : NetworkComponent
                 if(randAtk == 1)
                 {
                     renderer1.material = MColor[1];
+                    SendUpdate("ATTACK1", "0");
                 }
                 if(randAtk == 2)
                 {
                     renderer2.material = MColor[1];
+                    SendUpdate("ATTACK2", "0");
                 }
                 if(randAtk == 3)
                 {
@@ -126,11 +162,13 @@ public class BossHitboxes : NetworkComponent
                     renderer32.material = MColor[1];
                     renderer33.material = MColor[1];
                     renderer34.material = MColor[1];
+                    SendUpdate("ATTACK3", "0");
                 }
                 if(randAtk == 4)
                 {
                     renderer41.material = MColor[1];
                     renderer42.material = MColor[1];
+                    SendUpdate("ATTACK4", "0");
                 }
                 SendUpdate("COUNT", count.ToString());
                 yield return new WaitForSeconds(.1f);
@@ -162,6 +200,13 @@ public class BossHitboxes : NetworkComponent
             }
             yield return new WaitForSeconds(1f);
         }
+    }
+
+    public IEnumerator SetAnimatorBool(Animator anim, string boolToSet)
+    {
+        anim.SetBool(boolToSet, true);
+        yield return new WaitForEndOfFrame();
+        anim.SetBool(boolToSet, false);
     }
 
     // Start is called before the first frame update

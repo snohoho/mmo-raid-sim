@@ -50,6 +50,7 @@ public class Shop : NetworkComponent
                     foreach(ItemStats item in player.GetComponent<PlayerInventory>().inventory) {
                         if(item == null) {
                             player.GetComponent<PlayerInventory>().inventory[i] = itemsForSale[slot];
+                            player.GetComponent<PlayerInventory>().inventory[i].StartCoroutine(SlowUpdate());
                             SendUpdate("INVENTORY",i+","+slot);
                             break;
                         }

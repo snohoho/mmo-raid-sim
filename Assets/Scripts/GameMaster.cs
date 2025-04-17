@@ -98,7 +98,7 @@ public class GameMaster : NetworkComponent
             } while(!tempStart || npm.Length < 1);
 
             //spawn shop first
-            MyCore.NetCreateObject(34, -1, new Vector3(6,0,5));
+            MyCore.NetCreateObject(34, -1, new Vector3(0,0,0));
             
             //spawn players
             npm = FindObjectsOfType<NetworkPlayerManager>();

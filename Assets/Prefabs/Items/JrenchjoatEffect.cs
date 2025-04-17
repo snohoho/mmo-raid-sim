@@ -29,7 +29,7 @@ public class JrenchjoatEffect : ItemStats
     {
         if(IsServer) {
             //perform item effects
-
+            Debug.Log("Jrenchjoat started");
             while (!StatsSet)
             {
                 ItemStats[] inv = GetComponent<PlayerInventory>().inventory;

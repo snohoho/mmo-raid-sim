@@ -44,12 +44,12 @@ public class PlayerCamera : NetworkComponent
 
     void Update()
     {
-        if(IsServer && !GetComponent<PlayerController>().isDead) {
+        if(IsServer && !GetComponent<PlayerController>().isDead && !GetComponent<PlayerController>().inMenu) {
             rb.transform.forward = Vector3.RotateTowards(rb.transform.forward, target, Mathf.PI, 0.0f);
         }
         if(IsLocalPlayer) {
             currentX += camPos.x * sensivity * Time.deltaTime;
-            currentY += camPos.y * sensivity * Time.deltaTime;
+            currentY += -camPos.y * sensivity * Time.deltaTime;
 
             currentY = Mathf.Clamp(currentY, 0f, 30f);
 
@@ -62,7 +62,7 @@ public class PlayerCamera : NetworkComponent
     }
 
     public void Look(InputAction.CallbackContext context) {
-        if(context.started) {
+        if(context.started && !GetComponent<PlayerController>().inShop && !GetComponent<PlayerController>().inMenu) {
             if(IsLocalPlayer) {
                 camPos = context.ReadValue<Vector2>();
                 SendCommand("LOOK", Camera.main.transform.forward.ToString());
@@ -73,6 +73,12 @@ public class PlayerCamera : NetworkComponent
                 camPos = Vector2.zero;
                 SendCommand("LOOK", Vector3.zero.ToString());
             }
+        }
+    }
+
+    public void ChangeSens(float newSens) {
+        if(IsLocalPlayer) {
+            sensivity = newSens;
         }
     }
 }

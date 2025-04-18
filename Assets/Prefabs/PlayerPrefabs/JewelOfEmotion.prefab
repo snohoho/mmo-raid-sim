@@ -20644,7 +20644,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Revive
+      value: OpenMenu
       objectReference: {fileID: 0}
     - target: {fileID: 3700197217660463116, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_Value
@@ -21229,6 +21229,7 @@ MonoBehaviour:
   usingLimit: 0
   withinInteract: 0
   inShop: 0
+  inMenu: 0
   lastSkill: 
   worldSpaceUI: {fileID: 7365427087927241182}
   playerName: 
@@ -21254,6 +21255,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 15ee8e70fd230344cb0111d614792d53, type: 3}
   - {fileID: 21300000, guid: 1ae9a5e4fdcbccf4f990aec792fc2b47, type: 3}
   - {fileID: 21300000, guid: 2d52c61c0d52eb5498cb7adcb877f994, type: 3}
+  pauseMenu: {fileID: 9070645691597293443}
   animator: {fileID: 6164688776770925483}
   shield: {fileID: 4547317156701009161}
   damageIndicator: {fileID: 8155611531537160145, guid: 2fff053c0d4d5dd4eb591b2838ba247d, type: 3}
@@ -21382,5 +21384,10 @@ MonoBehaviour:
 --- !u!224 &8914433261462152165 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1142626117415223080, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+  m_PrefabInstance: {fileID: 8389363554758614221}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &9070645691597293443 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 688040871486774094, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
   m_PrefabInstance: {fileID: 8389363554758614221}
   m_PrefabAsset: {fileID: 0}

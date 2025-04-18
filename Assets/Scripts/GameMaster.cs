@@ -70,7 +70,6 @@ public class GameMaster : NetworkComponent
                     header = "FUBUZILLA HAS DEFEATED YOU..!\n";
                 }
 
-                int ct = 0;
                 foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
                     finalStats.text =
                     header +
@@ -162,7 +161,9 @@ public class GameMaster : NetworkComponent
                 foreach(PlayerController player in players) {
                     player.transform.position = GameObject.Find("spawn" + player.Owner).transform.position;
                     player.inShop = false;
+                    player.SendUpdate("SHOP", false.ToString());
                     player.withinInteract = false;
+                    player.SendUpdate("INTERACT", false.ToString());
                 }
 
                 //spawn boss
@@ -180,7 +181,7 @@ public class GameMaster : NetworkComponent
 
                 yield return new WaitUntil(() => gameFinished == true || gameLost == true || time <= 0f);
                 
-                yield return new WaitForSeconds(5f);
+                yield return new WaitForSeconds(1f);
 
                 if(time <= 0f) {
                     MyCore.NetDestroyObject(FindAnyObjectByType<BossHitboxes>().NetId);

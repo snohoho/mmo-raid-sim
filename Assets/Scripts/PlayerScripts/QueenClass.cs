@@ -44,7 +44,7 @@ public class QueenClass : PlayerController
         }
         if(flag == "DEFENSIVE") {
             if(IsServer && gcd <= 0 && defCD <= 0) {
-                defCD = 8f;
+                defCD = 6f;
                 gcd = 1.4f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("DEFCD",defCD.ToString());
@@ -55,7 +55,7 @@ public class QueenClass : PlayerController
         }
         if(flag == "ULT") {
             if(IsServer && gcd <= 0 && ultCD <= 0) {
-                ultCD = 12f;
+                ultCD = 4f;
                 gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());
@@ -158,14 +158,9 @@ public class QueenClass : PlayerController
                 }
 
                 if(lastSkill == "PRIMARY") {
-                    primaryCD = 0.5f;
-                    gcd = 1.2f + gcdMod + gcdBase;
-                    SendUpdate("GBLCD",gcd.ToString());
-                    SendUpdate("PRIMARYCD",primaryCD.ToString()); 
-
                     heat += 10;
 
-                    skillDmg = 100;
+                    skillDmg = 100 + heat;
                     primaryHB.SetActive(true);
 
                     lastSkill = "";
@@ -173,7 +168,7 @@ public class QueenClass : PlayerController
                 if(lastSkill == "SECONDARY") {
                     heat += 20;
                     
-                    skillDmg = 150;
+                    skillDmg = 150 + heat;
                     secondaryHB.SetActive(true);
 
                     lastSkill = "";
@@ -196,13 +191,13 @@ public class QueenClass : PlayerController
                 if(lastSkill == "ULT") {
                     if(overheat) {
                         ultHB.SetActive(true);
-                        skillDmg = 500;
+                        skillDmg = 500 + heat;
                         dmgBonus = dmgBonusBase;
                         heat -= 50;
                     }
                     else if(!overheat) {
                         if(heat < 30) {
-                            skillDmg = 300;
+                            skillDmg = 300 + heat;
                             dmgBonus += 0.2f + dmgBonusBase;
                             ultHB.SetActive(true);
                         }
@@ -249,12 +244,10 @@ public class QueenClass : PlayerController
 
             if(usingPrimary) {
                 if(primaryCD > 0) {
-                    Debug.Log("test");
                     primaryCD -= Time.deltaTime;
                 }
 
                 if(primaryCD <= 0 && gcd <= 0) {
-                    Debug.Log("test2");
                     usingPrimary = false;
                     SendUpdate("PRIMARY", "false");
                 }
@@ -317,7 +310,6 @@ public class QueenClass : PlayerController
             dmgBonus = totalDmgBonus;
 
             ultHB.SetActive(true); 
-            SendUpdate("ULT", "true");
             yield return new WaitForSeconds(0.05f);
 
             ultHB.SetActive(false);

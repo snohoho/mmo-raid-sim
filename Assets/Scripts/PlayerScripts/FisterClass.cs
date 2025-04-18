@@ -27,6 +27,9 @@ public class FisterClass : PlayerController
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("PRIMARYCD",primaryCD.ToString());
             }
+            if(IsClient && usingPrimary) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[1]);
+            }
         }
         if(flag == "SECONDARY") {
             if(IsServer && gcd <= 0 && secondaryCD <= 0) {
@@ -34,6 +37,9 @@ public class FisterClass : PlayerController
                 gcd = 1.4f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("SECONDARYCD",secondaryCD.ToString());
+            }
+            if(IsClient && usingSecondary) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[2]);
             }
         }
         if(flag == "DEFENSIVE") {
@@ -43,6 +49,9 @@ public class FisterClass : PlayerController
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("DEFCD",defCD.ToString());
             }
+            if(IsClient && usingDefensive) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[28]);
+            }
         }
         if(flag == "ULT") {
             if(IsServer && gcd <= 0 && ultCD <= 0) {
@@ -50,6 +59,10 @@ public class FisterClass : PlayerController
                 gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());
+            }
+            if(IsClient && usingUlt) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[3]);
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[36]);
             }
         }
 
@@ -111,9 +124,10 @@ public class FisterClass : PlayerController
                 if(lastSkill == "PRIMARY") {
                     if(!gremmingOut) gremlin += 15f;
 
-                    skillDmg = 100;
+                    skillDmg = 150;
                     defBonus = false;
                     invuln = false;
+                    SendUpdate("INVULN", "false");
                     primaryHB.SetActive(true);
                     
                     lastSkill = "";
@@ -124,6 +138,8 @@ public class FisterClass : PlayerController
                     StartCoroutine(SecondaryHitboxes());
                     defBonus = false;
                     invuln = false;
+                    SendUpdate("INVULN", "false");
+                    
 
                     lastSkill = "";
                 }
@@ -131,6 +147,7 @@ public class FisterClass : PlayerController
                     gremlin += 20f;
 
                     invuln = true;
+                    SendUpdate("INVULN", "true");
                     if(!defBonus) {
                         dmgBonus += 0.5f;
                         defBonus = true;
@@ -144,6 +161,7 @@ public class FisterClass : PlayerController
                     StartCoroutine(UltHitboxes());
                     defBonus = false;
                     invuln = false;
+                    SendUpdate("INVULN", "false");
 
                     lastSkill = "";
                 }
@@ -159,14 +177,14 @@ public class FisterClass : PlayerController
                     gremlin = 0;
                     if(gremmingOut) {
                         gremmingOut = false;
-                        dmgBonus = 1f;
+                        dmgBonus = dmgBonusBase;
                         gcdMod = gcdBase;
                     }
                 }
                 else if(gremlin >= 100) {
                     gremlin = 100;
                     if(!gremmingOut) {
-                        dmgBonus = 2f;
+                        dmgBonus = dmgBonusBase+2f;
                         gcdMod = -0.5f + gcdBase;
                     }
                     gremmingOut = true;
@@ -248,6 +266,7 @@ public class FisterClass : PlayerController
        
         while(hbCount < 2) {
             skillDmg += 75;
+            totalDmgBonus += 0.5f;
             dmgBonus = totalDmgBonus;
 
             secondaryHB.SetActive(true); 
@@ -271,7 +290,7 @@ public class FisterClass : PlayerController
        
         while(hbCount < 5) {
             skillDmg += 75;
-            totalDmgBonus += 0.2f;
+            totalDmgBonus += 0.3f;
             dmgBonus = totalDmgBonus;
 
             ultHB.SetActive(true); 

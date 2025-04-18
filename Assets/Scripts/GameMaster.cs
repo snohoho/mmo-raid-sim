@@ -5,6 +5,7 @@ using NETWORK_ENGINE;
 using UnityEditor;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class GameMaster : NetworkComponent
 {
@@ -17,28 +18,50 @@ public class GameMaster : NetworkComponent
     public TextMeshProUGUI timer;
     public RectTransform finalStatsPanel;
     public TextMeshProUGUI finalStats;
+    public AudioSource bgMusicSource;
+    public AudioClip[] music;
     public bool gameLost;
+    public Animator fadeTransition;
 
     public override void HandleMessage(string flag, string value) 
     {
         if(flag == "GAMESTART") {
             if(IsClient) {
+                StartCoroutine(FadeTransition());
+
                 Cursor.lockState = CursorLockMode.Locked;
                 NetworkPlayerManager[] npm = FindObjectsOfType<NetworkPlayerManager>();
                 foreach(NetworkPlayerManager n in npm) {
                     n.transform.GetChild(0).gameObject.SetActive(false);
                 }
+
                 timerPanel.gameObject.SetActive(true);
+                bgMusicSource.resource = music[1];
+                bgMusicSource.Play();
+            }
+        }
+        if(flag == "BOSSSTART") {
+            if(IsClient) {
+                StartCoroutine(FadeTransition());
+
+                bgMusicSource.resource = music[2];
+                bgMusicSource.Play();
             }
         }
         if(flag == "GAMEFINISH") {
             if(IsClient) {
+                StartCoroutine(FadeTransition());
+
+                Cursor.lockState = CursorLockMode.None;
                 gameFinished = bool.Parse(value);
+                bgMusicSource.resource = music[0];
+                bgMusicSource.Play();
 
                 int timeSpent = (int)(300f-time);
                 foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
                     totalDamage += player.totalDamage;
                 }
+                
                 string header = "";
                 if(!gameLost) {
                     header = "FUBUZILLA HAS BEEN DEFEATED!\n";
@@ -47,14 +70,15 @@ public class GameMaster : NetworkComponent
                     header = "FUBUZILLA HAS DEFEATED YOU..!\n";
                 }
 
+                int ct = 0;
                 foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
-                    player.transform.GetChild(0).gameObject.SetActive(false);
-
                     finalStats.text =
                     header +
                     "Time\n" + string.Format("{0:00}:{1:00}", timeSpent/60, timeSpent%60) + "\n" +
-                    "Team DPS\n" + Mathf.Round(totalDamage/timeSpent) + "\n" +
-                    "Personal DPS\n" + Mathf.Round(player.totalDamage/timeSpent);
+                    "Team DPS\n" + Mathf.Round(totalDamage/timeSpent) + "\n";
+                    
+                    finalStatsPanel.gameObject.SetActive(true);
+                    player.gameObject.SetActive(false);
                 }
                 
             }
@@ -97,6 +121,10 @@ public class GameMaster : NetworkComponent
                 yield return new WaitForSeconds(.1f);
             } while(!tempStart || npm.Length < 1);
 
+            Debug.Log("starting game");
+            SendUpdate("GAMESTART", "1");
+            yield return new WaitForSeconds(0.45f);
+
             //spawn shop first
             MyCore.NetCreateObject(34, -1, new Vector3(0,0,0));
             
@@ -107,8 +135,6 @@ public class GameMaster : NetworkComponent
                 MyCore.NetCreateObject(n.playerClass, n.Owner, GameObject.Find("spawn" + n.Owner).transform.position);
             }
 
-            Debug.Log("starting game");
-            SendUpdate("GAMESTART", "1");
             MyCore.NotifyGameStart();
             
             PlayerController[] players = FindObjectsOfType<PlayerController>();
@@ -120,6 +146,10 @@ public class GameMaster : NetworkComponent
                 StartCoroutine(CheckDeaths(players));
                 
                 yield return new WaitUntil(() => gameFinished == true || gameLost == true || time <= 0f);
+
+
+                SendUpdate("BOSSSTART", "true");
+                yield return new WaitForSeconds(0.45f);
 
                 //destroy all enemies
                 foreach(NavMeshController enemy in FindObjectsOfType<NavMeshController>()) {
@@ -149,15 +179,24 @@ public class GameMaster : NetworkComponent
                 SendUpdate("TIMER", time.ToString());
 
                 yield return new WaitUntil(() => gameFinished == true || gameLost == true || time <= 0f);
+                
+                yield return new WaitForSeconds(5f);
 
                 if(time <= 0f) {
+                    MyCore.NetDestroyObject(FindAnyObjectByType<BossHitboxes>().NetId);
                     gameLost = true;
                     SendUpdate("GAMELOST", "true");
+                }
+                foreach(NavMeshController enemy in FindObjectsOfType<NavMeshController>()) {
+                    MyCore.NetDestroyObject(enemy.NetId);
+
+                    yield return null;
                 }
                 gameFinished = true;
             }
 
             Debug.Log("game finished");
+            yield return new WaitForSeconds(0.45f);
             SendUpdate("GAMEFINISH", "true");
 
             //wait on final screen for x amount of seconds
@@ -208,6 +247,18 @@ public class GameMaster : NetworkComponent
         }
     }
 
+    public IEnumerator FadeTransition() {
+        Debug.Log("START FADE OUT");
+        fadeTransition.SetBool("FadeIn", false);
+        fadeTransition.SetBool("FadeOut", true);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Debug.Log("START FADE IN");
+        fadeTransition.SetBool("FadeOut", false);
+        fadeTransition.SetBool("FadeIn", true);
+    }
+
 
     void Update()
     {
@@ -222,7 +273,7 @@ public class GameMaster : NetworkComponent
                 timer.text = string.Format("{0:00}:{1:00}", min, sec);
             }
             if(gameFinished) {
-                finalStatsPanel.gameObject.SetActive(true);
+                
             }
         }
     }

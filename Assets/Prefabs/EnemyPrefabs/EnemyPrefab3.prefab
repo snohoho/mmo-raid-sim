@@ -182,8 +182,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: HP
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c2d700ee69ac6e48b31edc5ceebf1ed, type: 2}
+  m_sharedMaterial: {fileID: -8333108710038492265, guid: 5c2d700ee69ac6e48b31edc5ceebf1ed, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -556,6 +556,7 @@ GameObject:
   - component: {fileID: 7470269866887065432}
   - component: {fileID: 4358281045325470490}
   - component: {fileID: 4302754774042443242}
+  - component: {fileID: 8305795837217901249}
   m_Layer: 0
   m_Name: EnemyPrefab3
   m_TagString: Enemy
@@ -751,7 +752,29 @@ MonoBehaviour:
   Goal: {x: 0, y: 0, z: 0}
   CurrentPos: {fileID: 0}
   hpBar: {fileID: 6410720432295674544}
-  animator: {fileID: 0}
+  animator: {fileID: 8305795837217901249}
+--- !u!95 &8305795837217901249
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6536711007726989035}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: d48e7a94ad6654248aa93e4e71feec67, type: 3}
+  m_Controller: {fileID: 9100000, guid: a8f631e8ea102af4c95be68ded39252f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6981799833823686015
 GameObject:
   m_ObjectHideFlags: 0

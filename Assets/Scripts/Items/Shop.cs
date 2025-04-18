@@ -32,7 +32,7 @@ public class Shop : NetworkComponent
                 int randItem = int.Parse(args[1]);
 
                 itemsForSale[slot] = allItems[randItem];
-                int price = allItems[randItem].itemRarity * 100;
+                int price = allItems[randItem].itemRarity * 1000;
                 itemPanel.GetChild(slot).GetComponent<Image>().sprite = allItems[randItem].itemSprite;
                 itemPanel.GetChild(slot).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = price + "G"; 
                 itemPanel.GetChild(slot).GetChild(1).gameObject.SetActive(false);
@@ -72,13 +72,15 @@ public class Shop : NetworkComponent
                     itemPanel.GetChild(slot).GetChild(1).gameObject.SetActive(true);
                 }
                 player.gold = newGold;
+
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[7]);
             }
         }
         if(flag == "SELL") {
             if(IsServer) {
                 int slot = int.Parse(value);
 
-                int price = player.GetComponent<PlayerInventory>().inventory[slot].itemRarity * 50;
+                int price = player.GetComponent<PlayerInventory>().inventory[slot].itemRarity * 500;
                 player.GetComponent<PlayerInventory>().inventory[slot] = null;
                 player.gold += price;
                 player.GetComponent<PlayerInventory>().newItem = true;
@@ -92,6 +94,8 @@ public class Shop : NetworkComponent
 
                 player.gold = price;
                 player.GetComponent<PlayerInventory>().inventory[slot] = null;
+
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[10]);
             }
         }
         if(flag == "INVENTORY") {
@@ -139,7 +143,7 @@ public class Shop : NetworkComponent
                     else if(inventory[i] != null) {
                         invPanel.GetChild(i).gameObject.SetActive(true);
                         invPanel.GetChild(i).GetComponent<Image>().sprite = inventory[i].itemSprite;
-                        invPanel.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = (inventory[i].itemRarity * 50).ToString();
+                        invPanel.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = (inventory[i].itemRarity * 500).ToString();
                     }
                 }
             }
@@ -151,10 +155,10 @@ public class Shop : NetworkComponent
     void Update()
     {
         if(IsClient) {
-            if(player.gold < 50) {
+            if(player.gold < 500) {
                 refreshButton.interactable = false;
             }
-            else if(player.gold >= 50) {
+            else if(player.gold >= 500) {
                 refreshButton.interactable = true;
             }
             itemDescPanel.transform.position = Input.mousePosition;
@@ -162,20 +166,19 @@ public class Shop : NetworkComponent
     }
 
     public void RefreshShop() {
-        Debug.Log("REFRESH");
         SendCommand("REFRESH", "true");
         refreshButton.interactable = false;
     }
 
     public IEnumerator Refresh() {
         if(!firstTime) {
-            player.gold -= 50;
+            player.gold -= 500;
             player.SendUpdate("GOLD", player.gold.ToString());
         }
         for(int i=0; i<itemsForSale.Length; i++) {
             if(IsServer) {
                 int randItem = Random.Range(0,allItems.Length);
-                int price = allItems[randItem].itemRarity * 100;
+                int price = allItems[randItem].itemRarity * 1000;
                 itemsForSale[i] = allItems[randItem];
                 buyPrice[i] = price;
 

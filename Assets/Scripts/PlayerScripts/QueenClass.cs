@@ -27,6 +27,9 @@ public class QueenClass : PlayerController
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("PRIMARYCD",primaryCD.ToString());
             }
+            if(IsClient && usingPrimary) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[1]);
+            }
         }
         if(flag == "SECONDARY") {
             if(IsServer && gcd <= 0 && secondaryCD <= 0) {
@@ -35,13 +38,19 @@ public class QueenClass : PlayerController
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("SECONDARYCD",secondaryCD.ToString());
             }
+            if(IsClient && usingSecondary) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[16]);
+            }
         }
         if(flag == "DEFENSIVE") {
             if(IsServer && gcd <= 0 && defCD <= 0) {
-                defCD = 6f;
+                defCD = 8f;
                 gcd = 1.4f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("DEFCD",defCD.ToString());
+            }
+            if(IsClient && usingDefensive) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[27]);
             }
         }
         if(flag == "ULT") {
@@ -50,6 +59,10 @@ public class QueenClass : PlayerController
                 gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());
+            }
+            if(IsClient && usingUlt) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[25]);
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[35]);
             }
         }
 
@@ -167,30 +180,30 @@ public class QueenClass : PlayerController
                 }
                 if(lastSkill == "DEFENSIVE") {
                     if(heat >= 50) {
-                        buffTimer = 3f;
+                        buffTimer = 5f;
                         heat -= 50;
                     }
                     else if(heat < 50) {
-                        buffTimer = 1f;
+                        buffTimer = 3f;
                         heat -= 20;
                     }
 
                     defHB.SetActive(true);
-                    StartCoroutine(InvulnTimer(buffTimer));
+                    StartCoroutine(InvulnTimer(buffTimer)); 
 
                     lastSkill = "";
                 }
                 if(lastSkill == "ULT") {
                     if(overheat) {
                         ultHB.SetActive(true);
-                        skillDmg = 300;
-                        dmgBonus = 1;
+                        skillDmg = 500;
+                        dmgBonus = dmgBonusBase;
                         heat -= 50;
                     }
                     else if(!overheat) {
                         if(heat < 30) {
-                            skillDmg = 150;
-                            dmgBonus += 0.2f;
+                            skillDmg = 300;
+                            dmgBonus += 0.2f + dmgBonusBase;
                             ultHB.SetActive(true);
                         }
                         StartCoroutine(UltHitboxes());

@@ -41,7 +41,7 @@ public class EnemyAtk : NetworkComponent
             if(IsServer)
             {
                 PlayerController player = col.gameObject.GetComponent<PlayerController>();
-                if(hitbox.count == 5)
+                if(hitbox.count == 2)
                 {
                     if(player.invuln)
                     {

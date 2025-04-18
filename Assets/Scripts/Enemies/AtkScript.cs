@@ -40,7 +40,7 @@ public class AtkScript : NetworkComponent
         if(col.gameObject.CompareTag("Player")) {
             if(IsServer) {
                 PlayerController player = col.gameObject.GetComponent<PlayerController>();
-                if(hitboxes.count == 10){
+                if(hitboxes.count == 5){
                     if(gameObject.CompareTag("Atk1")) {
                         if(player.invuln)
                         {

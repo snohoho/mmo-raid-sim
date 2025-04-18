@@ -124,7 +124,7 @@ public class BossHitboxes : NetworkComponent
             }
             
             count++;
-            if(count == 5 && !dead)
+            if(count == 2 && !dead)
             {
                 randAtk = UnityEngine.Random.Range(1,5);
                 if(randAtk == 1)
@@ -162,7 +162,7 @@ public class BossHitboxes : NetworkComponent
                 SendUpdate("ATK", randAtk.ToString());
                 SendUpdate("COUNT", count.ToString());
             }
-            if(count == 10)
+            if(count == 5)
             {
                 if(randAtk == 1)
                 {
@@ -239,7 +239,7 @@ public class BossHitboxes : NetworkComponent
         if(IsClient)
         {
             hpBar.value = hp;
-            if(count == 5 && !dead)
+            if(count == 2 && !dead)
             {
                 if(randAtk == 1)
                 {
@@ -263,7 +263,7 @@ public class BossHitboxes : NetworkComponent
                 }
             }
 
-            if(count == 10)
+            if(count == 5)
             {
                 if(randAtk == 1)
                 {

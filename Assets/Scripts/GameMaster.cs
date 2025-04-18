@@ -139,7 +139,7 @@ public class GameMaster : NetworkComponent
             PlayerController[] players = FindObjectsOfType<PlayerController>();
             while(!grindPhaseFinished) {
                 Debug.Log("grind phase start");
-                time = 180f;
+                time = 120f;
                 SendUpdate("TIMER", time.ToString());
                 StartCoroutine(SpawnEnemies());
                 StartCoroutine(CheckDeaths(players));

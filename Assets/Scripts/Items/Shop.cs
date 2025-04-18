@@ -50,6 +50,7 @@ public class Shop : NetworkComponent
                     foreach(ItemStats item in player.GetComponent<PlayerInventory>().inventory) {
                         if(item == null) {
                             player.GetComponent<PlayerInventory>().inventory[i] = itemsForSale[slot];
+                            player.GetComponent<PlayerInventory>().inventory[i].gameObject.SetActive(true);
                             player.GetComponent<PlayerInventory>().inventory[i].StartCoroutine(SlowUpdate());
                             SendUpdate("INVENTORY",i+","+slot);
                             break;
@@ -71,6 +72,8 @@ public class Shop : NetworkComponent
                     itemPanel.GetChild(slot).GetChild(1).gameObject.SetActive(true);
                 }
                 player.gold = newGold;
+
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[7]);
             }
         }
         if(flag == "SELL") {
@@ -91,6 +94,8 @@ public class Shop : NetworkComponent
 
                 player.gold = price;
                 player.GetComponent<PlayerInventory>().inventory[slot] = null;
+
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[10]);
             }
         }
         if(flag == "INVENTORY") {
@@ -118,12 +123,12 @@ public class Shop : NetworkComponent
                 transform.GetChild(3).gameObject.SetActive(false);
             }
             if(IsLocalPlayer) {
-                if(player.inShop) {
+                if(player.inShop && !player.inMenu) {
                     transform.GetChild(0).gameObject.SetActive(false);
                     transform.GetChild(3).gameObject.SetActive(true);
                     Cursor.lockState = CursorLockMode.None;
                 }
-                if(!player.inShop) {
+                if(!player.inShop && !player.inMenu) {
                     transform.GetChild(0).gameObject.SetActive(true);
                     transform.GetChild(3).gameObject.SetActive(false);
                     Cursor.lockState = CursorLockMode.Locked;
@@ -150,10 +155,10 @@ public class Shop : NetworkComponent
     void Update()
     {
         if(IsClient) {
-            if(player.gold < 50) {
+            if(player.gold < 500) {
                 refreshButton.interactable = false;
             }
-            else if(player.gold >= 50) {
+            else if(player.gold >= 500) {
                 refreshButton.interactable = true;
             }
             itemDescPanel.transform.position = Input.mousePosition;
@@ -161,14 +166,13 @@ public class Shop : NetworkComponent
     }
 
     public void RefreshShop() {
-        Debug.Log("REFRESH");
         SendCommand("REFRESH", "true");
         refreshButton.interactable = false;
     }
 
     public IEnumerator Refresh() {
         if(!firstTime) {
-            player.gold -= 50;
+            player.gold -= 500;
             player.SendUpdate("GOLD", player.gold.ToString());
         }
         for(int i=0; i<itemsForSale.Length; i++) {

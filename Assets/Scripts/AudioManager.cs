@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    private static AudioManager _Default;
-    public static AudioManager Default {
+    private static AudioManager _Instance;
+    public static AudioManager Instance {
         get {
-            if(_Default == null) {
-                _Default = GameObject.Find("AudioManager").GetComponent<AudioManager>(); 
+            if(_Instance == null) {
+                _Instance = GameObject.Find("AudioManager").GetComponent<AudioManager>(); 
             }
-            return _Default;
+            return _Instance;
         }
     }
     

@@ -36,6 +36,8 @@ public class BossHitboxes : NetworkComponent
 
     public Animator animator;
     public Slider hpBar;
+    public bool dead;
+    public GameObject particles;
 
     public override void HandleMessage(string flag, string value)
     {
@@ -65,7 +67,8 @@ public class BossHitboxes : NetworkComponent
         {
             if (IsClient)
             {
-                StartCoroutine(SetAnimatorBool(animator, "Attack1"));
+                StartCoroutine(SetAnimatorBool(animator, "Attack3"));
+                particles.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
             }
         }
 
@@ -73,7 +76,8 @@ public class BossHitboxes : NetworkComponent
         {
             if (IsClient)
             {
-                StartCoroutine(SetAnimatorBool(animator, "Attack4"));
+                StartCoroutine(SetAnimatorBool(animator, "Attack2"));
+                particles.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
             }
         }
 
@@ -81,7 +85,8 @@ public class BossHitboxes : NetworkComponent
         {
             if (IsClient)
             {
-                StartCoroutine(SetAnimatorBool(animator, "Attack2"));
+                StartCoroutine(SetAnimatorBool(animator, "Attack4"));
+                particles.transform.GetChild(2).GetComponent<ParticleSystem>().Play();
             }
         }
 
@@ -89,9 +94,18 @@ public class BossHitboxes : NetworkComponent
         {
             if (IsClient)
             {
-                StartCoroutine(SetAnimatorBool(animator, "Attack3"));
+                StartCoroutine(SetAnimatorBool(animator, "Attack1"));
+                particles.transform.GetChild(3).GetComponent<ParticleSystem>().Play();
             }
-
+        }
+        if (flag == "DEAD")
+        {
+            if (IsClient)
+            {
+                dead = true;
+                StartCoroutine(SetAnimatorBool(animator, "Dead"));
+                particles.transform.GetChild(4).GetComponent<ParticleSystem>().Play();
+            }
         }
     }
 
@@ -105,11 +119,12 @@ public class BossHitboxes : NetworkComponent
         while(IsServer)
         {
             if(hp <= 0) {
-                MyCore.NetDestroyObject(NetId);
+                dead = true;
+                SendUpdate("DEAD", "true");
             }
             
             count++;
-            if(count == 5)
+            if(count == 5 && !dead)
             {
                 randAtk = UnityEngine.Random.Range(1,5);
                 if(randAtk == 1)
@@ -117,7 +132,6 @@ public class BossHitboxes : NetworkComponent
                     atk1HB.SetActive(true);
                     hb1.SetActive(true);
                     renderer1.material = MColor[0];
-
                 }
                 if(randAtk == 2)
                 {
@@ -209,7 +223,7 @@ public class BossHitboxes : NetworkComponent
     public IEnumerator SetAnimatorBool(Animator anim, string boolToSet)
     {
         anim.SetBool(boolToSet, true);
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(.1f);
         anim.SetBool(boolToSet, false);
     }
 
@@ -225,21 +239,18 @@ public class BossHitboxes : NetworkComponent
         if(IsClient)
         {
             hpBar.value = hp;
-            if(count == 5)
+            if(count == 5 && !dead)
             {
                 if(randAtk == 1)
                 {
-                    atk1HB.SetActive(true);
                     hb1.SetActive(true);
                 }
                 if(randAtk == 2)
                 {
-                    atk2HB.SetActive(true);
                     hb2.SetActive(true);
                 }
                 if(randAtk == 3)
                 {
-                    atk3HB.SetActive(true);
                     hb31.SetActive(true);
                     hb32.SetActive(true);
                     hb33.SetActive(true);
@@ -247,7 +258,6 @@ public class BossHitboxes : NetworkComponent
                 }
                 if(randAtk == 4)
                 {
-                    atk4HB.SetActive(true);
                     hb41.SetActive(true);
                     hb42.SetActive(true);
                 }

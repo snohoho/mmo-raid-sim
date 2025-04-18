@@ -27,6 +27,9 @@ public class QueenClass : PlayerController
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("PRIMARYCD",primaryCD.ToString());
             }
+            if(IsClient && usingPrimary) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[1]);
+            }
         }
         if(flag == "SECONDARY") {
             if(IsServer && gcd <= 0 && secondaryCD <= 0) {
@@ -34,6 +37,9 @@ public class QueenClass : PlayerController
                 gcd = 1.4f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("SECONDARYCD",secondaryCD.ToString());
+            }
+            if(IsClient && usingSecondary) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[16]);
             }
         }
         if(flag == "DEFENSIVE") {
@@ -43,13 +49,20 @@ public class QueenClass : PlayerController
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("DEFCD",defCD.ToString());
             }
+            if(IsClient && usingDefensive) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[27]);
+            }
         }
         if(flag == "ULT") {
             if(IsServer && gcd <= 0 && ultCD <= 0) {
-                ultCD = 12f;
+                ultCD = 4f;
                 gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());
+            }
+            if(IsClient && usingUlt) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[25]);
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[35]);
             }
         }
 
@@ -145,14 +158,9 @@ public class QueenClass : PlayerController
                 }
 
                 if(lastSkill == "PRIMARY") {
-                    primaryCD = 0.5f;
-                    gcd = 1.2f + gcdMod + gcdBase;
-                    SendUpdate("GBLCD",gcd.ToString());
-                    SendUpdate("PRIMARYCD",primaryCD.ToString()); 
-
                     heat += 10;
 
-                    skillDmg = 100;
+                    skillDmg = 100 + heat;
                     primaryHB.SetActive(true);
 
                     lastSkill = "";
@@ -160,37 +168,37 @@ public class QueenClass : PlayerController
                 if(lastSkill == "SECONDARY") {
                     heat += 20;
                     
-                    skillDmg = 150;
+                    skillDmg = 150 + heat;
                     secondaryHB.SetActive(true);
 
                     lastSkill = "";
                 }
                 if(lastSkill == "DEFENSIVE") {
                     if(heat >= 50) {
-                        buffTimer = 3f;
+                        buffTimer = 5f;
                         heat -= 50;
                     }
                     else if(heat < 50) {
-                        buffTimer = 1f;
+                        buffTimer = 3f;
                         heat -= 20;
                     }
 
                     defHB.SetActive(true);
-                    StartCoroutine(InvulnTimer(buffTimer));
+                    StartCoroutine(InvulnTimer(buffTimer)); 
 
                     lastSkill = "";
                 }
                 if(lastSkill == "ULT") {
                     if(overheat) {
                         ultHB.SetActive(true);
-                        skillDmg = 300;
-                        dmgBonus = 1;
+                        skillDmg = 500 + heat;
+                        dmgBonus = dmgBonusBase;
                         heat -= 50;
                     }
                     else if(!overheat) {
                         if(heat < 30) {
-                            skillDmg = 150;
-                            dmgBonus += 0.2f;
+                            skillDmg = 300 + heat;
+                            dmgBonus += 0.2f + dmgBonusBase;
                             ultHB.SetActive(true);
                         }
                         StartCoroutine(UltHitboxes());
@@ -236,12 +244,10 @@ public class QueenClass : PlayerController
 
             if(usingPrimary) {
                 if(primaryCD > 0) {
-                    Debug.Log("test");
                     primaryCD -= Time.deltaTime;
                 }
 
                 if(primaryCD <= 0 && gcd <= 0) {
-                    Debug.Log("test2");
                     usingPrimary = false;
                     SendUpdate("PRIMARY", "false");
                 }
@@ -304,7 +310,6 @@ public class QueenClass : PlayerController
             dmgBonus = totalDmgBonus;
 
             ultHB.SetActive(true); 
-            SendUpdate("ULT", "true");
             yield return new WaitForSeconds(0.05f);
 
             ultHB.SetActive(false);

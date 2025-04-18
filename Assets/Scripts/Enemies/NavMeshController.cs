@@ -187,7 +187,6 @@ public class NavMeshController : NetworkComponent
             if(isArrived)
             {
                 hb.SetActive(true);
-                Debug.Log("hb active");
             }
             if(count < 5)
             {
@@ -200,7 +199,6 @@ public class NavMeshController : NetworkComponent
             if(!isArrived)
             {
                 hb.SetActive(false);
-                Debug.Log("hb false");
             }
         }
     }

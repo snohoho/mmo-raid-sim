@@ -23,17 +23,23 @@ public class SoundDemonClass : PlayerController
         if(flag == "PRIMARY") {
             if(IsServer && gcd <= 0 && primaryCD <= 0) {
                 primaryCD = 0.5f;
-                gcd = 1.2f + gcdMod + gcdBase;
+                gcd = 1.4f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("PRIMARYCD",primaryCD.ToString());
+            }
+            if(IsClient && usingPrimary) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[20]);
             }
         }
         if(flag == "SECONDARY") {
             if(IsServer && gcd <= 0 && secondaryCD <= 0) {
                 secondaryCD = 0.5f;
-                gcd = 1.2f + gcdMod + gcdBase;
+                gcd = 1.4f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("SECONDARYCD",secondaryCD.ToString());
+            }
+            if(IsClient && usingSecondary) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[17]);
             }
         }
         if(flag == "DEFENSIVE") {
@@ -43,13 +49,20 @@ public class SoundDemonClass : PlayerController
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("DEFCD",defCD.ToString());
             }
+            if(IsClient && usingDefensive) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[27]);
+            }
         }
         if(flag == "ULT") {
             if(IsServer && gcd <= 0 && ultCD <= 0) {
-                ultCD = 12f;
+                ultCD = 18f;
                 gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());
+            }
+            if(IsClient && usingUlt) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[25]);
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[37]);
             }
         }
 
@@ -125,7 +138,7 @@ public class SoundDemonClass : PlayerController
                 if(lastSkill == "PRIMARY") {
                     note[0] = true;
 
-                    skillDmg = 150;
+                    skillDmg = 100;
                     primaryHB.SetActive(true);
                     defBonus = false;
 
@@ -146,7 +159,7 @@ public class SoundDemonClass : PlayerController
                     note[2] = true;
 
                     if(!defBonus) {
-                        dmgBonus = 0.5f + dmgBonusBase;
+                        dmgBonus += 0.5f;
                         defBonus = true;
                     }
                     
@@ -181,12 +194,12 @@ public class SoundDemonClass : PlayerController
 
             if(usingPrimary) {
                 if(primaryCD > 0) {
-                    Debug.Log("test");
+                    //Debug.Log("test");
                     primaryCD -= Time.deltaTime;
                 }
 
                 if(primaryCD <= 0 && gcd <= 0) {
-                    Debug.Log("test2");
+                    //Debug.Log("test2");
                     usingPrimary = false;
                     SendUpdate("PRIMARY", "false");
                 }

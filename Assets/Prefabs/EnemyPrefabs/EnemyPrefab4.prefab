@@ -103,8 +103,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: HP
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c2d700ee69ac6e48b31edc5ceebf1ed, type: 2}
+  m_sharedMaterial: {fileID: -8333108710038492265, guid: 5c2d700ee69ac6e48b31edc5ceebf1ed, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -489,9 +489,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1000
+  m_MaxValue: 1500
   m_WholeNumbers: 1
-  m_Value: 1000
+  m_Value: 1500
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -598,6 +598,7 @@ GameObject:
   - component: {fileID: 4321211801489554653}
   - component: {fileID: 610038122708051141}
   - component: {fileID: 4057622838589597177}
+  - component: {fileID: 1388274147942540551}
   m_Layer: 0
   m_Name: EnemyPrefab4
   m_TagString: Enemy
@@ -793,6 +794,29 @@ MonoBehaviour:
   Goal: {x: 0, y: 0, z: 0}
   CurrentPos: {fileID: 0}
   hpBar: {fileID: 668523433935168675}
+  animator: {fileID: 1388274147942540551}
+--- !u!95 &1388274147942540551
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6298565134351679991}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: cbcb2a78d6318fe46a45733f3408f802, type: 3}
+  m_Controller: {fileID: 9100000, guid: bb21949d2a2018848a82733c797ecd6c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8338466087768441126
 GameObject:
   m_ObjectHideFlags: 0

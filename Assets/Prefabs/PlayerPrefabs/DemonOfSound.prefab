@@ -19703,8 +19703,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: NOTES
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c2d700ee69ac6e48b31edc5ceebf1ed, type: 2}
+  m_sharedMaterial: {fileID: -8333108710038492265, guid: 5c2d700ee69ac6e48b31edc5ceebf1ed, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -20469,6 +20469,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+      propertyPath: m_ActionEvents.Array.data[16].m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -20558,7 +20562,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Revive
+      value: OpenMenu
       objectReference: {fileID: 0}
     - target: {fileID: 3579090440161180750, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
       propertyPath: m_ActionEvents.Array.data[19].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -21361,6 +21365,7 @@ MonoBehaviour:
   usingLimit: 0
   withinInteract: 0
   inShop: 0
+  inMenu: 0
   lastSkill: 
   worldSpaceUI: {fileID: 8486902764023022010}
   playerName: 
@@ -21386,10 +21391,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 15ee8e70fd230344cb0111d614792d53, type: 3}
   - {fileID: 21300000, guid: 1ae9a5e4fdcbccf4f990aec792fc2b47, type: 3}
   - {fileID: 21300000, guid: 2d52c61c0d52eb5498cb7adcb877f994, type: 3}
+  pauseMenu: {fileID: 7931298274399186919}
   animator: {fileID: 5305904152637646359}
   shield: {fileID: 3236849175616101741}
-  damageIndicator: {fileID: 0}
-  model: {fileID: 0}
+  damageIndicator: {fileID: 8155611531537160145, guid: 2fff053c0d4d5dd4eb591b2838ba247d, type: 3}
+  model: {fileID: 7254460457678798305}
   notesPanel: {fileID: 2735594363968783745}
   defBonus: 0
   note: 000000
@@ -21419,6 +21425,11 @@ MonoBehaviour:
 --- !u!224 &7513873496755014529 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1142626117415223080, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
+  m_PrefabInstance: {fileID: 7466343955036124329}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &7931298274399186919 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 688040871486774094, guid: ed222df85b977ee4d888afdf818cce4d, type: 3}
   m_PrefabInstance: {fileID: 7466343955036124329}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &8261739440530377215 stripped
@@ -21532,6 +21543,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c44043757f1ed549894e38db4dd1833, type: 3}
+--- !u!1 &7254460457678798305 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8c44043757f1ed549894e38db4dd1833, type: 3}
+  m_PrefabInstance: {fileID: 7524508410361069744}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8063367431696918363 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8c44043757f1ed549894e38db4dd1833, type: 3}

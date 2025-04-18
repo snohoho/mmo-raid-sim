@@ -25,6 +25,9 @@ public class EmotionJewelClass : PlayerController
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("PRIMARYCD",primaryCD.ToString());
             }
+            if(IsClient && usingPrimary) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[20]);
+            }
         }
         if(flag == "SECONDARY") {
             if(IsServer && gcd <= 0 && secondaryCD <= 0) {
@@ -32,6 +35,9 @@ public class EmotionJewelClass : PlayerController
                 gcd = 1.4f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("SECONDARYCD",secondaryCD.ToString());
+            }
+            if(IsClient && usingSecondary) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[16]);
             }
         }
         if(flag == "DEFENSIVE") {
@@ -41,6 +47,9 @@ public class EmotionJewelClass : PlayerController
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("DEFCD",defCD.ToString());
             }
+            if(IsClient && usingDefensive) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[27]);
+            }
         }
         if(flag == "ULT") {
             if(IsServer && gcd <= 0 && ultCD <= 0) {
@@ -48,6 +57,10 @@ public class EmotionJewelClass : PlayerController
                 gcd = 1f + gcdMod + gcdBase;
                 SendUpdate("GBLCD",gcd.ToString());
                 SendUpdate("ULTCD",ultCD.ToString());
+            }
+            if(IsClient && usingUlt) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[25]);
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[38]);
             }
         }
 
@@ -176,12 +189,10 @@ public class EmotionJewelClass : PlayerController
 
             if(usingPrimary) {
                 if(primaryCD > 0) {
-                    Debug.Log("test");
                     primaryCD -= Time.deltaTime;
                 }
 
                 if(primaryCD <= 0 && gcd <= 0) {
-                    Debug.Log("test2");
                     usingPrimary = false;
                     SendUpdate("PRIMARY", "false");
                 }

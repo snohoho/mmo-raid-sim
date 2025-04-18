@@ -29,7 +29,7 @@ public class SillyHatEffect : ItemStats
         if (IsServer)
         {
             //perform item effects
-
+            Debug.Log("Silly Hat Started");
             while (!StatsSet2)
             {
                 ItemStats[] inv = GetComponent<PlayerInventory>().inventory;

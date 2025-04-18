@@ -49,9 +49,9 @@ public class AttackHitbox : NetworkComponent
                 enemy.HP -= (int)damage;
                 controller.totalDamage += (int)damage;
                 enemy.SendUpdate("HP", enemy.HP.ToString());
-                Debug.Log("ENEMY HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
+                Debug.Log("ENEMY HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + (int)damage);
                 controller.dmgBonus = controller.dmgBonusBase;
-                controller.SendUpdate("DAMAGE", controller.totalDamage.ToString());
+                controller.SendUpdate("DAMAGE", ((int)damage).ToString());
 
                 if(enemy.HP <= 0) {
                     Debug.Log("award exp and gold");
@@ -70,12 +70,13 @@ public class AttackHitbox : NetworkComponent
                     damage = (controller.rangedAtk + controller.skillDmg) * controller.dmgBonus; 
                 }
                 
+                
                 enemy.hp -= (int)damage;
                 enemy.SendUpdate("HP", enemy.hp.ToString());
                 controller.totalDamage += (int)damage;
                 Debug.Log("ENEMY HIT: " + col.gameObject.name + "\nDAMAGE DEALT: " + damage);
                 controller.dmgBonus = controller.dmgBonusBase;
-                controller.SendUpdate("DAMAGE", controller.totalDamage.ToString());
+                controller.SendUpdate("DAMAGE", ((int)damage).ToString());
 
                 if(enemy.hp <= 0) {
                     Debug.Log("FUBUZILLA KILLED !!");

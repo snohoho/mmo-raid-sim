@@ -204,7 +204,7 @@ public class GameMaster : NetworkComponent
             yield return new WaitForSeconds(15f);
             
             //kill server
-            StartCoroutine(MyCore.DisconnectServer());
+            MyCore.UI_Quit();
         }
 
         yield return new WaitForSeconds(MyCore.MasterTimer);

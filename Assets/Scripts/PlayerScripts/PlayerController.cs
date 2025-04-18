@@ -102,9 +102,12 @@ public class PlayerController : NetworkComponent
         }
         if(flag == "HURT") {
             if(IsClient) {
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[24]);
+
                 isHurt = bool.Parse(value);
                 hp--;
                 isHurt = false;
+                StartCoroutine(InvulnBlink());
             }
         }
         if(flag == "DEAD") {
@@ -271,11 +274,14 @@ public class PlayerController : NetworkComponent
                 level = int.Parse(value);
                 meleeAtk += 10;
                 rangedAtk += 10;
+
+                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[21]);
             }
         }
         if(flag == "DAMAGE") {
             if(IsClient) {
-                totalDamage = int.Parse(value);
+                totalDamage += int.Parse(value);
+                SpawnDamageIndicator(int.Parse(value));
             }
         }
     }
@@ -502,16 +508,21 @@ public class PlayerController : NetworkComponent
             }
         }
     }
+    
+    public void SpawnDamageIndicator(int damage) {
+        GameObject newDmg = Instantiate(damageIndicator, new Vector3(1,1,-1) + transform.position, transform.rotation);
+        newDmg.GetComponentInChildren<TextMeshProUGUI>().text = damage.ToString();
+    }
 
-    public IEnumerator DistributeGoldExp(int gold = 0, int exp = 0) {
+    public IEnumerator DistributeGoldExp(int gold, int exp) {
         if(IsServer) {
             foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
                 Debug.Log("gold earned " + gold);
                 Debug.Log("exp earned " + exp);
                 player.gold += gold;
                 player.exp += exp;
-                SendUpdate("GOLD", player.gold.ToString());
-                SendUpdate("EXP", player.exp.ToString());
+                player.SendUpdate("GOLD", player.gold.ToString());
+                player.SendUpdate("EXP", player.exp.ToString());
                  
                 yield return null;
             }
@@ -548,6 +559,9 @@ public class PlayerController : NetworkComponent
 
             flickerCt++;
         }
+
+        invuln = false;
+        SendUpdate("INVULN", invuln.ToString());
     }
 
     public IEnumerator EmotionTime(int emotion) {
@@ -568,6 +582,7 @@ public class PlayerController : NetworkComponent
                 break;
             case 2:
                 invuln = true;
+                SendUpdate("INVULN", "true");
                 break;
             case 3:
                 speed += spdBonus;
@@ -595,6 +610,7 @@ public class PlayerController : NetworkComponent
                 break;
             case 2:
                 invuln = false;
+                SendUpdate("INVULN", "false");
                 break;
             case 3:
                 speed -= spdBonus;

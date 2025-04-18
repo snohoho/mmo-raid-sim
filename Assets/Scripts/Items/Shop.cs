@@ -123,12 +123,12 @@ public class Shop : NetworkComponent
                 transform.GetChild(3).gameObject.SetActive(false);
             }
             if(IsLocalPlayer) {
-                if(player.inShop) {
+                if(player.inShop && !player.inMenu) {
                     transform.GetChild(0).gameObject.SetActive(false);
                     transform.GetChild(3).gameObject.SetActive(true);
                     Cursor.lockState = CursorLockMode.None;
                 }
-                if(!player.inShop) {
+                if(!player.inShop && !player.inMenu) {
                     transform.GetChild(0).gameObject.SetActive(true);
                     transform.GetChild(3).gameObject.SetActive(false);
                     Cursor.lockState = CursorLockMode.Locked;

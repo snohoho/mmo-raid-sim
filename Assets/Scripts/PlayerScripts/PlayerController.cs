@@ -51,6 +51,7 @@ public class PlayerController : NetworkComponent
     public bool usingLimit;
     public bool withinInteract;
     public bool inShop;
+    public bool inMenu;
     public string lastSkill;
 
     public RectTransform worldSpaceUI;
@@ -63,6 +64,7 @@ public class PlayerController : NetworkComponent
     public Image gcd1, gcd2, gcd3, gcd4;
     public RectTransform otherPlayersPanel;
     public Sprite[] playerClassIcons;
+    public RectTransform pauseMenu;
 
     public Animator animator;
     public GameObject shield;
@@ -92,6 +94,7 @@ public class PlayerController : NetworkComponent
         }
         if(flag == "SHOP") {
             if(IsServer) {
+                lastInput = Vector3.zero;
                 inShop = bool.Parse(value);
 
                 SendUpdate("SHOP",inShop.ToString());
@@ -284,6 +287,16 @@ public class PlayerController : NetworkComponent
                 SpawnDamageIndicator(int.Parse(value));
             }
         }
+        if(flag == "MENU") {
+            if(IsServer) {
+                inMenu = bool.Parse(value);
+
+                SendUpdate("MENU",value);
+            }
+            if(IsClient) {
+                inMenu = bool.Parse(value);
+            }
+        }
     }
 
     public override void NetworkedStart()
@@ -337,6 +350,15 @@ public class PlayerController : NetworkComponent
 
         //handle cooldown timers
         if(IsLocalPlayer) {
+            if(inMenu && !inShop) {
+                Cursor.lockState = CursorLockMode.None;
+                pauseMenu.gameObject.SetActive(true);
+            }
+            else if(!inMenu && !inShop) {
+                Cursor.lockState = CursorLockMode.Locked;
+                pauseMenu.gameObject.SetActive(false);
+            }
+
             if(isDead && deathTimer > 0f) {
                 worldSpaceUI.transform.GetChild(1).gameObject.SetActive(true);
                 deathTimer -= Time.deltaTime;
@@ -423,7 +445,7 @@ public class PlayerController : NetworkComponent
     }
 
     public void Move(InputAction.CallbackContext context) {
-        if((context.started || context.performed) && !inShop && !isDead) {
+        if((context.started || context.performed) && !inShop && !isDead && !inMenu) {
             SendCommand("MOVE", context.ReadValue<Vector2>().ToString());
         }
         if(context.canceled) {
@@ -432,25 +454,25 @@ public class PlayerController : NetworkComponent
     }
 
     public void UsePrimary(InputAction.CallbackContext context) {
-        if(context.started && !usingPrimary && !inShop && !isDead) {
+        if(context.started && !usingPrimary && !inShop && !isDead && !inMenu) {
             SendCommand("PRIMARY", "true");
         }
     }
 
     public void UseSecondary(InputAction.CallbackContext context) {
-        if(context.started && !usingSecondary && !inShop && !isDead) {
+        if(context.started && !usingSecondary && !inShop && !isDead && !inMenu) {
             SendCommand("SECONDARY", "true");
         }
     }
 
     public void UseDefensive(InputAction.CallbackContext context) {
-        if(context.started && !usingDefensive && !inShop && !isDead) {
+        if(context.started && !usingDefensive && !inShop && !isDead && !inMenu) {
             SendCommand("DEFENSIVE", "true");
         }
     }
 
     public void UseUlt(InputAction.CallbackContext context) {
-        if(context.started && !usingUlt && !inShop && !isDead) {
+        if(context.started && !usingUlt && !inShop && !isDead && !inMenu) {
             SendCommand("ULT", "true");
         }
     }
@@ -462,14 +484,21 @@ public class PlayerController : NetworkComponent
     }
 
     public void Interact(InputAction.CallbackContext context) {
-        if(context.started && withinInteract && !isDead) {
+        if(context.started && withinInteract && !isDead && !inMenu) {
+            rb.velocity = Vector3.zero;
             SendCommand("SHOP",(!inShop).ToString());
         }
     }
 
     public void Revive(InputAction.CallbackContext context) {
-        if(context.started && isDead && deathTimer <= 0) {
+        if(context.started && isDead && deathTimer <= 0 && !inMenu) {
             SendCommand("REVIVE", "false");
+        }
+    }
+
+    public void OpenMenu(InputAction.CallbackContext context) {
+        if(context.started && !inShop) {
+            SendCommand("MENU", (!inMenu).ToString());
         }
     }
 

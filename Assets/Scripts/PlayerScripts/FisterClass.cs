@@ -212,12 +212,10 @@ public class FisterClass : PlayerController
 
             if(usingPrimary) {
                 if(primaryCD > 0) {
-                    Debug.Log("test");
                     primaryCD -= Time.deltaTime;
                 }
 
                 if(primaryCD <= 0 && gcd <= 0) {
-                    Debug.Log("test2");
                     usingPrimary = false;
                     SendUpdate("PRIMARY", "false");
                 }

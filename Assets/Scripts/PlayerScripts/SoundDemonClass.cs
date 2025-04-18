@@ -159,7 +159,7 @@ public class SoundDemonClass : PlayerController
                     note[2] = true;
 
                     if(!defBonus) {
-                        dmgBonus = 0.5f + dmgBonusBase;
+                        dmgBonus += 0.5f;
                         defBonus = true;
                     }
                     

@@ -194,12 +194,10 @@ public class SoundDemonClass : PlayerController
 
             if(usingPrimary) {
                 if(primaryCD > 0) {
-                    //Debug.Log("test");
                     primaryCD -= Time.deltaTime;
                 }
 
                 if(primaryCD <= 0 && gcd <= 0) {
-                    //Debug.Log("test2");
                     usingPrimary = false;
                     SendUpdate("PRIMARY", "false");
                 }
@@ -265,7 +263,7 @@ public class SoundDemonClass : PlayerController
         note[1] = false;
         note[2] = false;
         SendUpdate("NOTE","3");
-        dmgBonus = 1f;
+        dmgBonus = dmgBonusBase;
         inCr = false;
     }
 }

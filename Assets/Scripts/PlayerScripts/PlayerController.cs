@@ -105,8 +105,9 @@ public class PlayerController : NetworkComponent
         }
         if(flag == "HURT") {
             if(IsClient) {
-                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[24]);
-
+                if(IsLocalPlayer) {
+                    AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[24]);
+                }
                 isHurt = bool.Parse(value);
                 hp--;
                 isHurt = false;
@@ -278,7 +279,9 @@ public class PlayerController : NetworkComponent
                 meleeAtk += 10;
                 rangedAtk += 10;
 
-                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[21]);
+                if(IsLocalPlayer) {
+                    AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[21]);
+                }
             }
         }
         if(flag == "DAMAGE") {

@@ -64,10 +64,10 @@ public class GameMaster : NetworkComponent
                 
                 string header = "";
                 if(!gameLost) {
-                    header = "FUBUZILLA HAS BEEN DEFEATED!\n";
+                    header = "FUBUZILLA HAS BEEN DEFEATED!\n\n";
                 }
                 else if(gameLost) {
-                    header = "FUBUZILLA HAS DEFEATED YOU..!\n";
+                    header = "FUBUZILLA HAS DEFEATED YOU..!\n\n";
                 }
 
                 foreach(PlayerController player in FindObjectsOfType<PlayerController>()) {
@@ -139,7 +139,7 @@ public class GameMaster : NetworkComponent
             PlayerController[] players = FindObjectsOfType<PlayerController>();
             while(!grindPhaseFinished) {
                 Debug.Log("grind phase start");
-                time = 180f;
+                time = 150f;
                 SendUpdate("TIMER", time.ToString());
                 StartCoroutine(SpawnEnemies());
                 StartCoroutine(CheckDeaths(players));
@@ -180,8 +180,8 @@ public class GameMaster : NetworkComponent
                 SendUpdate("TIMER", time.ToString());
 
                 yield return new WaitUntil(() => gameFinished == true || gameLost == true || time <= 0f);
-                
-                yield return new WaitForSeconds(1f);
+
+                yield return new WaitForSeconds(2f);
 
                 if(time <= 0f) {
                     MyCore.NetDestroyObject(FindAnyObjectByType<BossHitboxes>().NetId);
@@ -201,10 +201,10 @@ public class GameMaster : NetworkComponent
             SendUpdate("GAMEFINISH", "true");
 
             //wait on final screen for x amount of seconds
-            yield return new WaitForSeconds(15f);
+            yield return new WaitForSeconds(10f);
             
             //kill server
-            StartCoroutine(MyCore.DisconnectServer());
+            MyCore.UI_Quit();
         }
 
         yield return new WaitForSeconds(MyCore.MasterTimer);

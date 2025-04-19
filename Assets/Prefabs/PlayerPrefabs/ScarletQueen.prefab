@@ -31880,7 +31880,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 500G
+  m_text: 250G
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5c2d700ee69ac6e48b31edc5ceebf1ed, type: 2}
   m_sharedMaterial: {fileID: -8333108710038492265, guid: 5c2d700ee69ac6e48b31edc5ceebf1ed, type: 2}

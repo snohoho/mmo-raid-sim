@@ -65,12 +65,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: b3d14823e09ca974e813d189bc423139, type: 3}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
-      propertyPath: rangedBonus
+      propertyPath: meleeBonus
       value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
+      propertyPath: rangedBonus
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemDescription
-      value: Gives a small ranged attack boost.
+      value: Gives a small melee attack boost.
       objectReference: {fileID: 0}
     - target: {fileID: 7309268987623219551, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: m_Name

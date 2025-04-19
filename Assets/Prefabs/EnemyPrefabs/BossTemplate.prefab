@@ -14883,7 +14883,7 @@ MonoBehaviour:
   MyId: {fileID: 0}
   IsDirty: 0
   randAtk: 0
-  hp: 1500000
+  hp: 2000000
   count: 0
   MColor:
   - {fileID: 2100000, guid: 51ad2cca9e157f14182c0fbf59b97c4e, type: 2}
@@ -34755,9 +34755,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 3000000
+  m_MaxValue: 2000000
   m_WholeNumbers: 1
-  m_Value: 3000000
+  m_Value: 2000000
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:

@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemRarity
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemSprite
@@ -74,7 +74,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemDescription
-      value: +1 max hp, moderate melee boost
+      value: +1 max hp, moderate melee boost, +1 SPD
       objectReference: {fileID: 0}
     - target: {fileID: 7309268987623219551, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: m_Name

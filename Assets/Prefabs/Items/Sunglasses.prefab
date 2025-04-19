@@ -62,11 +62,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: spdBonus
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemRarity
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemSprite
@@ -74,11 +74,11 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: e51e9b210ee889e4abeb04f1245514b6, type: 3}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: rangedBonus
-      value: 70
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5879322880264311818, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: itemDescription
-      value: High ranged bonus, +1 max hp, small speed bonus
+      value: High ranged bonus, +1 max hp
       objectReference: {fileID: 0}
     - target: {fileID: 7309268987623219551, guid: 847436365cb774149b30b0dddc3ab02c, type: 3}
       propertyPath: m_Name

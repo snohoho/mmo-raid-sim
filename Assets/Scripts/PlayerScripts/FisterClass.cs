@@ -101,7 +101,7 @@ public class FisterClass : PlayerController
                     SendUpdate("LVLUP",level.ToString());
                 }
 
-                if((primaryHB.activeSelf || secondaryHB.activeSelf || ultHB.activeSelf) && !gremmingOut && !inCr) {
+                if((primaryHB.activeSelf || secondaryHB.activeSelf || ultHB.activeSelf) && !inCr) {
                     dmgBonus = dmgBonusBase;
                 }
                 if(!inCr) {
@@ -177,14 +177,14 @@ public class FisterClass : PlayerController
                     gremlin = 0;
                     if(gremmingOut) {
                         gremmingOut = false;
-                        dmgBonus = dmgBonusBase;
+                        dmgBonusBase -= 0.5f;
                         gcdMod = gcdBase;
                     }
                 }
                 else if(gremlin >= 100) {
                     gremlin = 100;
                     if(!gremmingOut) {
-                        dmgBonus = dmgBonusBase+2f;
+                        dmgBonusBase += 0.5f;
                         gcdMod = -0.5f + gcdBase;
                     }
                     gremmingOut = true;
@@ -276,7 +276,7 @@ public class FisterClass : PlayerController
             hbCount++;
         }
         
-        dmgBonus = 1f;
+        dmgBonus = dmgBonusBase;
         inCr = false;
     }
 
@@ -300,7 +300,7 @@ public class FisterClass : PlayerController
             hbCount++;
         }
 
-        dmgBonus = 1f;
+        dmgBonus = dmgBonusBase;
         inCr = false;
     }
 }

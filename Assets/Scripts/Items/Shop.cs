@@ -73,7 +73,9 @@ public class Shop : NetworkComponent
                 }
                 player.gold = newGold;
 
-                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[7]);
+                if(IsLocalPlayer) {
+                    AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[7]);
+                }
             }
         }
         if(flag == "SELL") {
@@ -95,7 +97,9 @@ public class Shop : NetworkComponent
                 player.gold = price;
                 player.GetComponent<PlayerInventory>().inventory[slot] = null;
 
-                AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[10]);
+                if(IsLocalPlayer) {
+                    AudioManager.Instance.CreateSource(AudioManager.Instance.audioClips[10]);
+                }
             }
         }
         if(flag == "INVENTORY") {
@@ -155,10 +159,10 @@ public class Shop : NetworkComponent
     void Update()
     {
         if(IsClient) {
-            if(player.gold < 500) {
+            if(player.gold < 250) {
                 refreshButton.interactable = false;
             }
-            else if(player.gold >= 500) {
+            else if(player.gold >= 250) {
                 refreshButton.interactable = true;
             }
             itemDescPanel.transform.position = Input.mousePosition;
@@ -171,8 +175,8 @@ public class Shop : NetworkComponent
     }
 
     public IEnumerator Refresh() {
-        if(!firstTime) {
-            player.gold -= 500;
+        if(!firstTime && IsServer) {
+            player.gold -= 250;
             player.SendUpdate("GOLD", player.gold.ToString());
         }
         for(int i=0; i<itemsForSale.Length; i++) {

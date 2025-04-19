@@ -527,7 +527,7 @@ public class PlayerController : NetworkComponent
                     
                     currPlayer.GetChild(0).GetComponent<TextMeshProUGUI>().text = player.playerName;
                     if(player.isDead) {
-                        currPlayer.GetChild(1).GetComponent<TextMeshProUGUI>().text = player.deathTimer.ToString("N1");
+                        currPlayer.GetChild(1).GetComponent<TextMeshProUGUI>().text = "KNOCKED OUT";
                     }
                     else {
                         currPlayer.GetChild(1).GetComponent<TextMeshProUGUI>().text = "HP: " + player.hp + "/" + player.maxHp;

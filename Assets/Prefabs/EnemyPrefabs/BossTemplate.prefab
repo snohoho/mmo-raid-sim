@@ -14883,7 +14883,7 @@ MonoBehaviour:
   MyId: {fileID: 0}
   IsDirty: 0
   randAtk: 0
-  hp: 3000000
+  hp: 1500000
   count: 0
   MColor:
   - {fileID: 2100000, guid: 51ad2cca9e157f14182c0fbf59b97c4e, type: 2}

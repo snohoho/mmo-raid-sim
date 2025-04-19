@@ -121,7 +121,7 @@ public class NavMeshController : NetworkComponent
                 SendUpdate("GOAL", Goal.ToString("F2"));
                 ++count;
                 SendUpdate("COUNT", count.ToString());
-                if(count == 5)
+                if(count == 2)
                 {
                     renderer.material = MColor[1];
                     SendUpdate("DOINGATTACK", "0");
@@ -188,11 +188,11 @@ public class NavMeshController : NetworkComponent
             {
                 hb.SetActive(true);
             }
-            if(count < 5)
+            if(count < 2)
             {
                 renderer.material = MColor[0];
             }
-            if(count == 5)
+            if(count == 2)
             {
                 renderer.material = MColor[1];
             }

@@ -55,6 +55,7 @@ public class AttackHitbox : NetworkComponent
 
                 if(enemy.HP <= 0) {
                     Debug.Log("award exp and gold");
+                    MyCore.NetDestroyObject(enemy.NetId);
                     controller.StartCoroutine(controller.DistributeGoldExp(enemy.Gold,enemy.XP));
                 }
             }       

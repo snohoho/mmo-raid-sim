@@ -28,7 +28,7 @@ public class NavMeshController : NetworkComponent
 
     public Animator animator;
 
-    public static Vector3 VectorFromString(string value)
+    public static Vector3 VectorFromString(string value) //parse vector3 from given string value
     {
         char[] temp = { '(', ')' };
         string[] args = value.Trim(temp).Split(',');
@@ -37,7 +37,7 @@ public class NavMeshController : NetworkComponent
 
     public override void HandleMessage(string flag, string value)
     {
-        if(flag == "HP") {
+        if(flag == "HP") {  //client-side synchronization
             if(IsClient) {
                 HP = int.Parse(value);
             }
@@ -87,7 +87,7 @@ public class NavMeshController : NetworkComponent
 
         if(IsServer)
         {
-            randx = UnityEngine.Random.Range(-47,48);
+            randx = UnityEngine.Random.Range(-47,48);  //set initial  x and z coordinates for navmesh
             randz = UnityEngine.Random.Range(-47,48);
         }
 
@@ -97,11 +97,11 @@ public class NavMeshController : NetworkComponent
             CurrentPos = this.gameObject.GetComponent<Transform>();
             PlayerController[] pc;
             pc = FindObjectsOfType<PlayerController>();
-            foreach(PlayerController p in pc) {
-                float distanceToPlayer = Vector3.Distance(CurrentPos.position, p.gameObject.transform.position);
-                if(distanceToPlayer < 6f)
+            foreach(PlayerController p in pc) {  //for every player on the field
+                float distanceToPlayer = Vector3.Distance(CurrentPos.position, p.gameObject.transform.position);  //check navmesh's distance to each player
+                if(distanceToPlayer < 6f)  //if close enough to a player
                 {
-                    Goal = p.gameObject.transform.position;
+                    Goal = p.gameObject.transform.position;  //begin chasing player
                     MyAgent.SetDestination(Goal);
                     SendUpdate("GOAL", Goal.ToString("F2"));
                 } else {
@@ -110,41 +110,41 @@ public class NavMeshController : NetworkComponent
                     SendUpdate("GOAL", Goal.ToString("F2"));
                 }
             }
-            if(MyAgent.remainingDistance<3f)
+            if(MyAgent.remainingDistance<3f) //once enemy arrives at random destination or gets close enough to player, turn hitbox on and prepare to attack
             {
                 atkHB.SetActive(true);
                 hb.SetActive(true);
-                renderer.material = MColor[0];
+                renderer.material = MColor[0];  //hitbox is yellow to indicate enemy is about to attack
                 SendUpdate("ARRIVED", true.ToString());
                 Goal = CurrentPos.position;
                 MyAgent.SetDestination(Goal);
                 SendUpdate("GOAL", Goal.ToString("F2"));
                 ++count;
                 SendUpdate("COUNT", count.ToString());
-                if(count == 2)
+                if(count == 2)  //after two seconds, attack
                 {
-                    renderer.material = MColor[1];
+                    renderer.material = MColor[1];  //hitbox changes to red to indicate enemy is attacking
                     SendUpdate("DOINGATTACK", "0");
                     SendUpdate("ATTACKING", count.ToString());
-                    randx = UnityEngine.Random.Range(-47,48);
+                    randx = UnityEngine.Random.Range(-47,48);  //when done with attack, pick new random point on map for next destination
                     randz = UnityEngine.Random.Range(-47,48);
                     Goal = new Vector3(randx, 0, randz);
                     yield return new WaitForSeconds(.1f);
                     MyAgent.SetDestination(Goal);
                     SendUpdate("GOAL", Goal.ToString("F2"));
-                    count = 0;
+                    count = 0;   //set timer back to zero
                     SendUpdate("COUNT", count.ToString());
                 }
                 if(count == 0)
                 {
-                    renderer.material = MColor[0];
+                    renderer.material = MColor[0];  //set hitbox back to yellow color and turn them off
                     SendUpdate("ARRIVED", false.ToString());
                     hb.SetActive(false);
                     atkHB.SetActive(false);
                 }
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(1f);  //count variable increments every second to simulate a timer
             } else {
-                renderer.material = MColor[0];
+                renderer.material = MColor[0];  //only begin counting and preparing to attack when at destination
                 SendUpdate("ARRIVED", false.ToString());
                 hb.SetActive(false);
                 atkHB.SetActive(false);
@@ -180,7 +180,7 @@ public class NavMeshController : NetworkComponent
     // Update is called once per frame
     void Update()
     {
-        if(IsClient)
+        if(IsClient)  //make sure each client on the server sees the same thing
         {
             hpBar.value = HP;
             MyAgent.SetDestination(Goal);

@@ -11,12 +11,12 @@ public class BossHitboxes : NetworkComponent
     public int hp = 3000000;
     public int count;
     public Material[] MColor;
-    public GameObject atk1HB;
+    public GameObject atk1HB;  //set hitbox gameobjects for turning on and off
     public GameObject atk2HB;
     public GameObject atk3HB;
     public GameObject atk4HB;
 
-    public GameObject hb1;
+    public GameObject hb1;   //set gameobjects for visualization of hitboxes
     public GameObject hb2;
     public GameObject hb31;
     public GameObject hb32;
@@ -25,7 +25,7 @@ public class BossHitboxes : NetworkComponent
     public GameObject hb41;
     public GameObject hb42;
 
-    public MeshRenderer renderer1;
+    public MeshRenderer renderer1;  //set renderers for changing color of hitboxes
     public MeshRenderer renderer2;
     public MeshRenderer renderer31;
     public MeshRenderer renderer32;
@@ -41,7 +41,7 @@ public class BossHitboxes : NetworkComponent
 
     public override void HandleMessage(string flag, string value)
     {
-        if(flag == "HP") {
+        if(flag == "HP") {     //client-side synching of values
             if(IsClient) {
                 hp = int.Parse(value);
             }
@@ -126,12 +126,12 @@ public class BossHitboxes : NetworkComponent
             count++;
             if(count == 2 && !dead)
             {
-                randAtk = UnityEngine.Random.Range(1,5);
+                randAtk = UnityEngine.Random.Range(1,5); //set random attack after two seconds
                 if(randAtk == 1)
                 {
                     atk1HB.SetActive(true);
                     hb1.SetActive(true);
-                    renderer1.material = MColor[0];
+                    renderer1.material = MColor[0];  //yellow color to warn of incoming attack
                 }
                 if(randAtk == 2)
                 {
@@ -162,11 +162,11 @@ public class BossHitboxes : NetworkComponent
                 SendUpdate("ATK", randAtk.ToString());
                 SendUpdate("COUNT", count.ToString());
             }
-            if(count == 5)
+            if(count == 5) //after 5 seconds, attack goes off
             {
                 if(randAtk == 1)
                 {
-                    renderer1.material = MColor[1];
+                    renderer1.material = MColor[1];  //red to indicate boss is attacking
                     SendUpdate("ATTACK1", "0");
                 }
                 if(randAtk == 2)
@@ -190,11 +190,11 @@ public class BossHitboxes : NetworkComponent
                 }
                 SendUpdate("COUNT", count.ToString());
                 yield return new WaitForSeconds(.1f);
-                count = 0;
+                count = 0;  //set timer back to zero
             }
             if(count == 0)
             {
-                hb1.SetActive(false);
+                hb1.SetActive(false);  //turn of active hitboxes and set their colors back to yellow
                 hb2.SetActive(false);
                 hb31.SetActive(false);
                 hb32.SetActive(false);
@@ -216,7 +216,7 @@ public class BossHitboxes : NetworkComponent
                 atk4HB.SetActive(false);
                 SendUpdate("COUNT", count.ToString());
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1f); //count variable increments every second to simulate timer
         }
     }
 
@@ -236,7 +236,7 @@ public class BossHitboxes : NetworkComponent
     // Update is called once per frame
     void Update()
     {
-        if(IsClient)
+        if(IsClient) //ensure all clients on the server see the same thing
         {
             hpBar.value = hp;
             if(count == 2 && !dead)

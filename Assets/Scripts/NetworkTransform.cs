@@ -13,7 +13,7 @@ public class NetworkTransform : NetworkComponent
     public float NavMeshSpeed = 1;
     public float RotationSpeed = Mathf.PI / 2;
 
-    public static Vector3 VectorFromString(string value)
+    public static Vector3 VectorFromString(string value)  //parse Vector3 value from given string value
     {
         char[] temp = { '(', ')' };
         string[] args = value.Trim(temp).Split(',');
@@ -22,7 +22,7 @@ public class NetworkTransform : NetworkComponent
 
     public override void HandleMessage(string flag, string value)
     {
-        if(flag == "POS")
+        if(flag == "POS")  //synchronization of position and rotation vector3 values
         {
             Vector3 temp = NetworkTransform.VectorFromString(value);
             if ( (temp-this.transform.position).magnitude > MaxThreshold || !Smooth)
@@ -54,7 +54,7 @@ public class NetworkTransform : NetworkComponent
     {
         while(MyCore.IsConnected)
         {
-            if(IsServer)
+            if(IsServer)  //server holds and sends position and rotation values of enemy navmesh movement to players
             {
                 float DistCheck = (this.transform.position - LastPosition).magnitude;
                 if(DistCheck > MinThreshold)
@@ -89,7 +89,7 @@ public class NetworkTransform : NetworkComponent
     // Update is called once per frame
     void Update()
     {
-        if(IsClient && Smooth)
+        if(IsClient && Smooth)  //every player sees the same exact enemy movement
         {
             this.transform.position = Vector3.Lerp(this.transform.position, LastPosition, .2f);
             Quaternion qt = new Quaternion();

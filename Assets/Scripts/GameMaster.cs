@@ -146,6 +146,9 @@ public class GameMaster : NetworkComponent
                 
                 yield return new WaitUntil(() => gameFinished == true || gameLost == true || time <= 0f);
 
+                if(gameLost) {
+                    break;
+                }
 
                 SendUpdate("BOSSSTART", "true");
                 yield return new WaitForSeconds(0.45f);
@@ -243,6 +246,7 @@ public class GameMaster : NetworkComponent
             if(deathCt == players.Length) {
                 gameLost = true;
                 gameFinished = true;
+                SendUpdate("GAMELOST","true");
             }
             deathCt = 0;
         }

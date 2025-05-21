@@ -35,13 +35,16 @@ public class HPBarUI : MonoBehaviour
     }
 
     public void AddSegment() {
-        segments.Add(Instantiate(segment, fill));
+        while(slider.value > segments.Count) {
+            segments.Add(Instantiate(segment, fill));
+        }
     }
 
     public void RemoveSegment() {
-        Debug.Log("remove " + segments.Last());
-        Destroy(segments.Last());
-        segments.RemoveAt(segments.Count-1);
+        while(slider.value < segments.Count) {
+            Destroy(segments.Last());
+            segments.RemoveAt(segments.Count-1);
+        }
     }
 
     public void UpdateSegment(float value) {
